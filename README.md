@@ -1,4 +1,4 @@
-# Barnard College Custom Content - Islandora Collection
+# Islandora Solr Content Type
 A Drupal 7.x content type for Islandora requiring only core-drupal, Islandora and, Islandora SOLR. 
 
 ## Deps
