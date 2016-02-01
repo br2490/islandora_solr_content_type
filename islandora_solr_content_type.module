@@ -124,7 +124,7 @@ function islandora_solr_content_type_islandora_solr_facet_bucket_classes_alter(&
 /**
  * Reports all islandora blocks available... I'm so lazy. (DEVELOPMENT)
  */
-function dpm_all_islandora_blocks() {
+function isct_dpm_all_islandora_blocks() {
 	$islandoraBlocks = module_invoke('islandora_solr', 'block_info');
 	dpm($islandoraBlocks);
 }

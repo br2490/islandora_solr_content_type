@@ -23,13 +23,13 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		// Everything gets saved in the content's global for reasons ('reasons...')
 		
 		// Configure the solr facets that will be displayed on the final content page.
-		foreach (field_get_items('node', $node, 'islandora_solr_content_type_query_facets') as $field) {
+		foreach (field_get_items('node', $node, 'isct_display_facets') as $field) {
 			$_islandora_solr_content_type['facets'][] = $field['value'];
 		}
 
 		// Define and save our starting solr query, and results per page.
-		$islandora_solr_content_type_solr_query = field_get_items('node', $node, 'islandora_solr_content_type_solr_query');
-		$islandora_solr_content_type_query_rows = field_get_items('node', $node, 'islandora_solr_content_type_query_rows');
+		$islandora_solr_content_type_solr_query = field_get_items('node', $node, 'isct_solr_query');
+		$islandora_solr_content_type_query_rows = field_get_items('node', $node, 'isct_query_rows');
 		
 		$_islandora_solr_content_type['content_query'] = $islandora_solr_content_type_solr_query[0]['value'];
 		$_islandora_solr_content_type['rows'] = $islandora_solr_content_type_query_rows[0]['value'];
@@ -56,15 +56,15 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 
 
 		// Build the rest of our block's content - include the switch (list/grid) and sort blocks.
-		$node->content['sort_order_block'] = array(
-			'#markup' => block_content_render('islandora_solr', 'sort'),
+		$node->content['switch_block'] = array(
+			'#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'display_switch'),
 			'#weight' => '2',
 			);
 
-		$node->content['switch_block'] = array(
-			'#markup' => block_content_render('islandora_solr', 'display_switch'),
+		$node->content['sort_order_block'] = array(
+			'#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'sort'),
 			'#weight' => '2',
-			);
+		);
 
 		$node->content['results'] = array(
 			'#markup' => $solr_result_output,
@@ -128,20 +128,20 @@ function islandora_solr_content_type_block_list_alter(&$blocks) {
 	}
 
   // Sort the blocks
-  usort($blocks, "custom_sort");
+  usort($blocks, "islandora_solr_content_type_custom_sort");
 }
 
 /**
  * Sorting function for blocks as objects. Why drupal only has sort functions for arrays is beyond me...
  */
-function custom_sort($a,$b) {
+function islandora_solr_content_type_custom_sort($a,$b) {
   return $a->weight>$b->weight;
 }
 
 /**
  * Generates a rendered block from $module with name $function.
  */
-function block_content_render($module, $function) {
+function islandora_solr_content_type_block_content_render($module, $function) {
 	$block = block_load($module, $function);
 	$block_renderable = _block_get_renderable_array(_block_render_blocks(array($block)));
 	$render = drupal_render($block_renderable);

@@ -1,6 +1,11 @@
 <?php
+/**
+ * @file
+ * Handles install and uninstall of module.
+ * Fields, instance, and variables for our content type.
+ * For brevity field names are shortened to "isct" - the initialism of the module.
+ */
 
-$_node_name = 'islandora_solr_content_type';
 
 /**
  * Implements hook_install().
@@ -10,23 +15,23 @@ function islandora_solr_content_type_install() {
   // Note that normally one would call node_add_body_field() for their content type
   // We do not, instead we create our own "body field" that forces the full page view. 
   // This content type works best in the "full" view mode...
-  add_custom_fields();
-  add_variables();
+  islandora_solr_content_type_add_custom_fields();
+  islandora_solr_content_type_add_variables();
 }
 
-function add_custom_fields() {
-  foreach (_islandora_solr_content_type_fields() as $field) {
+function islandora_solr_content_type_add_custom_fields() {
+  //Add our content fields
+  foreach (_islandora_solr_content_type_installed_fields() as $field) {
     field_create_field($field);
-    //dpm(field_info_field($field['field_name']));
   }
-  
+  //Add instances of base fields.
   foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
     field_create_instance($fieldinstance);
-    //dpm(field_info_instance('node', $fieldinstance['field_name'], 'islandora_solr_content_type_solr_view'));
   }
+
 }
 
-function add_variables() {
+function islandora_solr_content_type_add_variables() {
   foreach(_islandora_solr_content_type_variables() as $var => $option) {
     variable_set($var, $option);
   }
@@ -36,32 +41,30 @@ function add_variables() {
  * Implements hook_uninstall().
  */
 function islandora_solr_content_type_uninstall() {
-  $node_name = $GLOBALS['_node_name'];
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
-  $result = db_query($sql, array(':type' => $node_name));
+  $result = db_query($sql, array(':type' => 'islandora_solr_content_type'));
   $nids = array();
   foreach ($result as $row) {
     $nids[] = $row->nid;
   }
   node_delete_multiple($nids);
-  delete_custom_fields();
-	node_type_delete($node_name);
+  islandora_solr_content_type_delete_custom_fields();
+  node_type_delete($node_name);
   field_purge_batch(1000);
-  remove_variables();
+  islandora_solr_content_type_remove_variables();
 }
 
-function delete_custom_fields() {
-  $node_name = $GLOBALS['_node_name'];
-  foreach (array_keys(_islandora_solr_content_type_fields()) as $field) {
+function islandora_solr_content_type_delete_custom_fields() {
+  foreach (array_keys(_islandora_solr_content_type_installed_fields()) as $field) {
     field_delete_field($field);
   }
-  $instances = field_info_instances('node', $node_name);
+  $instances = field_info_instances('node', 'islandora_solr_content_type');
   foreach ($instances as $instance_name => $fieldinstance) {
     field_delete_instance($fieldinstance);
   }
 }
 
-function remove_variables() {
+function islandora_solr_content_type_remove_variables() {
   foreach(array_keys(_islandora_solr_content_type_variables()) as $var) {
     variable_del($var);
   }
@@ -99,14 +102,14 @@ function _islandora_solr_content_type_variables() {
   return $variables;
 }
 
-function _islandora_solr_content_type_fields() {
-	$fields = array();
+function _islandora_solr_content_type_installed_fields() {
+  $fields = array();
 
-  $fields['islandora_solr_content_type_body'] = array(
+  $fields['isct_body'] = array(
     'entity_types' => array('node'),
-    'translatable' => 0,
+    'translatable' => 1,
     'settings' => array(),
-    'field_name' => 'islandora_solr_content_type_body',
+    'field_name' => 'isct_body',
     'type' => 'text_long',
     'module' => 'text',
     'active' => 1,
@@ -115,11 +118,11 @@ function _islandora_solr_content_type_fields() {
     'deleted' => 0,
   );
 
-  $fields['islandora_solr_content_type_solr_query'] = array(
+  $fields['isct_solr_query'] = array(
     'entity_types' => array('node'),
     'translatable' => 0,
     'settings' => array(),
-    'field_name' => 'islandora_solr_content_type_solr_query',
+    'field_name' => 'isct_solr_query',
     'type' => 'text_long',
     'module' => 'text',
     'active' => 1,
@@ -128,11 +131,11 @@ function _islandora_solr_content_type_fields() {
     'deleted' => 0,
   );
 
-  $fields['islandora_solr_content_type_query_rows'] = array(
+  $fields['isct_query_rows'] = array(
     'entity_types' => array('node'),
-    'translatable' => 0,
+    'translatable' => 1,
     'settings' => array(),
-    'field_name' => 'islandora_solr_content_type_query_rows',
+    'field_name' => 'isct_query_rows',
     'type' => 'text',
     'module' => 'text',
     'active' => 1,
@@ -141,11 +144,11 @@ function _islandora_solr_content_type_fields() {
     'deleted' => 0,
   );
 
-  $fields['islandora_solr_content_type_query_facets'] = array(
+  $fields['isct_display_facets'] = array(
     'entity_types' => array('node'),
     'translatable' => 0,
     'settings' => array(
-      'allowed_values' => array(
+      'allowed_values' => array( //This needs to be changed before any real release. This shouldn't be static.
         'mods_subject_topic_ms' => 'mods_subject_topic_ms',
         'mods_genre_ms' => 'mods_genre_ms',
         'mods_subject_name_personal_namePart_ms' => 'mods_subject_name_personal_namePart_ms',
@@ -157,11 +160,11 @@ function _islandora_solr_content_type_fields() {
       ),
       'allowed_values_function' => '',
     ),
-    'field_name' => 'islandora_solr_content_type_query_facets',
+    'field_name' => 'isct_display_facets',
     'module' => 'list',
     'type' => 'list_text',
     'active' => 1,
-    'locked' => 0,
+    'locked' => 1,
     'cardinality' => -1,
     'deleted' => 0,
   );
@@ -170,12 +173,13 @@ function _islandora_solr_content_type_fields() {
 }
 
 function _islandora_solr_content_type_instances() {
+
   $instances = array();
   $t = get_t();
 
-  $instances['islandora_solr_content_type_body'] = array(
-    'bundle' => 'islandora_solr_content_type_solr_view',
-    'field_name' => 'islandora_solr_content_type_body',
+  $instances['isct_body'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_body',
     'type' => 'text_long',
     'label' => $t('Collection Summary'),
     'deleted' => 0,
@@ -205,17 +209,17 @@ function _islandora_solr_content_type_instances() {
     ),
   );
 
-  $instances['islandora_solr_content_type_solr_query'] = array(
-    'bundle' => 'islandora_solr_content_type_solr_view',
-    'field_name' => 'islandora_solr_content_type_solr_query',
+  $instances['isct_solr_query'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_solr_query',
     'type' => 'text',
     'label' => $t('Collection SOLR Query - landing page'),
-		'default_value' => array(
-		  0 => array(
-		    'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
-		  ),
-		),
-		'deleted' => 0,
+    'default_value' => array(
+      0 => array(
+        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
+      ),
+    ),
+    'deleted' => 0,
     'description' => $t('The SOLR query that will generate desired \'collection view.\' <br>
     An easy way to create this question is to visit the <a href="'.$GLOBALS['base_root'].'/islandora/search">search page</a> and start with a basic query.
 The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the SOLR search fields available to a site visitor.</em></strong><br>
@@ -255,9 +259,9 @@ Examples:
     ),
   );
 
-  $instances['islandora_solr_content_type_query_rows'] = array(
-    'bundle' => 'islandora_solr_content_type_solr_view',
-    'field_name' => 'islandora_solr_content_type_query_rows',
+  $instances['isct_query_rows'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_query_rows',
     'type' => 'text',
     'label' => $t('Number of results to display per page'),
     'default_value' => array(
@@ -298,11 +302,12 @@ Examples:
     ),
   );
 
-$instances['islandora_solr_content_type_query_facets'] = array(
-    'bundle' => 'islandora_solr_content_type_solr_view',
-    'field_name' => 'islandora_solr_content_type_query_facets',
+$instances['isct_display_facets'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_display_facets',
+    'type' => 'list',
     'label' => $t('Facets to display on page'),
-    'default_value' => array(
+    'default_value' => array( // this should not be static same as with the field.
       0 => array('value' => 'mods_subject_topic_ms',),
       1 => array('value' => 'mods_genre_ms',),
       2 => array('value' => 'mods_subject_name_personal_namePart_ms',),
