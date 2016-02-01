@@ -10,16 +10,16 @@ require_once dirname(__FILE__) . '/includes/theme.inc'; // Themeing.
 // Do I want to break breadcrumbs out for all of Barnard's site? New module?
 
 // Content global.
-$_bc_views_solr_view = array();
+$_islandora_solr_content_type = array();
 
 /**
  * Implements hook_node_info().
  * Define our content type.
  */
-function bc_views_node_info() {
+function islandora_solr_content_type_node_info() {
   $items = array(
-    'bc_views_solr_view' => array(
-      'name' => t('Barnard Collection View'), // Will refactor to Islandora Solr Content Collection (name still WIP)
+    'islandora_solr_content_type' => array(
+      'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still WIP)
       'base' => 'node_content',
       'description' => t('A content type to configure and display a collection by a specifying a SOLR query. <em>Collection</em> is used loosely, as these content pages may be curated exhibits, special projects, timely (or time-based) collections, etc.  '),
       'has_title' => '1',
@@ -35,21 +35,21 @@ function bc_views_node_info() {
 /**
  * Implements hook_form().
  */
-function bc_views_form($node, $form_state) {
+function islandora_solr_content_type_form($node, $form_state) {
   return node_content_form($node, $form_state);
 }
 
 /**
  * Implements hook_form_alter()
  */
-function bc_views_form_alter(&$form, $form_state, $form_id) {
+function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
   // dpm($form_id);
 }
 
 
 
 // UNUSED AT PRESENT
-// function bc_views_menu_breadcrumb_alter(&$active_trail, $item) {
+// function islandora_solr_content_type_menu_breadcrumb_alter(&$active_trail, $item) {
 // 	// dpm($active_trail);
 // 	// dpm($item);
 // }
@@ -57,11 +57,11 @@ function bc_views_form_alter(&$form, $form_state, $form_id) {
 /**
  * Implements hook_islandora_breadcrumbs_alter().
  */
-function bc_views_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
+	global $_islandora_solr_content_type;
 
 	// If it is not one of our unique queries, return;
-	if (!$_bc_views_solr_view['view']) {
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
@@ -93,7 +93,7 @@ function bc_views_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
 // /**
 //  * Implements islandora_breadcrumbs_alter().
 //  */
-// function bc_views_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
+// function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
 // 	foreach($breadcrumb as $pos => $crumb) {
 // 		if((bool)strpos($crumb,'href="/node/%20?cq=')) {
 
@@ -110,13 +110,13 @@ function bc_views_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
 // }
 
 // UNUSED AT PRESENT
-function bc_views_islandora_solr_facet_bucket_classes_alter(&$attributes, $islandora_solr_query) {
+function islandora_solr_content_type_islandora_solr_facet_bucket_classes_alter(&$attributes, $islandora_solr_query) {
 	// dpm($attributes);
 }
 
-// function bc_views_block_view_alter(&$data, $block) {
-// 	global $_bc_views_solr_view;
-// 	if (!isset($_bc_views_solr_view)) {
+// function islandora_solr_content_type_block_view_alter(&$data, $block) {
+// 	global $_islandora_solr_content_type;
+// 	if (!isset($_islandora_solr_content_type)) {
 // 		return;
 // 	}
 // }

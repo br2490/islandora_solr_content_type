@@ -8,31 +8,31 @@
  * Implements hook_node_view()
  * This is where we display our content type to the end-user.
  */
-function bc_views_node_view($node, $view_mode = 'full') {
-	if ($node->type == 'bc_views_solr_view') {
+function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
+	if ($node->type == 'islandora_solr_content_type') {
 
 		// Get our globals.
-		global $_bc_views_solr_view;
+		global $_islandora_solr_content_type;
 		global $_islandora_solr_queryclass;
 
-		// We're on a bc_views_solr_view page...
-		$_bc_views_solr_view['view'] = TRUE;
+		// We're on a islandora_solr_content_type page...
+		$_islandora_solr_content_type['view'] = TRUE;
 
 		// These are our content variables that the end-user has little interaction with. 
 		// These DEFINE what is present on the content page, and also help us with search.
 		// Everything gets saved in the content's global for reasons ('reasons...')
 		
 		// Configure the solr facets that will be displayed on the final content page.
-		foreach (field_get_items('node', $node, 'bc_views_query_facets') as $field) {
-			$_bc_views_solr_view['facets'][] = $field['value'];
+		foreach (field_get_items('node', $node, 'islandora_solr_content_type_query_facets') as $field) {
+			$_islandora_solr_content_type['facets'][] = $field['value'];
 		}
 
 		// Define and save our starting solr query, and results per page.
-		$bc_views_solr_query = field_get_items('node', $node, 'bc_views_solr_query');
-		$bc_views_query_rows = field_get_items('node', $node, 'bc_views_query_rows');
+		$islandora_solr_content_type_solr_query = field_get_items('node', $node, 'islandora_solr_content_type_solr_query');
+		$islandora_solr_content_type_query_rows = field_get_items('node', $node, 'islandora_solr_content_type_query_rows');
 		
-		$_bc_views_solr_view['content_query'] = $bc_views_solr_query[0]['value'];
-		$_bc_views_solr_view['rows'] = $bc_views_query_rows[0]['value'];
+		$_islandora_solr_content_type['content_query'] = $islandora_solr_content_type_solr_query[0]['value'];
+		$_islandora_solr_content_type['rows'] = $islandora_solr_content_type_query_rows[0]['value'];
 
 		// For our content type, we want to default to the grid view. If the user selects 
 		// something else we do not want to override them back to the grid view.
@@ -78,12 +78,12 @@ function bc_views_node_view($node, $view_mode = 'full') {
 /*
  * Implements hook_block_list_alter().
  */
-function bc_views_block_list_alter(&$blocks) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_block_list_alter(&$blocks) {
+	global $_islandora_solr_content_type;
 	global $theme_key;
 
 	// If it is not one of our unique queries, return;
-	if (!$_bc_views_solr_view['view']) {
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
@@ -154,11 +154,11 @@ function block_content_render($module, $function) {
  * Implements hook_form_BASE_ID_alter()
  * For our content type we want to simplify the facet block by hiding a few elements.
  */
-function bc_views_form_islandora_solr_range_slider_form_alter(&$form, &$form_state) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter(&$form, &$form_state) {
+	global $_islandora_solr_content_type;
 
 	// If it is not one of our unique queries, return;
-	if (!$_bc_views_solr_view['view']) {
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
@@ -174,11 +174,11 @@ function bc_views_form_islandora_solr_range_slider_form_alter(&$form, &$form_sta
  * Implements hook_form_BASE_ID_alter()
  * For our content type we want to simplify the facet block by hiding a few elements.
  */
-function bc_views_form_islandora_solr_date_filter_form_alter(&$form, &$form_state) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_form_islandora_solr_date_filter_form_alter(&$form, &$form_state) {
+	global $_islandora_solr_content_type;
 
 	// If it is not one of our unique queries, return;
-	if (!$_bc_views_solr_view['view']) {
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
@@ -195,9 +195,9 @@ function bc_views_form_islandora_solr_date_filter_form_alter(&$form, &$form_stat
 /**
  * Implements hook_islandora_solr_query().
  */
-function bc_views_islandora_solr_query($islandora_solr_query) {
-	global $_bc_views_solr_view;
-	if (!$_bc_views_solr_view['view']) {
+function islandora_solr_content_type_islandora_solr_query($islandora_solr_query) {
+	global $_islandora_solr_content_type;
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
@@ -210,7 +210,7 @@ function bc_views_islandora_solr_query($islandora_solr_query) {
 	if (in_array('cq', array_keys(drupal_get_query_parameters()))) {
 
 		// Tokenize and set field query limit.
-		$content_query = str_replace('_ms:', '_mt:', $_bc_views_solr_view['content_query']);
+		$content_query = str_replace('_ms:', '_mt:', $_islandora_solr_content_type['content_query']);
 		$islandora_solr_query->solrParams['fq'][] = $content_query;
 
 		// Return our search ISQP.
@@ -218,7 +218,7 @@ function bc_views_islandora_solr_query($islandora_solr_query) {
 	} 
 
 	// Set field query limit.
-	$islandora_solr_query->solrParams['fq'][] = $_bc_views_solr_view['content_query'];
+	$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['content_query'];
 
 	return $islandora_solr_query;
 }
@@ -227,32 +227,32 @@ function bc_views_islandora_solr_query($islandora_solr_query) {
  * Implements hook_islandora_solr_query_alter().
  * Modifies query before execution.
  */
-function bc_views_islandora_solr_query_alter(&$islandora_solr_query) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_islandora_solr_query_alter(&$islandora_solr_query) {
+	global $_islandora_solr_content_type;
 
 	// If it is not one of our unique queries, return.
-	if (!$_bc_views_solr_view['view']) {
+	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
 
 	// I need to figure out pagination and why 'rows' isn't restricting the
   // results from solr. This leads to pagination, not result limits.
-	$islandora_solr_query->solrLimit = $_bc_views_solr_view['rows'];
+	$islandora_solr_query->solrLimit = $_islandora_solr_content_type['rows'];
 
 	// Update facets to only those selected...
-	$islandora_solr_query->solrParams['facet.field'] = $_bc_views_solr_view['facets'];
+	$islandora_solr_query->solrParams['facet.field'] = $_islandora_solr_content_type['facets'];
 }
 
 /**
  * Implements hook_islandora_solr_query_result().
  */
-// function bc_views_islandora_solr_query_result($result) {
+// function islandora_solr_content_type_islandora_solr_query_result($result) {
 // }
 
 /**
  * Implements hook_islandora_solr_results_alter().
  */
-// function bc_views_islandora_solr_results_alter(&$search_results, $query_processor) {
+// function islandora_solr_content_type_islandora_solr_results_alter(&$search_results, $query_processor) {
 // }
 
 

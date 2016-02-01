@@ -9,13 +9,13 @@
  * Implements hook_form_FORM_ID_alter()
  * We're gonna use our own submit handler for our content type.
  */
-function bc_views_form_islandora_solr_advanced_search_form_alter(&$form, &$form_state) {
-	global $_bc_views_solr_view;
+function islandora_solr_content_type_form_islandora_solr_advanced_search_form_alter(&$form, &$form_state) {
+	global $_islandora_solr_content_type;
 
-	if ($_bc_views_solr_view !== null || isset($form_state['build_info']['args']['barnard_custom_view'])) {
+	if ($_islandora_solr_content_type !== null || isset($form_state['build_info']['args']['islandora_solr_content_type'])) {
 		unset($form['#submit']);
-		$form['#submit'][] = 'bc_views_advanced_search_form_submit';
-		$form_state['build_info']['args']['barnard_custom_view'] = TRUE;
+		$form['#submit'][] = 'islandora_solr_content_type_advanced_search_form_submit';
+		$form_state['build_info']['args']['islandora_solr_content_type'] = TRUE;
 	}
 
 }
@@ -30,7 +30,7 @@ function bc_views_form_islandora_solr_advanced_search_form_alter(&$form, &$form_
  *
  * @see islandora_solr_advanced_search_form()
  */
-function bc_views_advanced_search_form_submit($form, &$form_state) {
+function islandora_solr_content_type_advanced_search_form_submit($form, &$form_state) {
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
   global $_islandora_solr_queryclass;
   // Collect query values.
@@ -102,8 +102,8 @@ function bc_views_advanced_search_form_submit($form, &$form_state) {
 ## REGION TEMPORARY SEARCH TESTING
 /*
 // This is a temporary search block in an attempt to get SOLR working with our current setup.
-function bc_views_search_form($form, &$form_state) {
-  $form['bc_views_search'] = array(
+function islandora_solr_content_type_search_form($form, &$form_state) {
+  $form['islandora_solr_content_type_search'] = array(
   	'#type' => 'container',
     '#attributes' => array(
       	'class' => array(
@@ -111,14 +111,14 @@ function bc_views_search_form($form, &$form_state) {
       ),
     ),
   );
-  $form['bc_views_search']["query"] = array(
+  $form['islandora_solr_content_type_search']["query"] = array(
     '#size' => '15',
     '#type' => 'textfield',
     '#title' => t('Search: '),
     // @todo Should this be the searched value?
     '#default_value' => '',
   );
-  $form['bc_views_search']['submit'] = array(
+  $form['islandora_solr_content_type_search']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Go!'),
   );
@@ -126,9 +126,9 @@ function bc_views_search_form($form, &$form_state) {
   return $form;
 }
 
-function bc_views_search_form_submit($form, &$form_state) {
+function islandora_solr_content_type_search_form_submit($form, &$form_state) {
 	global $_islandora_solr_queryclass; 
-	global $_bc_views_solr_view;
+	global $_islandora_solr_content_type;
 
 	$search_string = islandora_solr_replace_slashes($form_state['values']['query']);
 

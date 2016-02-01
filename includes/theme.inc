@@ -7,9 +7,9 @@
 /**
  * Implements theme_preprocess_page().
  */
-function bc_views_preprocess_page(&$vars) {
+function islandora_solr_content_type_preprocess_page(&$vars) {
 	// This code allows page level themeing based on the type of NODE.
-	if (isset($vars['node']) && $vars['node']->type == 'bc_views_solr_view') {
+	if (isset($vars['node']) && $vars['node']->type == 'islandora_solr_content_type') {
 		if (!(bool)strpos(current_path(),'edit')) {
 			$vars['theme_hook_suggestions'][] = 'page__node__' . $vars['node']->type;
 		} // else { do some edit page theming or nothing... }
@@ -19,13 +19,13 @@ function bc_views_preprocess_page(&$vars) {
 /**
  * Implements hook_theme().
  */
-function bc_views_theme($existing, $type, $theme, $path) {
+function islandora_solr_content_type_theme($existing, $type, $theme, $path) {
   $theme = array();
-  $theme['page__node__bc_views_solr_view'] = array(
+  $theme['page__node__islandora_solr_content_type'] = array(
     'render element' => 'content',
     'base hook' => 'page',
-    'template' => 'page--node--bc_views_solr_view',
-    'path' => drupal_get_path('module', 'bc_views') . '/templates',
+    'template' => 'page--node--islandora_solr_content_type',
+    'path' => drupal_get_path('module', 'islandora_solr_content_type') . '/templates',
    );
   return $theme;
 }
