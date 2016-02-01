@@ -1,3 +1,4 @@
+vim: syntax=php:
 <?php
 /**
  * @file
