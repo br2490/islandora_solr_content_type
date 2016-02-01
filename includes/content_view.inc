@@ -1,4 +1,5 @@
 <?php 
+// vim: syntax=php
 /**
  * @file
  * Collection content page display and config.
