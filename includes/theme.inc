@@ -1,5 +1,5 @@
-vim: syntax=php:
 <?php
+// vim: syntax=php
 /**
  * @file
  * Collection page THEME modifications.
