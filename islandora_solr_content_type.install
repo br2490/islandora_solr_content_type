@@ -103,6 +103,7 @@ function _islandora_solr_content_type_variables() {
 }
 
 function _islandora_solr_content_type_installed_fields() {
+  $t = get_t();
   $fields = array();
 
   $fields['isct_body'] = array(
@@ -110,8 +111,8 @@ function _islandora_solr_content_type_installed_fields() {
     'translatable' => 1,
     'settings' => array(),
     'field_name' => 'isct_body',
-    'type' => 'text_long',
     'module' => 'text',
+    'type' => 'text_long',
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
@@ -123,8 +124,8 @@ function _islandora_solr_content_type_installed_fields() {
     'translatable' => 0,
     'settings' => array(),
     'field_name' => 'isct_solr_query',
-    'type' => 'text_long',
     'module' => 'text',
+    'type' => 'text_long',
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
@@ -136,8 +137,44 @@ function _islandora_solr_content_type_installed_fields() {
     'translatable' => 1,
     'settings' => array(),
     'field_name' => 'isct_query_rows',
-    'type' => 'text',
     'module' => 'text',
+    'type' => 'text',
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
+  $fields['isct_display_dateslider'] = array(
+    'entity_types' => array('node'),
+    'translatable' => 0,
+    'settings' => array(
+      'allowed_values' => array (
+        '',
+        '', // Drupal requires two allowed_values for booleans.
+        ),
+      ),
+    'field_name' => 'isct_display_dateslider',
+    'module' => 'list',
+    'type' => 'list_boolean',
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
+  $fields['isct_display_auto_expand_date'] = array(
+    'entity_types' => array('node'),
+    'translatable' => 0,
+    'settings' => array(
+      'allowed_values' => array (
+        '',
+        '', // Drupal requires two allowed_values for booleans.
+        ),
+      ),
+    'field_name' => 'isct_display_auto_expand_date',
+    'module' => 'list',
+    'type' => 'list_boolean',
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
@@ -246,15 +283,7 @@ Examples:
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
-      ),
-      'full' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 2,
       ),
     ),
   );
@@ -289,15 +318,61 @@ Examples:
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
       ),
-      'full' => array(
+    ),
+  );
+
+$instances['isct_display_dateslider'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_display_dateslider',
+    'label' => $t('Display the date slider (date picker) in the Facet block?'),
+    'deleted' => 0,
+    'entity_type' => 'node',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'type' => 'options_onoff',
+      'settings' => array(
+        'display_label' => TRUE
+        ),
+      'weight' => 4,
+    ),
+    'display' => array(
+      'default' => array(
         'label' => 'hidden',
-        'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
+      ),
+    ),
+  );
+
+$instances['isct_display_auto_expand_date'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_display_auto_expand_date',
+    'label' => $t('Automatically expand the "Date Created" area in the Facets block?'),
+    'deleted' => 0,
+    'entity_type' => 'node',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'type' => 'options_onoff',
+      'settings' => array(
+        'display_label' => TRUE
+        ),
+      'weight' => 5,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
       ),
     ),
   );
@@ -305,7 +380,7 @@ Examples:
 $instances['isct_display_facets'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_facets',
-    'type' => 'list',
+    'type' => 'list_text',
     'label' => $t('Facets to display on page'),
     'default_value' => array( // this should not be static same as with the field.
       0 => array('value' => 'mods_subject_topic_ms',),
@@ -328,21 +403,12 @@ $instances['isct_display_facets'] = array(
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 4,
+      'weight' => 6,
     ),
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'list',
-        'settings' => array(),
         'type' => 'hidden',
-        'weight' => 2,
-      ),
-      'full' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 2,
       ),
     ),
   );

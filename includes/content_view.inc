@@ -1,5 +1,4 @@
 <?php 
-// vim: syntax=php
 /**
  * @file
  * Collection content page display and config.
@@ -31,9 +30,13 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		// Define and save our starting solr query, and results per page.
 		$islandora_solr_content_type_solr_query = field_get_items('node', $node, 'isct_solr_query');
 		$islandora_solr_content_type_query_rows = field_get_items('node', $node, 'isct_query_rows');
-		
+		$islandora_solr_content_type_diplay_dateslider = field_get_items('node', $node, 'isct_display_dateslider');
+		$islandora_solr_content_type_diplay_auto_expand_date = field_get_items('node', $node, 'isct_display_auto_expand_date');
+	
 		$_islandora_solr_content_type['content_query'] = $islandora_solr_content_type_solr_query[0]['value'];
 		$_islandora_solr_content_type['rows'] = $islandora_solr_content_type_query_rows[0]['value'];
+		$_islandora_solr_content_type['display_dateslider'] = $islandora_solr_content_type_diplay_dateslider[0]['value'];
+		$_islandora_solr_content_type['display_expand_date'] = $islandora_solr_content_type_diplay_auto_expand_date[0]['value'];
 
 		// For our content type, we want to default to the grid view. If the user selects 
 		// something else we do not want to override them back to the grid view.
@@ -166,9 +169,12 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
 	// We need to access the theme layer to hide the display of the title "Date Created"
 	// @see: https://github.com/Islandora/islandora_solr_search/blob/7.x/theme/theme.inc#L108
 
-	// Get rid of datepicker bar and the corresponding submit.
- 	$form['markup']['#access'] = FALSE;
-	$form['range_slider_submit']['#access'] = FALSE;
+	if (!$_islandora_solr_content_type['display_dateslider']) {
+		// Get rid of datepicker bar and the corresponding submit.
+	 	$form['markup']['#access'] = FALSE;
+		$form['range_slider_submit']['#access'] = FALSE;
+	}
+
 }
 
 /**
@@ -183,8 +189,10 @@ function islandora_solr_content_type_form_islandora_solr_date_filter_form_alter(
 		return;
 	}
 
-	// Modify the markup to class 'expanded' and remove the hide/show link:
-	$form['date_range_expand']['#markup'] = '<span class="toggle-date-range-filter date-range-expanded"></span>';
+	if ($_islandora_solr_content_type['display_expand_date']) {
+		// Modify the markup to class 'expanded' and remove the hide/show link:
+		$form['date_range_expand']['#markup'] = '<span class="toggle-date-range-filter date-range-expanded"></span>';
+	}	
 }
 ## END REGION
 
