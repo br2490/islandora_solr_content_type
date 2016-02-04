@@ -102,88 +102,101 @@ function _islandora_solr_content_type_variables() {
   return $variables;
 }
 
+/* 
+ * @TODO: describe.
+ */
 function _islandora_solr_content_type_installed_fields() {
   $t = get_t();
   $fields = array();
 
+  // Body field (forced to full view, no summary.)
   $fields['isct_body'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 1,
-    'settings' => array(),
     'field_name' => 'isct_body',
     'module' => 'text',
     'type' => 'text_long',
+    'settings' => array(),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
   );
 
+  // Solr query field
   $fields['isct_solr_query'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 0,
-    'settings' => array(),
     'field_name' => 'isct_solr_query',
     'module' => 'text',
     'type' => 'text_long',
+    'settings' => array(),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
   );
 
+  // Field: number of results to display per page (rows)
   $fields['isct_query_rows'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 1,
-    'settings' => array(),
     'field_name' => 'isct_query_rows',
     'module' => 'text',
     'type' => 'text',
+    'settings' => array(),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
   );
 
+  // Field: modify #access of facet block's date_slider
   $fields['isct_display_dateslider'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 0,
-    'settings' => array(
-      'allowed_values' => array (
-        '',
-        '', // Drupal requires two allowed_values for booleans.
-        ),
-      ),
     'field_name' => 'isct_display_dateslider',
     'module' => 'list',
     'type' => 'list_boolean',
+    'settings' => array(
+      'allowed_values' => array (
+        0 => '',
+        1 => '',
+        ),
+      ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
+    'parent' => 'isct_facets_group',
   );
 
+  // Field: modify #markup of facet block's date_range
   $fields['isct_display_auto_expand_date'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 0,
-    'settings' => array(
-      'allowed_values' => array (
-        '',
-        '', // Drupal requires two allowed_values for booleans.
-        ),
-      ),
     'field_name' => 'isct_display_auto_expand_date',
     'module' => 'list',
     'type' => 'list_boolean',
+    'settings' => array(
+      'allowed_values' => array (
+        0 => '',
+        1 => '', // apparently this is the "correct" convention.
+        ),
+      ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
   );
 
+  // Field: facets displayed on a collection page.
   $fields['isct_display_facets'] = array(
-    'entity_types' => array('node'),
+    'entity_types' => array(),
     'translatable' => 0,
+    'field_name' => 'isct_display_facets',
+    'module' => 'list',
+    'type' => 'list_text',
     'settings' => array(
       'allowed_values' => array( //This needs to be changed before any real release. This shouldn't be static.
         'mods_subject_topic_ms' => 'mods_subject_topic_ms',
@@ -197,27 +210,44 @@ function _islandora_solr_content_type_installed_fields() {
       ),
       'allowed_values_function' => '',
     ),
-    'field_name' => 'isct_display_facets',
-    'module' => 'list',
-    'type' => 'list_text',
     'active' => 1,
     'locked' => 1,
     'cardinality' => -1,
     'deleted' => 0,
   );
 
+  // Field: featured image to display at the top of the page, below title, above body.
+  $fields['isct_featured_image'] = array(
+    'entity_types' => array(),
+    'translatable' => 0,
+    'field_name' => 'isct_featured_image',
+    'module' => 'image',
+    'type' => 'image',
+    'settings' => array(
+      'default_image' => 0,
+      'uri_scheme' => 'public',
+    ),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
   return $fields;
 }
 
-function _islandora_solr_content_type_instances() {
 
+/* 
+ * @TODO: describe.
+ */
+
+function _islandora_solr_content_type_instances() {
   $instances = array();
   $t = get_t();
 
   $instances['isct_body'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_body',
-    'type' => 'text_long',
     'label' => $t('Collection Summary'),
     'deleted' => 0,
     'entity_type' => 'node',
@@ -238,25 +268,14 @@ function _islandora_solr_content_type_instances() {
         'settings' => array(),
         'weight' => 1,
       ),
-      'full' => array(
-        'label' => 'hidden',
-        'settings' => array(),
-        'weight' => 1,
-      ),
     ),
   );
 
   $instances['isct_solr_query'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_solr_query',
-    'type' => 'text',
+    'entity_type' => 'node',
     'label' => $t('Collection SOLR Query - landing page'),
-    'default_value' => array(
-      0 => array(
-        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
-      ),
-    ),
-    'deleted' => 0,
     'description' => $t('The SOLR query that will generate desired \'collection view.\' <br>
     An easy way to create this question is to visit the <a href="'.$GLOBALS['base_root'].'/islandora/search">search page</a> and start with a basic query.
 The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the SOLR search fields available to a site visitor.</em></strong><br>
@@ -265,19 +284,24 @@ Examples:
 <li>Get all yearbooks by mods title AND only display their cover (by collection membership): mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li>
 <li>Get all photographs using mods: mods_genre_ms:"photographs"</li>
 </ul>'),
-    'entity_type' => 'node',
+    'default_value' => array(
+      0 => array(
+        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
+      ),
+    ),
+    'deleted' => 0,
     'required' => 1,
     'settings' => array(
       'text_processing' => 0,
-      'user_register_form' => FALSE,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'text',
-      'settings' => array(
-        'rows' => 2,
-      ),
       'type' => 'text_textarea',
+      'settings' => array(
+        'rows' => 1,
+      ),
       'weight' => 2,
     ),
     'display' => array(
@@ -288,10 +312,62 @@ Examples:
     ),
   );
 
+  $instances['isct_featured_image'] = array(
+    'entity_type' => 'node',
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_featured_image',
+    'type' => 'image',
+    'label' => 'Featured Image (Incomplete Feature)',
+    'description' => 'Select the featured image to appear at the top of page, under the title but before the collection description.',
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'media',
+      'settings' => array(
+        'allowed_schemes' => array(
+          'public' => 'public',
+        ),
+        'allowed_types' => array(
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'media_generic',
+      'weight' => 3,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 0,
+      ),
+    ),
+  );
+  
   $instances['isct_query_rows'] = array(
+    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_query_rows',
-    'type' => 'text',
     'label' => $t('Number of results to display per page'),
     'default_value' => array(
       0 => array(
@@ -300,11 +376,10 @@ Examples:
     ),
     'deleted' => 0,
     'description' => $t('The number of records (rows) to display from the SOLR query.'),
-    'entity_type' => 'node',
     'required' => 1,
     'settings' => array(
       'text_processing' => 0,
-      'user_register_form' => FALSE,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
@@ -313,7 +388,7 @@ Examples:
         'size' => 40,
       ),
       'type' => 'text',
-      'weight' => 3,
+      'weight' => 10,
     ),
     'display' => array(
       'default' => array(
@@ -324,23 +399,26 @@ Examples:
   );
 
 $instances['isct_display_dateslider'] = array(
+    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_dateslider',
     'label' => $t('Display the date slider (date picker) in the Facet block?'),
+    'default_value' => array(
+      0 => array('value' => 0,),
+    ),
     'deleted' => 0,
-    'entity_type' => 'node',
     'required' => 0,
     'settings' => array(
-      'user_register_form' => FALSE,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
       'settings' => array(
-        'display_label' => TRUE
+        'display_label' => 1
         ),
-      'weight' => 4,
+      'weight' => 11,
     ),
     'display' => array(
       'default' => array(
@@ -351,23 +429,26 @@ $instances['isct_display_dateslider'] = array(
   );
 
 $instances['isct_display_auto_expand_date'] = array(
+    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_auto_expand_date',
     'label' => $t('Automatically expand the "Date Created" area in the Facets block?'),
+    'default_value' => array(
+      0 => array('value' => 1,),
+    ),
     'deleted' => 0,
-    'entity_type' => 'node',
     'required' => 0,
     'settings' => array(
-      'user_register_form' => FALSE,
+      'user_register_form' => 0,
     ),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
       'settings' => array(
-        'display_label' => TRUE
+        'display_label' => 1
         ),
-      'weight' => 5,
+      'weight' => 12,
     ),
     'display' => array(
       'default' => array(
@@ -378,6 +459,7 @@ $instances['isct_display_auto_expand_date'] = array(
   );
 
 $instances['isct_display_facets'] = array(
+    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_facets',
     'type' => 'list_text',
@@ -393,17 +475,18 @@ $instances['isct_display_facets'] = array(
       7 => array('value' => 'mods_relatedItem_series_titleInfo_title_ms',),
     ),
     'deleted' => 0,
-    'entity_type' => 'node',
     'required' => 0,
     'settings' => array(
-      'user_register_form' => FALSE,
+      'user_register_form' => 0,
     ),
+    'tree' => 1,
+    'collapsible' => 1,
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 6,
+      'weight' => 13,
     ),
     'display' => array(
       'default' => array(

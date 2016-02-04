@@ -12,6 +12,8 @@
 function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 	if ($node->type == 'islandora_solr_content_type') {
 
+		dpm($node);
+
 		// Get our globals.
 		global $_islandora_solr_content_type;
 		global $_islandora_solr_queryclass;
