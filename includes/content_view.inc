@@ -1,5 +1,5 @@
 <?php 
-// vim: syntax=php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
 /**
  * @file
  * Collection content page display and config.
