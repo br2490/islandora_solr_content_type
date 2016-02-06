@@ -20,24 +20,6 @@ function islandora_solr_content_type_install() {
   islandora_solr_content_type_add_variables();
 }
 
-function islandora_solr_content_type_add_custom_fields() {
-  //Add our content fields
-  foreach (_islandora_solr_content_type_installed_fields() as $field) {
-    field_create_field($field);
-  }
-  //Add instances of base fields.
-  foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
-    field_create_instance($fieldinstance);
-  }
-
-}
-
-function islandora_solr_content_type_add_variables() {
-  foreach(_islandora_solr_content_type_variables() as $var => $option) {
-    variable_set($var, $option);
-  }
-}
-
 /**
  * Implements hook_uninstall().
  */
@@ -55,6 +37,30 @@ function islandora_solr_content_type_uninstall() {
   islandora_solr_content_type_remove_variables();
 }
 
+// INSTALL SECTION
+/*
+ * Function to add our conntent fields and instances.
+ */
+function islandora_solr_content_type_add_custom_fields() {
+  foreach (_islandora_solr_content_type_installed_fields() as $field) {
+    field_create_field($field);
+  }
+  foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
+   field_create_instance($fieldinstance);
+  }
+}
+
+/* 
+ * Function to populate our variables.
+ */
+function islandora_solr_content_type_add_variables() {
+  foreach(_islandora_solr_content_type_variables() as $var => $option) {
+    variable_set($var, $option);
+  }
+}
+// END INSTALL SECTION
+
+// UNINSTALL SECTION
 function islandora_solr_content_type_delete_custom_fields() {
   foreach (array_keys(_islandora_solr_content_type_installed_fields()) as $field) {
     field_delete_field($field);
@@ -70,11 +76,10 @@ function islandora_solr_content_type_remove_variables() {
     variable_del($var);
   }
 }
+// END UNSINTALL SECTION
 
-/**
- * BEGIN VARIABLES, FIELDS AND INSTANCES
- */
 
+// VARIABLES, FIELDS AND INSTANCES SECTION
 function _islandora_solr_content_type_variables() {
   $variables = array();
 
@@ -103,11 +108,7 @@ function _islandora_solr_content_type_variables() {
   return $variables;
 }
 
-/* 
- * @TODO: describe.
- */
 function _islandora_solr_content_type_installed_fields() {
-  $t = get_t();
   $fields = array();
 
   // Body field (forced to full view, no summary.)
@@ -182,7 +183,7 @@ function _islandora_solr_content_type_installed_fields() {
     'settings' => array(
       'allowed_values' => array (
         0 => '',
-        1 => '', // apparently this is the "correct" convention.
+        1 => '',
         ),
       ),
     'active' => 1,
@@ -198,7 +199,7 @@ function _islandora_solr_content_type_installed_fields() {
     'field_name' => 'isct_display_facets',
     'module' => 'list',
     'type' => 'list_text',
-    'settings' => array(
+    'settings' => array( // Wondering if we really want to specify this here or in the instances?
       'allowed_values' => array( //This needs to be changed before any real release. This shouldn't be static.
         'mods_subject_topic_ms' => 'mods_subject_topic_ms',
         'mods_genre_ms' => 'mods_genre_ms',
@@ -234,13 +235,56 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
   );
 
+  // Field: featured image subtext or description
+  $fields['isct_featured_image_desc'] = array(
+    'entity_types' => array(),
+    'translatable' => 1,
+    'field_name' => 'isct_featured_image_desc',
+    'module' => 'text',
+    'type' => 'text',
+    'settings' => array(),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
+  // Field: featured image <a href=URL>
+  $fields['isct_featured_image_url'] = array(
+    'entity_types' => array(),
+    'translatable' => 0,
+    'field_name' => 'isct_featured_image_url',
+    'module' => 'text',
+    'type' => 'text',
+    'settings' => array(),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
+  // Field: featured iamge, hide when user preforms a collection query?
+  $fields['isct_featured_image_hide'] = array(
+    'entity_types' => array(),
+    'translatable' => 0,
+    'field_name' => 'isct_featured_image_hide',
+    'module' => 'list',
+    'type' => 'list_boolean',
+    'settings' => array(
+      'allowed_values' => array (
+        0 => '',
+        1 => '',
+        ),
+      ),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
   return $fields;
 }
 
-
-/* 
- * @TODO: describe.
- */
 
 function _islandora_solr_content_type_instances() {
   $instances = array();
@@ -312,59 +356,7 @@ Examples:
       ),
     ),
   );
-
-  $instances['isct_featured_image'] = array(
-    'entity_type' => 'node',
-    'bundle' => 'islandora_solr_content_type',
-    'field_name' => 'isct_featured_image',
-    'type' => 'image',
-    'label' => 'Featured Image (Incomplete Feature)',
-    'description' => 'Select the featured image to appear at the top of page, under the title but before the collection description.',
-    'deleted' => 0,
-    'required' => 0,
-    'settings' => array(
-      'alt_field' => 0,
-      'default_image' => 0,
-      'file_directory' => '',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
-      'min_resolution' => '',
-      'title_field' => 0,
-      'user_register_form' => 0,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'media',
-      'settings' => array(
-        'allowed_schemes' => array(
-          'public' => 'public',
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'default' => 0,
-          'image' => 'image',
-          'video' => 0,
-        ),
-        'progress_indicator' => 'throbber',
-      ),
-      'type' => 'media_generic',
-      'weight' => 3,
-    ),
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'image',
-        'settings' => array(
-          'image_link' => '',
-          'image_style' => '',
-        ),
-        'type' => 'image',
-        'weight' => 0,
-      ),
-    ),
-  );
-  
+ 
   $instances['isct_query_rows'] = array(
     'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
@@ -493,6 +485,58 @@ $instances['isct_display_facets'] = array(
       'default' => array(
         'label' => 'hidden',
         'type' => 'hidden',
+      ),
+    ),
+  );
+
+  $instances['isct_featured_image'] = array(
+    'entity_type' => 'node',
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_featured_image',
+    'type' => 'image',
+    'label' => 'Featured Image (Incomplete Feature)',
+    'description' => 'Select the featured image to appear at the top of page, under the title but before the collection description.',
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'alt_field' => 0,
+      'default_image' => 0,
+      'file_directory' => '',
+      'file_extensions' => 'png gif jpg jpeg',
+      'max_filesize' => '',
+      'max_resolution' => '',
+      'min_resolution' => '',
+      'title_field' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'media',
+      'settings' => array(
+        'allowed_schemes' => array(
+          'public' => 'public',
+        ),
+        'allowed_types' => array(
+          'audio' => 0,
+          'default' => 0,
+          'image' => 'image',
+          'video' => 0,
+        ),
+        'progress_indicator' => 'throbber',
+      ),
+      'type' => 'media_generic',
+      'weight' => 3,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'image',
+        'settings' => array(
+          'image_link' => '',
+          'image_style' => '',
+        ),
+        'type' => 'image',
+        'weight' => 0,
       ),
     ),
   );
