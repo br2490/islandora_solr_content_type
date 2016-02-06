@@ -1,4 +1,5 @@
 <?php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
 /**
  * @file
  * Handles install and uninstall of module.
