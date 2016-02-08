@@ -630,7 +630,8 @@ $instances['isct_display_facets'] = array(
       'active' => 1,
       'module' => 'text',
       'settings' => array(),
-      'type' => 'text',
+      'type' => 'text_long',
+      'default_widget' => 'text_textfield',
       'weight' => 4,
     ),
     'display' => array(
