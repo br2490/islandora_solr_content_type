@@ -20,7 +20,7 @@ $_islandora_solr_content_type = array();
 function islandora_solr_content_type_node_info() {
   $items = array(
     'islandora_solr_content_type' => array(
-      'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still WIP)
+      'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still a WIP)
       'base' => 'node_content',
       'description' => t('A content type to configure and display a collection by a specifying a SOLR query. <em>Collection</em> is used loosely, as these content pages may be curated exhibits, special projects, timely (or time-based) collections, etc.  '),
       'has_title' => '1',
