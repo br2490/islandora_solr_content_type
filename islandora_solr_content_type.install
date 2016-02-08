@@ -37,7 +37,7 @@ function islandora_solr_content_type_uninstall() {
   islandora_solr_content_type_remove_variables();
 }
 
-// INSTALL SECTION
+// Install functions section
 /*
  * Function to add our conntent fields and instances.
  */
@@ -58,9 +58,12 @@ function islandora_solr_content_type_add_variables() {
     variable_set($var, $option);
   }
 }
-// END INSTALL SECTION
 
-// UNINSTALL SECTION
+
+// Uninstall/remove functions section
+/*
+ * Function to remove our conntent fields and instances.
+ */
 function islandora_solr_content_type_delete_custom_fields() {
   foreach (array_keys(_islandora_solr_content_type_installed_fields()) as $field) {
     field_delete_field($field);
@@ -71,15 +74,19 @@ function islandora_solr_content_type_delete_custom_fields() {
   }
 }
 
+/* 
+ * Function to delete our variables.
+ */
 function islandora_solr_content_type_remove_variables() {
   foreach(array_keys(_islandora_solr_content_type_variables()) as $var) {
     variable_del($var);
   }
 }
-// END UNSINTALL SECTION
 
 
-// VARIABLES, FIELDS AND INSTANCES SECTION
+// Fields, instances and variables for islandora_solr_content_type
+// Note that some fields, instances and variable names use the name initialism (ISCT) to
+// avoid the strlen limit on fields and instances.
 function _islandora_solr_content_type_variables() {
   $variables = array();
 
@@ -111,7 +118,7 @@ function _islandora_solr_content_type_variables() {
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
 
-  // Body field (forced to full view, no summary.)
+  // "Custom" body field (forced to full view, no summary.)
   $fields['isct_body'] = array(
     'entity_types' => array(),
     'translatable' => 1,
@@ -235,7 +242,7 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
   );
 
-  // Field: featured image subtext or description
+  // Field: featured image subtitle or description
   $fields['isct_featured_image_desc'] = array(
     'entity_types' => array(),
     'translatable' => 1,
@@ -249,7 +256,7 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
   );
 
-  // Field: featured image <a href=URL>
+  // Field: featured image href
   $fields['isct_featured_image_url'] = array(
     'entity_types' => array(),
     'translatable' => 0,
@@ -263,7 +270,7 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
   );
 
-  // Field: featured iamge, hide when user preforms a collection query?
+  // Field: (bool) hide featured iamge when user preforms a collection query?
   $fields['isct_featured_image_hide'] = array(
     'entity_types' => array(),
     'translatable' => 0,
@@ -285,7 +292,7 @@ function _islandora_solr_content_type_installed_fields() {
   return $fields;
 }
 
-
+// grumble grumble...
 function _islandora_solr_content_type_instances() {
   $instances = array();
   $t = get_t();
@@ -293,9 +300,9 @@ function _islandora_solr_content_type_instances() {
   $instances['isct_body'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_body',
+    'entity_type' => 'node',
     'label' => $t('Collection Summary'),
     'deleted' => 0,
-    'entity_type' => 'node',
     'required' => 0,
     'settings' => array(
       'text_processing' => 1,
@@ -322,16 +329,16 @@ function _islandora_solr_content_type_instances() {
     'entity_type' => 'node',
     'label' => $t('Collection SOLR Query - landing page'),
     'description' => $t('The SOLR query that will generate desired \'collection view.\' <br>
-    An easy way to create this question is to visit the <a href="'.$GLOBALS['base_root'].'/islandora/search">search page</a> and start with a basic query.
+    An easy way to create this question is to visit the <a target="_blank" href="'.$GLOBALS['base_root'].'/islandora/search">search page</a> and start with a basic query.
 The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the SOLR search fields available to a site visitor.</em></strong><br>
-Examples: 
+Barnard College Examples: 
 <ul>
 <li>Get all yearbooks by mods title AND only display their cover (by collection membership): mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li>
 <li>Get all photographs using mods: mods_genre_ms:"photographs"</li>
 </ul>'),
     'default_value' => array(
       0 => array(
-        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
+        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'), // This is for dev and should be removed.
       ),
     ),
     'deleted' => 0,
@@ -358,9 +365,9 @@ Examples:
   );
  
   $instances['isct_query_rows'] = array(
-    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_query_rows',
+    'entity_type' => 'node',
     'label' => $t('Number of results to display per page'),
     'default_value' => array(
       0 => array(
@@ -392,9 +399,9 @@ Examples:
   );
 
 $instances['isct_display_dateslider'] = array(
-    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_dateslider',
+    'entity_type' => 'node',
     'label' => $t('Display the date slider (date picker) in the Facet block?'),
     'default_value' => array(
       0 => array('value' => 0,),
@@ -422,9 +429,9 @@ $instances['isct_display_dateslider'] = array(
   );
 
 $instances['isct_display_auto_expand_date'] = array(
-    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_auto_expand_date',
+    'entity_type' => 'node',
     'label' => $t('Automatically expand the "Date Created" area in the Facets block?'),
     'default_value' => array(
       0 => array('value' => 1,),
@@ -452,9 +459,9 @@ $instances['isct_display_auto_expand_date'] = array(
   );
 
 $instances['isct_display_facets'] = array(
-    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_facets',
+    'entity_type' => 'node',
     'type' => 'list_text',
     'label' => $t('Facets to display on page'),
     'default_value' => array( // this should not be static same as with the field.
@@ -490,12 +497,12 @@ $instances['isct_display_facets'] = array(
   );
 
   $instances['isct_featured_image'] = array(
-    'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_featured_image',
+    'entity_type' => 'node',
     'type' => 'image',
-    'label' => 'Featured Image (Incomplete Feature)',
-    'description' => 'Select the featured image to appear at the top of page, under the title but before the collection description.',
+    'label' => $t('Featured Image (Incomplete Feature)'),
+    'description' => $t('Select the featured image to appear at the top of page, under the title but before the collection description.'),
     'deleted' => 0,
     'required' => 0,
     'settings' => array(
