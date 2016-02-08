@@ -5,6 +5,38 @@
  * Collection content page display and config.
  */
 
+
+function islandora_solr_content_type_prepare_content($node) {
+		global $_islandora_solr_content_type;
+
+		// These are our content variables that the end-user has little interaction with. 
+		// These DEFINE what is present on the content page, and also help us with search.
+		// Everything gets saved in the content's global - I'm sure there is a better way.
+		
+		// Get our field collections
+		$display_options_collection = field_get_items('node', $node, 'isct_fc_display_opts');
+		$featured_image_collection = field_get_items('node', $node, 'isct_fc_featured_image');
+		$display_options = field_collection_item_load($display_options_collection[0]['value']);
+  	$featured_image = field_collection_item_load($featured_image_collection[0]['value']);
+
+		// Configure the solr facets that will be displayed on the final content page.
+		foreach (field_get_items('field_collection_item', $display_options, 'isct_display_facets') as $field) {
+			$_islandora_solr_content_type['facets'][] = $field['value'];
+		}
+
+		// Define and save our starting solr query, and results per page.
+		$isct_solr_query = field_get_items('node', $node, 'isct_solr_query');
+		$isct_query_rows = field_get_items('node', $node, 'isct_query_rows');
+		$isct_display_dateslider = field_get_items('field_collection_item', $display_options, 'isct_display_dateslider');
+		$isct_display_auto_expand_date = field_get_items('field_collection_item', $display_options, 'isct_display_auto_expand_date');
+	
+		$_islandora_solr_content_type['content_query'] = $isct_solr_query[0]['value'];
+		$_islandora_solr_content_type['rows'] = $isct_query_rows[0]['value'];
+		$_islandora_solr_content_type['display_dateslider'] = $isct_display_dateslider[0]['value'];
+		$_islandora_solr_content_type['display_expand_date'] = $isct_display_auto_expand_date[0]['value'];
+
+}
+
 /**
  * Implements hook_node_view()
  * This is where we display our content type to the end-user.
@@ -21,25 +53,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		// We're on a islandora_solr_content_type page...
 		$_islandora_solr_content_type['view'] = TRUE;
 
-		// These are our content variables that the end-user has little interaction with. 
-		// These DEFINE what is present on the content page, and also help us with search.
-		// Everything gets saved in the content's global for reasons ('reasons...')
-		
-		// Configure the solr facets that will be displayed on the final content page.
-		foreach (field_get_items('node', $node, 'isct_display_facets') as $field) {
-			$_islandora_solr_content_type['facets'][] = $field['value'];
-		}
-
-		// Define and save our starting solr query, and results per page.
-		$islandora_solr_content_type_solr_query = field_get_items('node', $node, 'isct_solr_query');
-		$islandora_solr_content_type_query_rows = field_get_items('node', $node, 'isct_query_rows');
-		$islandora_solr_content_type_diplay_dateslider = field_get_items('node', $node, 'isct_display_dateslider');
-		$islandora_solr_content_type_diplay_auto_expand_date = field_get_items('node', $node, 'isct_display_auto_expand_date');
-	
-		$_islandora_solr_content_type['content_query'] = $islandora_solr_content_type_solr_query[0]['value'];
-		$_islandora_solr_content_type['rows'] = $islandora_solr_content_type_query_rows[0]['value'];
-		$_islandora_solr_content_type['display_dateslider'] = $islandora_solr_content_type_diplay_dateslider[0]['value'];
-		$_islandora_solr_content_type['display_expand_date'] = $islandora_solr_content_type_diplay_auto_expand_date[0]['value'];
+		islandora_solr_content_type_prepare_content($node);		
 
 		// For our content type, we want to default to the grid view. If the user selects 
 		// something else we do not want to override them back to the grid view.

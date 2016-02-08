@@ -52,13 +52,12 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
  */
 function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $form_id) {
 	if ($form['#node']->type == 'islandora_solr_content_type') {
-		// This is the hackiest most impressively lazy use of "pseudo-fieldsets"
-		$form['isct_display_dateslider']['#prefix'] = '<fieldset class="collapsible form-wrapper"><legend><span class="fieldset-legend">Additional Display Options</span></legend><div class="fieldset-wrapper">';
-		// There are a bunch of elements here that are being wrapped as though they were
-		// coded as a field set. This means you can hide/show these fields on the page...
-		$form['isct_display_facets']['#suffix'] = '</div></fieldset>';
+		$form['isct_fc_display_opts']['und'][0]['#collapsible'] = TRUE;
+		$form['isct_fc_display_opts']['und'][0]['#collapsed'] = FALSE;
+		$form['isct_fc_featured_image']['und'][0]['#collapsible'] = TRUE;
+		$form['isct_fc_featured_image']['und'][0]['#collapsed'] = FALSE;
 
-		dpm($form);
+		// dpm($form);
 	}
 }
 

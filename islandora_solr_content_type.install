@@ -118,9 +118,27 @@ function _islandora_solr_content_type_variables() {
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
 
+  // Collections first
+  $fields['isct_fc_featured_image'] = array(
+    'field_name' => 'isct_fc_featured_image',
+    'type' => 'field_collection',
+    'active' => 1,
+    'locked' => 1,
+    'cadinality' => -1,
+    'deleted' => 0,
+    );
+
+  $fields['isct_fc_display_opts'] = array(
+    'field_name' => 'isct_fc_display_opts',
+    'type' => 'field_collection',
+    'active' => 1,
+    'locked' => 1,
+    'cadinality' => -1,
+    'deleted' => 0,
+    );
+
   // "Custom" body field (forced to full view, no summary.)
   $fields['isct_body'] = array(
-    'entity_types' => array(),
     'translatable' => 1,
     'field_name' => 'isct_body',
     'module' => 'text',
@@ -130,11 +148,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Solr query field
   $fields['isct_solr_query'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_solr_query',
     'module' => 'text',
@@ -144,11 +161,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Field: number of results to display per page (rows)
   $fields['isct_query_rows'] = array(
-    'entity_types' => array(),
     'translatable' => 1,
     'field_name' => 'isct_query_rows',
     'module' => 'text',
@@ -158,11 +174,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Field: modify #access of facet block's date_slider
   $fields['isct_display_dateslider'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_display_dateslider',
     'module' => 'list',
@@ -177,12 +192,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    'parent' => 'isct_facets_group',
-  );
+    );
 
   // Field: modify #markup of facet block's date_range
   $fields['isct_display_auto_expand_date'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_display_auto_expand_date',
     'module' => 'list',
@@ -197,11 +210,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Field: facets displayed on a collection page.
   $fields['isct_display_facets'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_display_facets',
     'module' => 'list',
@@ -223,11 +235,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => -1,
     'deleted' => 0,
-  );
+    );
 
   // Field: featured image to display at the top of the page, below title, above body.
   $fields['isct_featured_image'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_featured_image',
     'module' => 'image',
@@ -240,13 +251,12 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Field: featured image subtitle or description
-  $fields['isct_featured_image_desc'] = array(
-    'entity_types' => array(),
+  $fields['isct_featured_image_caption'] = array(
     'translatable' => 1,
-    'field_name' => 'isct_featured_image_desc',
+    'field_name' => 'isct_featured_image_caption',
     'module' => 'text',
     'type' => 'text',
     'settings' => array(),
@@ -254,11 +264,10 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-  );
+    );
 
   // Field: featured image href
   $fields['isct_featured_image_url'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_featured_image_url',
     'module' => 'text',
@@ -272,7 +281,6 @@ function _islandora_solr_content_type_installed_fields() {
 
   // Field: (bool) hide featured iamge when user preforms a collection query?
   $fields['isct_featured_image_hide'] = array(
-    'entity_types' => array(),
     'translatable' => 0,
     'field_name' => 'isct_featured_image_hide',
     'module' => 'list',
@@ -296,6 +304,38 @@ function _islandora_solr_content_type_installed_fields() {
 function _islandora_solr_content_type_instances() {
   $instances = array();
   $t = get_t();
+
+
+  $instances['isct_fc_display_opts'] = array(
+    'field_name' => 'isct_fc_display_opts',
+    'entity_type' => 'node',
+    'bundle' => 'islandora_solr_content_type',
+    'label' => $t('Additional Display Settings'),
+    'widget' => array('type' => 'field_collection_embed'),
+    'required' => 1,
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
+        ),
+      ),
+    );
+
+  $instances['isct_fc_featured_image'] = array(
+    'field_name' => 'isct_fc_featured_image',
+    'entity_type' => 'node',
+    'bundle' => 'islandora_solr_content_type',
+    'label' => $t('Featured Image'),
+    'widget' => array('type' => 'field_collection_embed',),
+    'required' => 1,
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'weight' => 0,
+        ),
+      ),
+    );
 
   $instances['isct_body'] = array(
     'bundle' => 'islandora_solr_content_type',
@@ -352,7 +392,7 @@ Barnard College Examples:
       'module' => 'text',
       'type' => 'text_textarea',
       'settings' => array(
-        'rows' => 1,
+        'rows' => 2,
       ),
       'weight' => 2,
     ),
@@ -399,9 +439,9 @@ Barnard College Examples:
   );
 
 $instances['isct_display_dateslider'] = array(
-    'bundle' => 'islandora_solr_content_type',
+    'bundle' => 'isct_fc_display_opts',
     'field_name' => 'isct_display_dateslider',
-    'entity_type' => 'node',
+    'entity_type' => 'field_collection_item',
     'label' => $t('Display the date slider (date picker) in the Facet block?'),
     'default_value' => array(
       0 => array('value' => 0,),
@@ -429,9 +469,9 @@ $instances['isct_display_dateslider'] = array(
   );
 
 $instances['isct_display_auto_expand_date'] = array(
-    'bundle' => 'islandora_solr_content_type',
+    'bundle' => 'isct_fc_display_opts',
     'field_name' => 'isct_display_auto_expand_date',
-    'entity_type' => 'node',
+    'entity_type' => 'field_collection_item',
     'label' => $t('Automatically expand the "Date Created" area in the Facets block?'),
     'default_value' => array(
       0 => array('value' => 1,),
@@ -459,9 +499,9 @@ $instances['isct_display_auto_expand_date'] = array(
   );
 
 $instances['isct_display_facets'] = array(
-    'bundle' => 'islandora_solr_content_type',
+    'bundle' => 'isct_fc_display_opts',
     'field_name' => 'isct_display_facets',
-    'entity_type' => 'node',
+    'entity_type' => 'field_collection_item',
     'type' => 'list_text',
     'label' => $t('Facets to display on page'),
     'default_value' => array( // this should not be static same as with the field.
@@ -497,11 +537,11 @@ $instances['isct_display_facets'] = array(
   );
 
   $instances['isct_featured_image'] = array(
-    'bundle' => 'islandora_solr_content_type',
+    'bundle' => 'isct_fc_featured_image',
     'field_name' => 'isct_featured_image',
-    'entity_type' => 'node',
+    'entity_type' => 'field_collection_item',
     'type' => 'image',
-    'label' => $t('Featured Image (Incomplete Feature)'),
+    'label' => $t('Featured Image'),
     'description' => $t('Select the featured image to appear at the top of page, under the title but before the collection description.'),
     'deleted' => 0,
     'required' => 0,
@@ -532,7 +572,7 @@ $instances['isct_display_facets'] = array(
         'progress_indicator' => 'throbber',
       ),
       'type' => 'media_generic',
-      'weight' => 3,
+      'weight' => 1,
     ),
     'display' => array(
       'default' => array(
@@ -543,7 +583,90 @@ $instances['isct_display_facets'] = array(
           'image_style' => '',
         ),
         'type' => 'image',
-        'weight' => 0,
+        'weight' => -2,
+      ),
+    ),
+  );
+
+  $instances['isct_featured_image_caption'] = array(
+    'bundle' => 'isct_fc_featured_image',
+    'field_name' => 'isct_featured_image_caption',
+    'entity_type' => 'field_collection_item',
+    'label' => $t('Featured image caption'),
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 1,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(),
+      'type' => 'text',
+      'weight' => 3,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'settings' => array(),
+        'weight' => -1,
+      ),
+    ),
+  );
+
+  $instances['isct_featured_image_url'] = array(
+    'bundle' => 'isct_fc_featured_image',
+    'field_name' => 'isct_featured_image_url',
+    'entity_type' => 'field_collection_item',
+    'label' => $t('Featured image link (relative or absolute)'),
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(),
+      'type' => 'text',
+      'weight' => 4,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
+      ),
+    ),
+  );
+
+  $instances['isct_featured_image_hide'] = array(
+    'bundle' => 'isct_fc_featured_image',
+    'field_name' => 'isct_featured_image_hide',
+    'entity_type' => 'field_collection_item',
+    'label' => $t('Hide the featured image when the user preforms a search in the collection?'),
+    'default_value' => array(
+      0 => array('value' => 1,),
+    ),
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'type' => 'options_onoff',
+      'settings' => array(
+        'display_label' => 1
+        ),
+      'weight' => 2,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
       ),
     ),
   );
