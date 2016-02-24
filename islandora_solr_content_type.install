@@ -536,6 +536,7 @@ $instances['isct_display_facets'] = array(
     ),
   );
 
+  // THESE ARE UNIMPLEMENTED ~ NOT FOR RELEASE ONE.
   $instances['isct_featured_image'] = array(
     'bundle' => 'isct_fc_featured_image',
     'field_name' => 'isct_featured_image',
@@ -577,11 +578,12 @@ $instances['isct_display_facets'] = array(
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'image',
-        'settings' => array(
-          'image_link' => '',
-          'image_style' => '',
-        ),
+        'type' => 'hidden',
+        // 'module' => 'image',
+        // 'settings' => array(
+        //   'image_link' => '',
+        //   'image_style' => '',
+        // ),
         'type' => 'image',
         'weight' => -2,
       ),
@@ -609,6 +611,7 @@ $instances['isct_display_facets'] = array(
     'display' => array(
       'default' => array(
         'label' => 'hidden',
+        'type' => 'hidden',
         'settings' => array(),
         'weight' => -1,
       ),
