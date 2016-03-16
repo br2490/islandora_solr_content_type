@@ -1,4 +1,5 @@
 <?php
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
 /**
  * @file
  * Collection "views" via a custom content type.
@@ -19,7 +20,7 @@ $_islandora_solr_content_type = array();
 function islandora_solr_content_type_node_info() {
   $items = array(
     'islandora_solr_content_type' => array(
-      'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still WIP)
+      'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still a WIP)
       'base' => 'node_content',
       'description' => t('A content type to configure and display a collection by a specifying a SOLR query. <em>Collection</em> is used loosely, as these content pages may be curated exhibits, special projects, timely (or time-based) collections, etc.  '),
       'has_title' => '1',
@@ -51,13 +52,12 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
  */
 function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $form_id) {
 	if ($form['#node']->type == 'islandora_solr_content_type') {
-		// This is the hackiest most impressively lazy use of "pseudo-fieldsets"
-		$form['isct_display_dateslider']['#prefix'] = '<fieldset class="collapsible form-wrapper"><legend><span class="fieldset-legend">Additional Display Options</span></legend><div class="fieldset-wrapper">';
-		// There are a bunch of elements here that are being wrapped as though they were
-		// coded as a field set. This means you can hide/show these fields on the page...
-		$form['isct_display_facets']['#suffix'] = '</div></fieldset>';
+		$form['isct_fc_display_opts']['und'][0]['#collapsible'] = TRUE;
+		$form['isct_fc_display_opts']['und'][0]['#collapsed'] = FALSE;
+		$form['isct_fc_featured_image']['und'][0]['#collapsible'] = TRUE;
+		$form['isct_fc_featured_image']['und'][0]['#collapsed'] = FALSE;
 
-		dpm($form);
+		// dpm($form);
 	}
 }
 
