@@ -5,7 +5,6 @@
  * Collection content page display and config.
  */
 
-
 function islandora_solr_content_type_prepare_content($node) {
 		global $_islandora_solr_content_type;
 
@@ -15,9 +14,9 @@ function islandora_solr_content_type_prepare_content($node) {
 		
 		// Get our field collections
 		$display_options_collection = field_get_items('node', $node, 'isct_fc_display_opts');
-		$featured_image_collection = field_get_items('node', $node, 'isct_fc_featured_image');
+		$featured_image_collection = field_get_items('node', $node, 'isct_fc_featured_area'); // UNUSED
 		$display_options = field_collection_item_load($display_options_collection[0]['value']);
-  	$featured_image = field_collection_item_load($featured_image_collection[0]['value']);
+		$featured_image = field_collection_item_load($featured_image_collection[0]['value']);
 
 		// Configure the solr facets that will be displayed on the final content page.
 		foreach (field_get_items('field_collection_item', $display_options, 'isct_display_facets') as $field) {
@@ -27,14 +26,16 @@ function islandora_solr_content_type_prepare_content($node) {
 		// Define and save our starting solr query, and results per page.
 		$isct_solr_query = field_get_items('node', $node, 'isct_solr_query');
 		$isct_query_rows = field_get_items('node', $node, 'isct_query_rows');
-		$isct_display_dateslider = field_get_items('field_collection_item', $display_options, 'isct_display_dateslider');
+
+		$isct_hide_datefacets = field_get_items('field_collection_item', $display_options, 'isct_display_datefacets');
+		$isct_hide_dateslider = field_get_items('field_collection_item', $display_options, 'isct_display_dateslider');
 		$isct_display_auto_expand_date = field_get_items('field_collection_item', $display_options, 'isct_display_auto_expand_date');
 	
 		$_islandora_solr_content_type['content_query'] = $isct_solr_query[0]['value'];
 		$_islandora_solr_content_type['rows'] = $isct_query_rows[0]['value'];
-		$_islandora_solr_content_type['display_dateslider'] = $isct_display_dateslider[0]['value'];
+		$_islandora_solr_content_type['hide_datefacets'] = $isct_hide_datefacets[0]['value'];
+		$_islandora_solr_content_type['hide_dateslider'] = $isct_hide_dateslider[0]['value'];
 		$_islandora_solr_content_type['display_expand_date'] = $isct_display_auto_expand_date[0]['value'];
-
 }
 
 /**
@@ -44,7 +45,7 @@ function islandora_solr_content_type_prepare_content($node) {
 function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 	if ($node->type == 'islandora_solr_content_type') {
 
-		dpm($node);
+		//dpm($node);
 
 		// Get our globals.
 		global $_islandora_solr_content_type;
@@ -59,7 +60,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		// something else we do not want to override them back to the grid view.
 		!isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
 
-		// The important stuff:
+		// The _very_ important stuff:
 		// Foremost we rely on islandora_solr() to return a search result - that will be our primary content.
 		// This reliance on islandora_solr let us do amazing things fairly simply.
 		
@@ -80,7 +81,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		$node->content['switch_block'] = array(
 			'#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'display_switch'),
 			'#weight' => '2',
-			);
+		);
 
 		$node->content['sort_order_block'] = array(
 			'#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'sort'),
@@ -183,10 +184,15 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
 		return;
 	}
 
+	// Hide the entire date faceting area! If this is TRUE once we set access we can leave this function.
+	if ($_islandora_solr_content_type['hide_datefacets']) {
+		$form['#access'] = FALSE;
+		return;
+	}
+
 	// We need to access the theme layer to hide the display of the title "Date Created"
 	// @see: https://github.com/Islandora/islandora_solr_search/blob/7.x/theme/theme.inc#L108
-
-	if (!$_islandora_solr_content_type['display_dateslider']) {
+	if ($_islandora_solr_content_type['hide_dateslider']) {
 		// Get rid of datepicker bar and the corresponding submit.
 	 	$form['markup']['#access'] = FALSE;
 		$form['range_slider_submit']['#access'] = FALSE;

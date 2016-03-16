@@ -14,3 +14,4 @@ dependencies[] = list
 dependencies[] = options
 dependencies[] = islandora
 dependencies[] = islandora_solr
+stylesheets[all][] = css/islandora_solr_content_type.css

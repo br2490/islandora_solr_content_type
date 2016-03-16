@@ -119,8 +119,8 @@ function _islandora_solr_content_type_installed_fields() {
   $fields = array();
 
   // Collections first
-  $fields['isct_fc_featured_image'] = array(
-    'field_name' => 'isct_fc_featured_image',
+  $fields['isct_fc_featured_area'] = array(
+    'field_name' => 'isct_fc_featured_area',
     'type' => 'field_collection',
     'active' => 1,
     'locked' => 1,
@@ -194,6 +194,24 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
     );
 
+  // Field: modify #access of facet block's date_facet
+  $fields['isct_display_datefacets'] = array(
+    'translatable' => 0,
+    'field_name' => 'isct_display_datefacets',
+    'module' => 'list',
+    'type' => 'list_boolean',
+    'settings' => array(
+      'allowed_values' => array (
+        0 => '',
+        1 => '',
+        ),
+      ),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    );
+
   // Field: modify #markup of facet block's date_range
   $fields['isct_display_auto_expand_date'] = array(
     'translatable' => 0,
@@ -237,52 +255,23 @@ function _islandora_solr_content_type_installed_fields() {
     'deleted' => 0,
     );
 
-  // Field: featured image to display at the top of the page, below title, above body.
-  $fields['isct_featured_image'] = array(
-    'translatable' => 0,
-    'field_name' => 'isct_featured_image',
-    'module' => 'image',
-    'type' => 'image',
-    'settings' => array(
-      'default_image' => 0,
-      'uri_scheme' => 'public',
-    ),
-    'active' => 1,
-    'locked' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    );
-
-  // Field: featured image subtitle or description
-  $fields['isct_featured_image_caption'] = array(
+  // Field: featured area for use with an image, caption, etc. that will autohide.
+  $fields['isct_featured_topic_text'] = array(
     'translatable' => 1,
-    'field_name' => 'isct_featured_image_caption',
+    'field_name' => 'isct_featured_topic_text',
     'module' => 'text',
-    'type' => 'text',
+    'type' => 'text_long',
     'settings' => array(),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     );
-
-  // Field: featured image href
-  $fields['isct_featured_image_url'] = array(
-    'translatable' => 0,
-    'field_name' => 'isct_featured_image_url',
-    'module' => 'text',
-    'type' => 'text',
-    'settings' => array(),
-    'active' => 1,
-    'locked' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-  );
 
   // Field: (bool) hide featured iamge when user preforms a collection query?
-  $fields['isct_featured_image_hide'] = array(
+  $fields['isct_featured_topic_hide'] = array(
     'translatable' => 0,
-    'field_name' => 'isct_featured_image_hide',
+    'field_name' => 'isct_featured_topic_hide',
     'module' => 'list',
     'type' => 'list_boolean',
     'settings' => array(
@@ -321,8 +310,8 @@ function _islandora_solr_content_type_instances() {
       ),
     );
 
-  $instances['isct_fc_featured_image'] = array(
-    'field_name' => 'isct_fc_featured_image',
+  $instances['isct_fc_featured_area'] = array(
+    'field_name' => 'isct_fc_featured_area',
     'entity_type' => 'node',
     'bundle' => 'islandora_solr_content_type',
     'label' => $t('Featured Image'),
@@ -438,13 +427,43 @@ Barnard College Examples:
     ),
   );
 
+$instances['isct_display_datefacets'] = array(
+    'bundle' => 'isct_fc_display_opts',
+    'field_name' => 'isct_display_datefacets',
+    'entity_type' => 'field_collection_item',
+    'label' => $t('Remove <strong>all</strong> date faceting from the Facet block?'),
+    'default_value' => array(
+      0 => array('value' => 0,),
+    ),
+    'deleted' => 0,
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'type' => 'options_onoff',
+      'settings' => array(
+        'display_label' => 1
+        ),
+      'weight' => 11,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
+      ),
+    ),
+  );
+
 $instances['isct_display_dateslider'] = array(
     'bundle' => 'isct_fc_display_opts',
     'field_name' => 'isct_display_dateslider',
     'entity_type' => 'field_collection_item',
-    'label' => $t('Display the date slider (date picker) in the Facet block?'),
+    'label' => $t('Remove the date slider region (i.e., date picker) in the Facet block?'),
     'default_value' => array(
-      0 => array('value' => 0,),
+      0 => array('value' => 1,),
     ),
     'deleted' => 0,
     'required' => 0,
@@ -472,7 +491,7 @@ $instances['isct_display_auto_expand_date'] = array(
     'bundle' => 'isct_fc_display_opts',
     'field_name' => 'isct_display_auto_expand_date',
     'entity_type' => 'field_collection_item',
-    'label' => $t('Automatically expand the "Date Created" area in the Facets block?'),
+    'label' => $t('Automatically expand the date search region in the Facets block?'),
     'default_value' => array(
       0 => array('value' => 1,),
     ),
@@ -536,65 +555,11 @@ $instances['isct_display_facets'] = array(
     ),
   );
 
-  // THESE ARE UNIMPLEMENTED ~ NOT FOR RELEASE ONE.
-  $instances['isct_featured_image'] = array(
-    'bundle' => 'isct_fc_featured_image',
-    'field_name' => 'isct_featured_image',
+  $instances['isct_featured_topic_text'] = array(
+    'bundle' => 'isct_fc_featured_area',
+    'field_name' => 'isct_featured_topic_text',
     'entity_type' => 'field_collection_item',
-    'type' => 'image',
-    'label' => $t('Featured Image'),
-    'description' => $t('Select the featured image to appear at the top of page, under the title but before the collection description.'),
-    'deleted' => 0,
-    'required' => 0,
-    'settings' => array(
-      'alt_field' => 0,
-      'default_image' => 0,
-      'file_directory' => '',
-      'file_extensions' => 'png gif jpg jpeg',
-      'max_filesize' => '',
-      'max_resolution' => '',
-      'min_resolution' => '',
-      'title_field' => 0,
-      'user_register_form' => 0,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'media',
-      'settings' => array(
-        'allowed_schemes' => array(
-          'public' => 'public',
-        ),
-        'allowed_types' => array(
-          'audio' => 0,
-          'default' => 0,
-          'image' => 'image',
-          'video' => 0,
-        ),
-        'progress_indicator' => 'throbber',
-      ),
-      'type' => 'media_generic',
-      'weight' => 1,
-    ),
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'type' => 'hidden',
-        // 'module' => 'image',
-        // 'settings' => array(
-        //   'image_link' => '',
-        //   'image_style' => '',
-        // ),
-        'type' => 'image',
-        'weight' => -2,
-      ),
-    ),
-  );
-
-  $instances['isct_featured_image_caption'] = array(
-    'bundle' => 'isct_fc_featured_image',
-    'field_name' => 'isct_featured_image_caption',
-    'entity_type' => 'field_collection_item',
-    'label' => $t('Featured image caption'),
+    'label' => $t('Featured Area Region'),
     'deleted' => 0,
     'required' => 0,
     'settings' => array(
@@ -604,50 +569,21 @@ $instances['isct_display_facets'] = array(
     'widget' => array(
       'active' => 1,
       'module' => 'text',
-      'settings' => array(),
-      'type' => 'text',
+      'type' => 'text_textarea',
       'weight' => 3,
     ),
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'type' => 'hidden',
         'settings' => array(),
         'weight' => -1,
       ),
     ),
   );
 
-  $instances['isct_featured_image_url'] = array(
-    'bundle' => 'isct_fc_featured_image',
-    'field_name' => 'isct_featured_image_url',
-    'entity_type' => 'field_collection_item',
-    'label' => $t('Featured image link (relative or absolute)'),
-    'deleted' => 0,
-    'required' => 0,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => 0,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(),
-      'type' => 'text_long',
-      'default_widget' => 'text_textfield',
-      'weight' => 4,
-    ),
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'type' => 'hidden',
-      ),
-    ),
-  );
-
-  $instances['isct_featured_image_hide'] = array(
-    'bundle' => 'isct_fc_featured_image',
-    'field_name' => 'isct_featured_image_hide',
+  $instances['isct_featured_topic_hide'] = array(
+    'bundle' => 'isct_fc_featured_area',
+    'field_name' => 'isct_featured_topic_hide',
     'entity_type' => 'field_collection_item',
     'label' => $t('Hide the featured image when the user preforms a search in the collection?'),
     'default_value' => array(
