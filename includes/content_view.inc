@@ -14,9 +14,9 @@ function islandora_solr_content_type_prepare_content($node) {
 		
 		// Get our field collections
 		$display_options_collection = field_get_items('node', $node, 'isct_fc_display_opts');
-		$featured_image_collection = field_get_items('node', $node, 'isct_fc_featured_area'); // UNUSED
+		$featured_area_collection = field_get_items('node', $node, 'isct_fc_featured_area');
 		$display_options = field_collection_item_load($display_options_collection[0]['value']);
-		$featured_image = field_collection_item_load($featured_image_collection[0]['value']);
+		$featured_image = field_collection_item_load($featured_area_collection[0]['value']);
 
 		// Configure the solr facets that will be displayed on the final content page.
 		foreach (field_get_items('field_collection_item', $display_options, 'isct_display_facets') as $field) {
@@ -25,6 +25,7 @@ function islandora_solr_content_type_prepare_content($node) {
 
 		// Define and save our starting solr query, and results per page.
 		$isct_solr_query = field_get_items('node', $node, 'isct_solr_query');
+		$isct_solr_search_query = field_get_items('node', $node, 'isct_solr_search_query');
 		$isct_query_rows = field_get_items('node', $node, 'isct_query_rows');
 
 		$isct_hide_datefacets = field_get_items('field_collection_item', $display_options, 'isct_display_datefacets');
@@ -32,6 +33,7 @@ function islandora_solr_content_type_prepare_content($node) {
 		$isct_display_auto_expand_date = field_get_items('field_collection_item', $display_options, 'isct_display_auto_expand_date');
 	
 		$_islandora_solr_content_type['content_query'] = $isct_solr_query[0]['value'];
+		$_islandora_solr_content_type['search_query'] = $isct_solr_search_query[0]['value'];
 		$_islandora_solr_content_type['rows'] = $isct_query_rows[0]['value'];
 		$_islandora_solr_content_type['hide_datefacets'] = $isct_hide_datefacets[0]['value'];
 		$_islandora_solr_content_type['hide_dateslider'] = $isct_hide_dateslider[0]['value'];
@@ -44,9 +46,6 @@ function islandora_solr_content_type_prepare_content($node) {
  */
 function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 	if ($node->type == 'islandora_solr_content_type') {
-
-		//dpm($node);
-
 		// Get our globals.
 		global $_islandora_solr_content_type;
 		global $_islandora_solr_queryclass;
@@ -54,7 +53,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 		// We're on a islandora_solr_content_type page...
 		$_islandora_solr_content_type['view'] = TRUE;
 
-		islandora_solr_content_type_prepare_content($node);		
+		islandora_solr_content_type_prepare_content($node);
 
 		// For our content type, we want to default to the grid view. If the user selects 
 		// something else we do not want to override them back to the grid view.
@@ -229,6 +228,7 @@ function islandora_solr_content_type_form_islandora_solr_date_filter_form_alter(
  */
 function islandora_solr_content_type_islandora_solr_query($islandora_solr_query) {
 	global $_islandora_solr_content_type;
+
 	if (!$_islandora_solr_content_type['view']) {
 		return;
 	}
@@ -241,7 +241,15 @@ function islandora_solr_content_type_islandora_solr_query($islandora_solr_query)
   // continuing.
 	if (in_array('cq', array_keys(drupal_get_query_parameters()))) {
 
-		// Tokenize and set field query limit.
+		// If we have an unique search query different from the collection query use it.
+		if ($_islandora_solr_content_type['search_query']) {
+			$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['search_query'];
+
+			// Return our search ISQP.
+			return $islandora_solr_query;
+		}
+
+		// We do not have an unique search query, so we'll tokenize our collection query fields and use them.
 		$content_query = str_replace('_ms:', '_mt:', $_islandora_solr_content_type['content_query']);
 		$islandora_solr_query->solrParams['fq'][] = $content_query;
 
@@ -249,7 +257,7 @@ function islandora_solr_content_type_islandora_solr_query($islandora_solr_query)
 		return $islandora_solr_query;
 	} 
 
-	// Set field query limit.
+	// We do not have a user collection search, so just preform and display the collection landing view...
 	$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['content_query'];
 
 	return $islandora_solr_query;
