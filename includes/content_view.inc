@@ -285,9 +285,9 @@ function islandora_solr_content_type_islandora_solr_query_alter(&$islandora_solr
 /**
  * Implements hook_islandora_solr_results_alter().
  */
-function islandora_solr_content_type_islandora_solr_results_alter(&$search_results, $query_processor) {
-	dpm($search_results);
-}
+// function islandora_solr_content_type_islandora_solr_results_alter(&$search_results, $query_processor) {
+// 	// dpm($search_results);
+// }
 ## END REGION
 
 ?>
