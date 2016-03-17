@@ -46,9 +46,8 @@ function islandora_solr_content_type_prepare_content($node) {
  */
 function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
 	if ($node->type == 'islandora_solr_content_type') {
-		// Get our globals.
+		// Get our global.
 		global $_islandora_solr_content_type;
-		global $_islandora_solr_queryclass;
 
 		// We're on a islandora_solr_content_type page...
 		$_islandora_solr_content_type['view'] = TRUE;
@@ -284,18 +283,11 @@ function islandora_solr_content_type_islandora_solr_query_alter(&$islandora_solr
 }
 
 /**
- * Implements hook_islandora_solr_query_result().
- */
-// function islandora_solr_content_type_islandora_solr_query_result($result) {
-// }
-
-/**
  * Implements hook_islandora_solr_results_alter().
  */
-// function islandora_solr_content_type_islandora_solr_results_alter(&$search_results, $query_processor) {
-// }
-
-
+function islandora_solr_content_type_islandora_solr_results_alter(&$search_results, $query_processor) {
+	dpm($search_results);
+}
 ## END REGION
 
 ?>
