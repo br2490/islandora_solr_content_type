@@ -123,12 +123,12 @@ function islandora_solr_content_type_block_list_alter(&$blocks) {
 	$additional_blocks = array(
     'islandora_solr' => array(
 			'advanced' => array(
-        'title' => 'Search this collection',
+        'title' => 'Search this collection', // will get H2
         'region' => 'sidebar_first',
         'weight' => 0,
       ),
       'basic_facets' => array(
-        'title' => 'Filter this collection',
+        'title' => '<none>',
         'region' => 'sidebar_first',
         'weight' => 1,
       ),
