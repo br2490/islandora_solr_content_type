@@ -238,7 +238,8 @@ function islandora_solr_content_type_islandora_solr_query($islandora_solr_query)
   // solr query to the user's term with a catch-all so we get as much for our
   // search as possible. Finally, we return the ISQP and stop the function from
   // continuing.
-	if (in_array('cq', array_keys(drupal_get_query_parameters()))) {
+  // if (in_array('cq', array_keys(drupal_get_query_parameters()))) {
+  if ($_GET['cq'] || count($islandora_solr_query->solrParams['fq']) > 1) { //check is this is Barnard specific.
 
 		// If we have an unique search query different from the collection query use it.
 		if ($_islandora_solr_content_type['search_query']) {
