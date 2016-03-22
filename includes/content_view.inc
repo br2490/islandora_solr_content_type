@@ -138,12 +138,12 @@ function islandora_solr_content_type_block_list_alter(&$blocks) {
 	// Fetch the additional blocks, setting the theme, region and weight.	
 	foreach ($additional_blocks as $module_name => $addl_block) {
 		foreach ($addl_block as $bid => $block_info) {
-      $block = block_load($module_name, $bid);
-      $block->theme = $theme_key;
-      $block->title = $block_info['title'];
-      $block->region = $block_info['region'];
-      $block->weight = $block_info['weight'];
-      $blocks[] = $block;
+			$block = block_load($module_name, $bid);
+			$block->theme = $theme_key;
+			$block->title = $block_info['title'];
+			$block->region = $block_info['region'];
+			$block->weight = $block_info['weight'];
+			$blocks[] = $block;
 		}
 	}
 
