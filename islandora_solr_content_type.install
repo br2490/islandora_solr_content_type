@@ -249,18 +249,9 @@ function _islandora_solr_content_type_installed_fields() {
     'field_name' => 'isct_display_facets',
     'module' => 'list',
     'type' => 'list_text',
-    'settings' => array( // Wondering if we really want to specify this here or in the instances?
-      'allowed_values' => array( //This needs to be changed before any real release. This shouldn't be static.
-        'mods_subject_topic_ms' => 'mods_subject_topic_ms',
-        'mods_genre_ms' => 'mods_genre_ms',
-        'mods_subject_name_personal_namePart_ms' => 'mods_subject_name_personal_namePart_ms',
-        'mods_subject_name_corporate_namePart_ms' => 'mods_subject_name_corporate_namePart_ms',
-        'mods_name_personal_namePart_ms' => 'mods_name_personal_namePart_ms',
-        'mods_name_corporate_namePart_ms' => 'mods_name_corporate_namePart_ms',
-        'mods_relatedItem_host_titleInfo_title_ms' => 'mods_relatedItem_host_titleInfo_title_ms',
-        'mods_relatedItem_series_titleInfo_title_ms' => 'mods_relatedItem_series_titleInfo_title_ms',
-      ),
-      'allowed_values_function' => '',
+    'settings' => array(
+      'allowed_values' => islandora_solr_get_fields('facet_fields'),
+      'allowed_values_function' => "islandora_solr_get_fields('facet_fields')",
     ),
     'active' => 1,
     'locked' => 1,
@@ -566,16 +557,6 @@ $instances['isct_display_facets'] = array(
     'entity_type' => 'field_collection_item',
     'type' => 'list_text',
     'label' => $t('Facets to display on page'),
-    'default_value' => array( // this should not be static same as with the field.
-      0 => array('value' => 'mods_subject_topic_ms',),
-      1 => array('value' => 'mods_genre_ms',),
-      2 => array('value' => 'mods_subject_name_personal_namePart_ms',),
-      3 => array('value' => 'mods_subject_name_corporate_namePart_ms',),
-      4 => array('value' => 'mods_name_personal_namePart_ms',),
-      5 => array('value' => 'mods_name_corporate_namePart_ms',),
-      6 => array('value' => 'mods_relatedItem_host_titleInfo_title_ms',),
-      7 => array('value' => 'mods_relatedItem_series_titleInfo_title_ms',),
-    ),
     'deleted' => 0,
     'required' => 0,
     'settings' => array(
@@ -657,4 +638,14 @@ $instances['isct_display_facets'] = array(
   return $instances;
 }
 
-?>
+// This is just a placeholder && example. It currently does not perform what I want.
+function islandora_solr_content_type_update_7001() {
+     // get default status for field using machine name of field
+    $facet_display_list_update = field_info_field('isct_display_facets');
+    // unset the allowed values
+    unset($facet_display_list_update['settings']['allowed_values']);
+    // function name that provides array of values
+    $facet_display_list_update['settings']['allowed_values_function'] = "islandora_solr_get_fields('facet_fields')"; 
+    // update value with new value.
+    field_update_field($facet_display_list_update);
+}
