@@ -34,6 +34,13 @@ function islandora_solr_content_type_node_info() {
 }
 
 /**
+ * Function to return list of currently used facet fields to the content node.
+ */
+function islandora_solr_content_type_solr_get_facets() {
+	return islandora_solr_get_fields('facet_fields');
+}
+
+/**
  * Implements hook_form().
  */
 function islandora_solr_content_type_form($node, $form_state) {
@@ -56,8 +63,6 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
 		$form['isct_fc_display_opts']['und'][0]['#collapsed'] = FALSE;
 		$form['isct_fc_featured_image']['und'][0]['#collapsible'] = TRUE;
 		$form['isct_fc_featured_image']['und'][0]['#collapsed'] = FALSE;
-
-		// dpm($form);
 	}
 }
 
@@ -101,7 +106,6 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $
 			}
 		}
 	}
-	// dpm($breadcrumb);
 }
 
 // /**

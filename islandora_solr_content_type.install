@@ -250,9 +250,9 @@ function _islandora_solr_content_type_installed_fields() {
     'module' => 'list',
     'type' => 'list_text',
     'settings' => array(
-      'allowed_values' => islandora_solr_get_fields('facet_fields'),
-      'allowed_values_function' => "islandora_solr_get_fields('facet_fields')",
-    ),
+      'allowed_values' => array(),
+      'allowed_values_function' => 'islandora_solr_content_type_solr_get_facets',
+      ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => -1,
@@ -638,14 +638,10 @@ $instances['isct_display_facets'] = array(
   return $instances;
 }
 
-// This is just a placeholder && example. It currently does not perform what I want.
+// This is just a placeholder && example. It currently does not perform anything.
 function islandora_solr_content_type_update_7001() {
-     // get default status for field using machine name of field
-    $facet_display_list_update = field_info_field('isct_display_facets');
-    // unset the allowed values
-    unset($facet_display_list_update['settings']['allowed_values']);
-    // function name that provides array of values
-    $facet_display_list_update['settings']['allowed_values_function'] = "islandora_solr_get_fields('facet_fields')"; 
-    // update value with new value.
-    field_update_field($facet_display_list_update);
+    // Get default status for field using machine name of field
+    // $field_updated_field = field_info_field('isct_display_facets');
+    // do stuff
+    // field_update_field($field_updated_field);
 }
