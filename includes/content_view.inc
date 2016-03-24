@@ -13,31 +13,36 @@ function islandora_solr_content_type_prepare_content($node) {
 		// Everything gets saved in the content's global - I'm sure there is a better way.
 		
 		// Get our field collections
-		$display_options_collection = field_get_items('node', $node, 'isct_fc_display_opts');
-		$featured_area_collection = field_get_items('node', $node, 'isct_fc_featured_area');
-		$display_options = field_collection_item_load($display_options_collection[0]['value']);
-		$featured_image = field_collection_item_load($featured_area_collection[0]['value']);
+		// $display_options_collection = field_get_items('node', $node, 'isct_fc_display_opts');
+		// $featured_area_collection = field_get_items('node', $node, 'isct_fc_featured_area');
+		// $display_options = field_collection_item_load($display_options_collection[0]['value']);
+		// $featured_image = field_collection_item_load($featured_area_collection[0]['value']);
 
-		// Configure the solr facets that will be displayed on the final content page.
-		foreach (field_get_items('field_collection_item', $display_options, 'isct_display_facets') as $field) {
-			$_islandora_solr_content_type['facets'][] = $field['value'];
+		// // Configure the solr facets that will be displayed on the final content page.
+		// foreach (field_get_items('field_collection_item', $display_options, 'isct_display_facets') as $field) {
+		// 	$_islandora_solr_content_type['facets'][] = $field['value'];
+		// }
+
+		$isct_values = array(
+			'isct_solr_query',
+			'isct_solr_search_query',
+			'isct_query_rows',
+			'isct_display_datefacets',
+			'isct_display_dateslider',
+			'isct_display_auto_expand_date',
+			'isct_display_facets',
+			'isct_featured_topic_hide',
+			// 'isct_featured_content_area', // We don't need this in our global.
+			);
+
+		foreach ($isct_values as $value) {
+			$raw_field = field_get_items('node', $node, $value);
+			$field_value = $raw_field[0]['value'];
+			$_islandora_solr_content_type[str_replace('isct_', '', $value)] = $field_value;
 		}
 
-		// Define and save our starting solr query, and results per page.
-		$isct_solr_query = field_get_items('node', $node, 'isct_solr_query');
-		$isct_solr_search_query = field_get_items('node', $node, 'isct_solr_search_query');
-		$isct_query_rows = field_get_items('node', $node, 'isct_query_rows');
-
-		$isct_hide_datefacets = field_get_items('field_collection_item', $display_options, 'isct_display_datefacets');
-		$isct_hide_dateslider = field_get_items('field_collection_item', $display_options, 'isct_display_dateslider');
-		$isct_display_auto_expand_date = field_get_items('field_collection_item', $display_options, 'isct_display_auto_expand_date');
+		dpm($_islandora_solr_content_type);
 	
-		$_islandora_solr_content_type['content_query'] = $isct_solr_query[0]['value'];
-		$_islandora_solr_content_type['search_query'] = $isct_solr_search_query[0]['value'];
-		$_islandora_solr_content_type['rows'] = $isct_query_rows[0]['value'];
-		$_islandora_solr_content_type['hide_datefacets'] = $isct_hide_datefacets[0]['value'];
-		$_islandora_solr_content_type['hide_dateslider'] = $isct_hide_dateslider[0]['value'];
-		$_islandora_solr_content_type['display_expand_date'] = $isct_display_auto_expand_date[0]['value'];
 }
 
 /**
@@ -183,14 +188,14 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
 	}
 
 	// Hide the entire date faceting area! If this is TRUE once we set access we can leave this function.
-	if ($_islandora_solr_content_type['hide_datefacets']) {
+	if ($_islandora_solr_content_type['display_datefacets']) {
 		$form['#access'] = FALSE;
 		return;
 	}
 
 	// We need to access the theme layer to hide the display of the title "Date Created"
 	// @see: https://github.com/Islandora/islandora_solr_search/blob/7.x/theme/theme.inc#L108
-	if ($_islandora_solr_content_type['hide_dateslider']) {
+	if ($_islandora_solr_content_type['display_dateslider']) {
 		// Get rid of datepicker bar and the corresponding submit.
 	 	$form['markup']['#access'] = FALSE;
 		$form['range_slider_submit']['#access'] = FALSE;
@@ -210,7 +215,7 @@ function islandora_solr_content_type_form_islandora_solr_date_filter_form_alter(
 		return;
 	}
 
-	if ($_islandora_solr_content_type['display_expand_date']) {
+	if ($_islandora_solr_content_type['display_auto_expand_date']) {
 		// Modify the markup to class 'expanded' and remove the hide/show link:
 		$form['date_range_expand']['#markup'] = '<span class="toggle-date-range-filter date-range-expanded"></span>';
 	}	
@@ -242,23 +247,23 @@ function islandora_solr_content_type_islandora_solr_query($islandora_solr_query)
   if ($_GET['cq'] || count($islandora_solr_query->solrParams['fq']) > 1) { //check is this is Barnard specific.
 
 		// If we have an unique search query different from the collection query use it.
-		if ($_islandora_solr_content_type['search_query']) {
-			$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['search_query'];
+		if ($_islandora_solr_content_type['solr_search_query']) {
+			$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['solr_search_query'];
 
 			// Return our search ISQP.
 			return $islandora_solr_query;
 		}
 
 		// We do not have an unique search query, so we'll tokenize our collection query fields and use them.
-		$content_query = str_replace('_ms:', '_mt:', $_islandora_solr_content_type['content_query']);
-		$islandora_solr_query->solrParams['fq'][] = $content_query;
+		$solr_query = str_replace('_ms:', '_mt:', $_islandora_solr_content_type['solr_query']);
+		$islandora_solr_query->solrParams['fq'][] = $solr_query;
 
 		// Return our search ISQP.
 		return $islandora_solr_query;
 	} 
 
 	// We do not have a user collection search, so just preform and display the collection landing view...
-	$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['content_query'];
+	$islandora_solr_query->solrParams['fq'][] = $_islandora_solr_content_type['solr_query'];
 
 	return $islandora_solr_query;
 }
@@ -275,9 +280,9 @@ function islandora_solr_content_type_islandora_solr_query_alter(&$islandora_solr
 		return;
 	}
 
-	// I need to figure out pagination and why 'rows' isn't restricting the
+	// I need to figure out pagination and why 'query_rows' isn't restricting the
   // results from solr. This leads to pagination, not result limits.
-	$islandora_solr_query->solrLimit = $_islandora_solr_content_type['rows'];
+	$islandora_solr_query->solrLimit = $_islandora_solr_content_type['query_rows'];
 
 	// Update facets to only those selected...
 	$islandora_solr_query->solrParams['facet.field'] = $_islandora_solr_content_type['facets'];
