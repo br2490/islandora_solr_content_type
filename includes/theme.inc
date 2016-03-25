@@ -9,12 +9,12 @@
  * Implements theme_preprocess_page().
  */
 function islandora_solr_content_type_preprocess_page(&$vars) {
-	// This code allows page level themeing based on the type of NODE.
-	if (isset($vars['node']) && $vars['node']->type == 'islandora_solr_content_type') {
-		if (!(bool)strpos(current_path(),'edit')) {
-			$vars['theme_hook_suggestions'][] = 'page__node__' . $vars['node']->type;
-		} // else { do some edit page theming or nothing... }
-	}
+  // This code allows page level themeing based on the type of NODE.
+  if (isset($vars['node']) && $vars['node']->type == 'islandora_solr_content_type') {
+    if (!(bool)strpos(current_path(),'edit')) {
+      $vars['theme_hook_suggestions'][] = 'page__node__' . $vars['node']->type;
+    } // else { do some edit page theming or nothing... }
+  }
 }
 
 /**
@@ -41,6 +41,3 @@ function islandora_solr_content_type_theme($existing, $type, $theme, $path) {
 
   return $theme;
 }
-
-
-?>

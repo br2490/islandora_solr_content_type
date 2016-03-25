@@ -583,14 +583,13 @@ $instances['isct_display_facets'] = array(
       ),
     ),
   );
-
   return $instances;
 }
 
 // This is just a placeholder && example. It currently does not perform anything.
 function islandora_solr_content_type_update_7001() {
-    // Get default status for field using machine name of field
-    // $field_updated_field = field_info_field('isct_display_facets');
-    // do stuff
-    // field_update_field($field_updated_field);
+  // Get default status for field using machine name of field
+  // $field_updated_field = field_info_field('isct_display_facets');
+  // do stuff
+  // field_update_field($field_updated_field);
 }
