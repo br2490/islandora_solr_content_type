@@ -161,8 +161,8 @@ function _islandora_solr_content_type_installed_fields() {
   $fields['isct_query_rows'] = array(
     'translatable' => 1,
     'field_name' => 'isct_query_rows',
-    'module' => 'text',
-    'type' => 'text',
+    'module' => 'number',
+    'type' => 'number_integer',
     'settings' => array(),
     'active' => 1,
     'locked' => 1,
@@ -395,11 +395,11 @@ Barnard College Examples:
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'text',
+      'module' => 'number',
       'settings' => array(
-        'size' => 40,
+        'size' => 10,
       ),
-      'type' => 'text',
+      'type' => 'number',
       'weight' => 4,
     ),
     'display' => array(

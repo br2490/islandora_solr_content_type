@@ -85,6 +85,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
     );
 
   }
+  dpm($node);
 }
 
 
