@@ -13,6 +13,37 @@ require_once dirname(__FILE__) . '/includes/theme.inc'; // Themeing.
 // Content global.
 $_islandora_solr_content_type = array();
 
+
+/**
+ * Implements hook_permission().
+ */
+function islandora_solr_content_type_permission() {
+  return array(
+    'administer islandora_solr_content_type' => array(
+      'title' => t('Administer Islandora Solr Content Type'),
+      'description' => t('Set defaults and administer the Islandora Solr Content Type.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function islandora_solr_content_type_menu() {
+  return array(
+    'admin/islandora/islandora_solr_content_type' => array(
+      'page callback' => 'drupal_get_form',
+      'title' => 'Islandora Solr Content Type',
+      'description' => 'Put something intelligent here', //@todo
+      'page arguments' => array('islandora_solr_content_type_config'),
+      'file' => 'includes/admin.form.inc',
+      'access arguments' => array('administer islandora_solr_content_type'),
+      'type' => MENU_NORMAL_ITEM,
+    ),
+  );
+}
+
+
 /**
  * Implements hook_node_info().
  * Define our content type.
@@ -50,9 +81,9 @@ function islandora_solr_content_type_form($node, $form_state) {
 /**
  * Implements hook_form_alter().
  */
-// function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
-//   dpm($form);
-// }
+function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
+  dpm($form);
+}
 
 /**
  * Implements hook_form_BASE_ID_alter().
@@ -159,9 +190,9 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $
 // }
 
 // UNUSED AT PRESENT
-function islandora_solr_content_type_islandora_solr_facet_bucket_classes_alter(&$attributes, $islandora_solr_query) {
-  // dpm($attributes);
-}
+// function islandora_solr_content_type_islandora_solr_facet_bucket_classes_alter(&$attributes, $islandora_solr_query) {
+//   // dpm($attributes);
+// }
 
 // function islandora_solr_content_type_block_view_alter(&$data, $block) {
 //  global $_islandora_solr_content_type;
