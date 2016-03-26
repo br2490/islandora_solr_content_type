@@ -1,6 +1,7 @@
 <?php 
 /**
- * @file TK
+ * @file 
+ * Decription TK
  */
 
 /**
@@ -37,10 +38,29 @@ function islandora_solr_content_type_config($form, &$form_state) {
     '#default_value' => variable_get('pathauto_node_islandora_solr_content_type_pattern', 'collections/[node:title]'),
   );
 
+  $form['isct_menu_by_default'] = array(
+    '#type' => 'radios',
+    '#options' => array (
+      1 => t('Enabled'),
+      0 => t('Disabled'),
+    ),
+    '#title' => t('By default add new Islandora Solr Content to a menu?'),
+    '#description' => t('This can be override by anyone with access administer menu.'),
+    '#default_value' => variable_get('isct_menu_by_default', '0'),
+  );
+  
+  $options = menu_parent_options(menu_get_menus(), 0); // Should this be restricted to "main-menu"? Implications? Use Cases?
+
   $form['menu_parent_islandora_solr_content_type'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Parent menu...'),
-    '#default_value' => variable_get('menu_parent_islandora_solr_content_type', 'main-menu:455'),
+    '#type' => 'select',
+    '#title' => t('Parent item'),
+    '#states' => array(
+      'invisible' => array(
+        'input[name="isct_menu_by_default"]' => array('value' => 0),
+      ),
+    ),
+    '#default_value' => variable_get('menu_parent_islandora_solr_content_type', ''),
+    '#options' => $options,
   );
 
   return system_settings_form($form);

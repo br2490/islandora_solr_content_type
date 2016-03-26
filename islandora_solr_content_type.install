@@ -9,7 +9,7 @@
 
 
 /**
- * Implements hook_install().
+ * Implements hook_install()
  */
 function islandora_solr_content_type_install()
 {
@@ -111,13 +111,16 @@ function _islandora_solr_content_type_variables()
   // Auto path generation default
   $variables['pathauto_node_islandora_solr_content_type_pattern'] = 'collections/[node:title]';
 
-  // Menu Default
-  $variables['menu_options_islandora_solr_content_type'] = array(
-    '0' => 'main-menu',
-  );
+  // Menu Default @TODO consider revisit.
+  // $variables['menu_options_islandora_solr_content_type'] = array(
+  //   '0' => 'main-menu',
+  // );
+  
+  // Auto-add to menu  
+  $variables['isct_menu_by_default'] = '0';
 
-  // Menu Parent (collections). NOT SUPER SURE ABOUT THIS ONE.
-  $variables['menu_parent_islandora_solr_content_type'] = 'main-menu:455';
+  // Parent menu for all if above == 1
+  $variables['menu_parent_islandora_solr_content_type'] = '';
 
   return $variables;
 }
