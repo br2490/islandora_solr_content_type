@@ -82,7 +82,7 @@ function islandora_solr_content_type_form($node, $form_state) {
  * Implements hook_form_alter().
  */
 function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
-  dpm($form);
+  // dpm($form);
 }
 
 /**
@@ -127,13 +127,6 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
     }
   }
 }
-
-
-// UNUSED AT PRESENT
-// function islandora_solr_content_type_menu_breadcrumb_alter(&$active_trail, $item) {
-//  // dpm($active_trail);
-//  // dpm($item);
-// }
 
 /**
  * Implements hook_islandora_breadcrumbs_alter().
@@ -186,18 +179,6 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $
 
 //      $breadcrumb[$pos] = $newcrumb;
 //    }
-//  }
-// }
-
-// UNUSED AT PRESENT
-// function islandora_solr_content_type_islandora_solr_facet_bucket_classes_alter(&$attributes, $islandora_solr_query) {
-//   // dpm($attributes);
-// }
-
-// function islandora_solr_content_type_block_view_alter(&$data, $block) {
-//  global $_islandora_solr_content_type;
-//  if (!isset($_islandora_solr_content_type)) {
-//    return;
 //  }
 // }
 
