@@ -3,7 +3,7 @@
 /**
  * @file
  * Collection "views" via a custom content type.
- * 
+ *
  */
 require_once dirname(__FILE__) . '/includes/content.view.inc'; // The display of our content type is here.
 require_once dirname(__FILE__) . '/includes/search.inc'; // The modification of solr search/faceting is here.
@@ -48,15 +48,16 @@ function islandora_solr_content_type_menu() {
  * Implements hook_node_info().
  * Define our content type.
  */
-function islandora_solr_content_type_node_info() {
+function islandora_solr_content_type_node_info()
+{
   $items = array(
     'islandora_solr_content_type' => array(
       'name' => t('Islandora Solr Content'), // Will refactor to Islandora Solr Content Collection (name still a WIP)
       'base' => 'node_content',
-      'description' => t('A content type to configure and display a collection by a specifying a SOLR query. <em>Collection</em> is used loosely, as these content pages may be curated exhibits, special projects, timely (or time-based) collections, etc.  '),
+      'description' => t('A content type to configure and display a collection by a specifying a Solr query. <em>Collection</em> is used loosely, as these content pages may be curated exhibits, special projects, timely (or time-based) collections, etc.  '),
       'has_title' => '1',
       'title_label' => t('Collection Name (Page Name)'),
-      'help' => t('Use this page to configure and display a collection by a specifying a SOLR query.<br> Use the <strong>Preview</strong> button to preview what the results from the SOLR query your specified.'),
+      'help' => t('Use this page to configure and display a collection by a specifying a Solr query.<br> Use the <strong>Preview</strong> button to preview what the results from the Solr query your specified.'),
       'custom' => '0',
     ),
   );
@@ -67,14 +68,19 @@ function islandora_solr_content_type_node_info() {
 /**
  * Function to return list of currently used facet fields to the content node.
  */
-function islandora_solr_content_type_solr_get_facets() {
+function islandora_solr_content_type_solr_get_facets()
+{
   return islandora_solr_get_fields('facet_fields');
 }
 
 /**
  * Implements hook_form().
+ * @param $node
+ * @param $form_state
+ * @return
  */
-function islandora_solr_content_type_form($node, $form_state) {
+function islandora_solr_content_type_form($node, $form_state)
+{
   return node_content_form($node, $form_state);
 }
 
@@ -87,29 +93,33 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
 
 /**
  * Implements hook_form_BASE_ID_alter().
+ * @param $form
+ * @param $form_state
+ * @param $form_id
  */
-function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $form_id) {
+function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $form_id)
+{
   if ($form['#node']->type == 'islandora_solr_content_type') {
     $form['additional_display_settings'] = array(
       '#type' => 'fieldset',
       '#title' => 'Additional Dislpay Settings',
       '#collapsible' => TRUE,
       '#weight' => 20,
-      );
+    );
 
     $form['featured_area'] = array(
       '#type' => 'fieldset',
       '#title' => 'Featured Area',
       '#collapsible' => TRUE,
       '#weight' => 30,
-      );
+    );
 
     $additional_display_settings = array(
       'isct_display_datefacets',
       'isct_display_dateslider',
       'isct_display_auto_expand_date',
       'isct_display_facets',
-      );
+    );
 
     foreach ($additional_display_settings as $form_element) {
       $form['additional_display_settings'][$form_element] = $form[$form_element];
@@ -119,7 +129,7 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
     $featured_area = array(
       'isct_featured_topic_hide',
       'isct_featured_content_area',
-      );
+    );
 
     foreach ($featured_area as $form_element) {
       $form['featured_area'][$form_element] = $form[$form_element];
@@ -130,8 +140,11 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
 
 /**
  * Implements hook_islandora_breadcrumbs_alter().
+ * @param $breadcrumb
+ * @param $context
  */
-function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
+function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $context)
+{
   global $_islandora_solr_content_type;
 
   // If it is not one of our unique queries, return;
@@ -182,10 +195,12 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $
 //  }
 // }
 
+
 /**
  * Reports all islandora blocks available... I'm so lazy. (DEVELOPMENT)
  */
-function isct_dpm_all_islandora_blocks() {
+function isct_dpm_all_islandora_blocks()
+{
   $islandoraBlocks = module_invoke('islandora_solr', 'block_info');
   dpm($islandoraBlocks);
 }

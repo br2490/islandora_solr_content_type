@@ -9,8 +9,11 @@
 /**
  * Implements hook_form_FORM_ID_alter()
  * We're gonna use our own submit handler for our content type.
+ * @param $form
+ * @param $form_state
  */
-function islandora_solr_content_type_form_islandora_solr_advanced_search_form_alter(&$form, &$form_state) {
+function islandora_solr_content_type_form_islandora_solr_advanced_search_form_alter(&$form, &$form_state)
+{
   global $_islandora_solr_content_type;
 
   if ($_islandora_solr_content_type !== null || isset($form_state['build_info']['args']['islandora_solr_content_type'])) {
@@ -30,7 +33,8 @@ function islandora_solr_content_type_form_islandora_solr_advanced_search_form_al
  *
  * @see islandora_solr_advanced_search_form()
  */
-function islandora_solr_content_type_advanced_search_form_submit($form, &$form_state) {
+function islandora_solr_content_type_advanced_search_form_submit($form, &$form_state)
+{
   module_load_include('inc', 'islandora_solr', 'includes/utilities');
   global $_islandora_solr_queryclass;
   // Collect query values.
@@ -89,7 +93,7 @@ function islandora_solr_content_type_advanced_search_form_submit($form, &$form_s
       'query' => $search_string,
     ),
   );
- 
+
   // Navigate to results page.
   // $form_state['redirect'] = array(
   //   ISLANDORA_SOLR_SEARCH_PATH . "/$query",

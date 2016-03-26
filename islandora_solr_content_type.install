@@ -11,10 +11,11 @@
 /**
  * Implements hook_install().
  */
-function islandora_solr_content_type_install() {
+function islandora_solr_content_type_install()
+{
   node_types_rebuild();
   // Note that normally one would call node_add_body_field() for their content type
-  // We do not, instead we create our own "body field" that forces the full page view. 
+  // We do not, instead we create our own "body field" that forces the full page view.
   // This content type works best in the "full" view mode...
   islandora_solr_content_type_add_custom_fields();
   islandora_solr_content_type_add_variables();
@@ -23,7 +24,8 @@ function islandora_solr_content_type_install() {
 /**
  * Implements hook_uninstall().
  */
-function islandora_solr_content_type_uninstall() {
+function islandora_solr_content_type_uninstall()
+{
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => 'islandora_solr_content_type'));
   $nids = array();
@@ -32,29 +34,31 @@ function islandora_solr_content_type_uninstall() {
   }
   node_delete_multiple($nids);
   islandora_solr_content_type_delete_custom_fields();
-  node_type_delete($node_name);
+  node_type_delete('islandora_solr_content_type');
   field_purge_batch(1000);
   islandora_solr_content_type_remove_variables();
 }
 
 // Install functions section
 /*
- * Function to add our conntent fields and instances.
+ * Function to add our content fields and instances.
  */
-function islandora_solr_content_type_add_custom_fields() {
+function islandora_solr_content_type_add_custom_fields()
+{
   foreach (_islandora_solr_content_type_installed_fields() as $field) {
     field_create_field($field);
   }
   foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
-   field_create_instance($fieldinstance);
+    field_create_instance($fieldinstance);
   }
 }
 
 /* 
  * Function to populate our variables.
  */
-function islandora_solr_content_type_add_variables() {
-  foreach(_islandora_solr_content_type_variables() as $var => $option) {
+function islandora_solr_content_type_add_variables()
+{
+  foreach (_islandora_solr_content_type_variables() as $var => $option) {
     variable_set($var, $option);
   }
 }
@@ -64,7 +68,8 @@ function islandora_solr_content_type_add_variables() {
 /*
  * Function to remove our conntent fields and instances.
  */
-function islandora_solr_content_type_delete_custom_fields() {
+function islandora_solr_content_type_delete_custom_fields()
+{
   foreach (array_keys(_islandora_solr_content_type_installed_fields()) as $field) {
     field_delete_field($field);
   }
@@ -77,8 +82,9 @@ function islandora_solr_content_type_delete_custom_fields() {
 /* 
  * Function to delete our variables.
  */
-function islandora_solr_content_type_remove_variables() {
-  foreach(array_keys(_islandora_solr_content_type_variables()) as $var) {
+function islandora_solr_content_type_remove_variables()
+{
+  foreach (array_keys(_islandora_solr_content_type_variables()) as $var) {
     variable_del($var);
   }
 }
@@ -87,35 +93,37 @@ function islandora_solr_content_type_remove_variables() {
 // Fields, instances and variables for islandora_solr_content_type
 // Note that some fields, instances and variable names use the name initialism (ISCT) to
 // avoid the strlen limit on fields and instances.
-function _islandora_solr_content_type_variables() {
+function _islandora_solr_content_type_variables()
+{
   $variables = array();
 
   // No comments
   $variables['comment_islandora_solr_content_type'] = '0';
-  
+
   // No submitted info (i.e. author info and date)
   $variables['node_submitted_islandora_solr_content_type'] = '0';
-  
+
   // Default state to published, without other options (e.g., sticky, promoted, etc.).
   $variables['node_options_islandora_solr_content_type'] = array(
     '0' => 'status'
-    );
+  );
 
   // Auto path generation default
   $variables['pathauto_node_islandora_solr_content_type_pattern'] = 'collections/[node:title]';
-  
+
   // Menu Default
-  $variables['menu_options_islandora_solr_content_type'] = array( 
+  $variables['menu_options_islandora_solr_content_type'] = array(
     '0' => 'main-menu',
-    );
+  );
 
   // Menu Parent (collections). NOT SUPER SURE ABOUT THIS ONE.
   $variables['menu_parent_islandora_solr_content_type'] = 'main-menu:455';
-  
+
   return $variables;
 }
 
-function _islandora_solr_content_type_installed_fields() {
+function _islandora_solr_content_type_installed_fields()
+{
   $fields = array();
 
   // "Custom" body field (forced to full view, no summary.)
@@ -129,7 +137,7 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Solr query field
   $fields['isct_solr_query'] = array(
@@ -142,9 +150,9 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
-    // Solr query field
+  // Solr query field
   $fields['isct_solr_search_query'] = array(
     'translatable' => 0,
     'field_name' => 'isct_solr_search_query',
@@ -155,7 +163,7 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Field: number of results to display per page (rows)
   $fields['isct_query_rows'] = array(
@@ -168,7 +176,7 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Field: modify #access of facet block's date_slider
   $fields['isct_display_dateslider'] = array(
@@ -177,16 +185,16 @@ function _islandora_solr_content_type_installed_fields() {
     'module' => 'list',
     'type' => 'list_boolean',
     'settings' => array(
-      'allowed_values' => array (
+      'allowed_values' => array(
         0 => '',
         1 => '',
-        ),
       ),
+    ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Field: modify #access of facet block's date_facet
   $fields['isct_display_datefacets'] = array(
@@ -195,16 +203,16 @@ function _islandora_solr_content_type_installed_fields() {
     'module' => 'list',
     'type' => 'list_boolean',
     'settings' => array(
-      'allowed_values' => array (
+      'allowed_values' => array(
         0 => '',
         1 => '',
-        ),
       ),
+    ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Field: modify #markup of facet block's date_range
   $fields['isct_display_auto_expand_date'] = array(
@@ -213,16 +221,16 @@ function _islandora_solr_content_type_installed_fields() {
     'module' => 'list',
     'type' => 'list_boolean',
     'settings' => array(
-      'allowed_values' => array (
+      'allowed_values' => array(
         0 => '',
         1 => '',
-        ),
       ),
+    ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
   // Field: facets displayed on a collection page.
   $fields['isct_display_facets'] = array(
@@ -233,12 +241,12 @@ function _islandora_solr_content_type_installed_fields() {
     'settings' => array(
       'allowed_values' => array(),
       'allowed_values_function' => 'islandora_solr_content_type_solr_get_facets',
-      ),
+    ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => -1,
     'deleted' => 0,
-    );
+  );
 
   // Field: featured area for use with an image, caption, etc. that will autohide.
   $fields['isct_featured_content_area'] = array(
@@ -251,20 +259,20 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1,
     'cardinality' => 1,
     'deleted' => 0,
-    );
+  );
 
-  // Field: (bool) hide featured iamge when user preforms a collection query?
+  // Field: (bool) hide featured area when user preforms a collection query?
   $fields['isct_featured_topic_hide'] = array(
     'translatable' => 0,
     'field_name' => 'isct_featured_topic_hide',
     'module' => 'list',
     'type' => 'list_boolean',
     'settings' => array(
-      'allowed_values' => array (
+      'allowed_values' => array(
         0 => '',
         1 => '',
-        ),
       ),
+    ),
     'active' => 1,
     'locked' => 1,
     'cardinality' => 1,
@@ -275,7 +283,8 @@ function _islandora_solr_content_type_installed_fields() {
 }
 
 // grumble grumble...
-function _islandora_solr_content_type_instances() {
+function _islandora_solr_content_type_instances()
+{
   $instances = array();
   $t = get_t();
 
@@ -311,7 +320,7 @@ function _islandora_solr_content_type_instances() {
     'entity_type' => 'node',
     'label' => $t('Solr Collection View Query - Landing Page'),
     'description' => $t('The Solr query that will generate desired \'collection view.\' <br>
-    An easy way to create this question is to visit the <a target="_blank" href="'.$GLOBALS['base_root'].'/islandora/search">search page</a> and start with a basic query.
+  An easy way to create this question is to visit the <a target="_blank" href="' . $GLOBALS['base_root'] . '/islandora/search">search page</a> and start with a basic query.
 The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the Solr search fields available to a site visitor.</em></strong><br>
 Barnard College Examples: 
 <ul>
@@ -346,7 +355,7 @@ Barnard College Examples:
     ),
   );
 
-    $instances['isct_solr_search_query'] = array(
+  $instances['isct_solr_search_query'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_solr_search_query',
     'entity_type' => 'node',
@@ -375,7 +384,7 @@ Barnard College Examples:
       ),
     ),
   );
- 
+
   $instances['isct_query_rows'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_query_rows',
@@ -410,7 +419,7 @@ Barnard College Examples:
     ),
   );
 
-$instances['isct_display_datefacets'] = array(
+  $instances['isct_display_datefacets'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_datefacets',
     'entity_type' => 'node',
@@ -429,7 +438,7 @@ $instances['isct_display_datefacets'] = array(
       'type' => 'options_onoff',
       'settings' => array(
         'display_label' => 1
-        ),
+      ),
       'weight' => 21,
     ),
     'display' => array(
@@ -440,7 +449,7 @@ $instances['isct_display_datefacets'] = array(
     ),
   );
 
-$instances['isct_display_dateslider'] = array(
+  $instances['isct_display_dateslider'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_dateslider',
     'entity_type' => 'node',
@@ -459,7 +468,7 @@ $instances['isct_display_dateslider'] = array(
       'type' => 'options_onoff',
       'settings' => array(
         'display_label' => 1
-        ),
+      ),
       'weight' => 22,
     ),
     'display' => array(
@@ -470,7 +479,7 @@ $instances['isct_display_dateslider'] = array(
     ),
   );
 
-$instances['isct_display_auto_expand_date'] = array(
+  $instances['isct_display_auto_expand_date'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_auto_expand_date',
     'entity_type' => 'node',
@@ -489,7 +498,7 @@ $instances['isct_display_auto_expand_date'] = array(
       'type' => 'options_onoff',
       'settings' => array(
         'display_label' => 1
-        ),
+      ),
       'weight' => 23,
     ),
     'display' => array(
@@ -500,7 +509,7 @@ $instances['isct_display_auto_expand_date'] = array(
     ),
   );
 
-$instances['isct_display_facets'] = array(
+  $instances['isct_display_facets'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_facets',
     'entity_type' => 'node',
@@ -547,7 +556,7 @@ $instances['isct_display_facets'] = array(
       'type' => 'options_onoff',
       'settings' => array(
         'display_label' => 1
-        ),
+      ),
       'weight' => 31,
     ),
     'display' => array(
@@ -587,7 +596,8 @@ $instances['isct_display_facets'] = array(
 }
 
 // This is just a placeholder && example. It currently does not perform anything.
-function islandora_solr_content_type_update_7001() {
+function islandora_solr_content_type_update_7001()
+{
   // Get default status for field using machine name of field
   // $field_updated_field = field_info_field('isct_display_facets');
   // do stuff
