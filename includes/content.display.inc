@@ -63,7 +63,6 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full')
   $_islandora_solr_content_type['view'] = TRUE;
 
   islandora_solr_content_type_prepare_content($node);
-  dpm($_islandora_solr_content_type);
   // For our content type, we want to default to the grid view. If the user selects
   // something else we do not want to override them back to the grid view.
   !isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
