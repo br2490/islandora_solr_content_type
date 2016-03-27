@@ -3,9 +3,11 @@
 /**
  * @file
  * Collection content page display and config.
- * @param $node
  */
 
+/**
+ * Parses node variables into a global variable that is used throughout the display and seach includes.
+ */
 function islandora_solr_content_type_prepare_content($node)
 {
   global $_islandora_solr_content_type;
@@ -47,48 +49,50 @@ function islandora_solr_content_type_prepare_content($node)
  */
 function islandora_solr_content_type_node_view($node, $view_mode = 'full')
 {
-  if ($node->type == 'islandora_solr_content_type') {
-    // Get our global.
-    global $_islandora_solr_content_type;
-
-    // We're on a islandora_solr_content_type page...
-    $_islandora_solr_content_type['view'] = TRUE;
-
-    islandora_solr_content_type_prepare_content($node);
-
-    // For our content type, we want to default to the grid view. If the user selects
-    // something else we do not want to override them back to the grid view.
-    !isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
-
-    // The _very_ important stuff:
-    // Foremost we rely on islandora_solr() to return a search result - that will be our primary content.
-    // This reliance on islandora_solr let us do amazing things fairly simply
-
-    // We use a param called "cq" if the user has preformed a search from our collection page.
-    // If it's not there we display the content as it was configured by the curator.
-    if (!$_GET['cq']) {
-      $solr_result_output = islandora_solr(); // See hook_islandora_solr()
-    } else {
-      $solr_result_output = islandora_solr($_GET['cq']); // See hook_islandora_solr_query().
-    }
-
-    // Build the rest of our block's content - include the switch (list/grid) and sort blocks.
-    $node->content['switch_block'] = array(
-      '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'display_switch'),
-      '#weight' => '2',
-    );
-
-    $node->content['sort_order_block'] = array(
-      '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'sort'),
-      '#weight' => '2',
-    );
-
-    $node->content['results'] = array(
-      '#markup' => $solr_result_output,
-      '#weight' => '3',
-    );
-
+  if ($node->type !== 'islandora_solr_content_type') {
+    return; // Party on Garth. Party on.
   }
+
+  // Get our global.
+  global $_islandora_solr_content_type;
+
+  // We're on a islandora_solr_content_type page...
+  $_islandora_solr_content_type['view'] = TRUE;
+
+  islandora_solr_content_type_prepare_content($node);
+
+  // For our content type, we want to default to the grid view. If the user selects
+  // something else we do not want to override them back to the grid view.
+  !isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
+
+  // The _very_ important stuff:
+  // Foremost we rely on islandora_solr() to return a search result - that will be our primary content.
+  // This reliance on islandora_solr let us do amazing things fairly simply
+
+  // We use a param called "cq" if the user has preformed a search from our collection page.
+  // If it's not there we display the content as it was configured by the curator.
+  if (!$_GET['cq']) {
+    $solr_result_output = islandora_solr(); // See hook_islandora_solr()
+  } else {
+    $solr_result_output = islandora_solr($_GET['cq']); // See hook_islandora_solr_query().
+  }
+
+  // Build the rest of our block's content - include the switch (list/grid) and sort blocks.
+  $node->content['switch_block'] = array(
+    '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'display_switch'),
+    '#weight' => '2',
+  );
+
+  $node->content['sort_order_block'] = array(
+    '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'sort'),
+    '#weight' => '2',
+  );
+
+  $node->content['results'] = array(
+    '#markup' => $solr_result_output,
+    '#weight' => '3',
+  );
+
 }
 
 

@@ -111,10 +111,10 @@ function _islandora_solr_content_type_variables()
   // Auto path generation default
   $variables['pathauto_node_islandora_solr_content_type_pattern'] = 'collections/[node:title]';
 
-  // Menu Default @TODO consider revisit.
-  // $variables['menu_options_islandora_solr_content_type'] = array(
-  //   '0' => 'main-menu',
-  // );
+  // Menu Default
+  $variables['menu_options_islandora_solr_content_type'] = array(
+    '0' => 'main-menu',
+  );
   
   // Auto-add to menu  
   $variables['isct_menu_by_default'] = '0';
@@ -599,10 +599,10 @@ Barnard College Examples:
 }
 
 // This is just a placeholder && example. It currently does not perform anything.
-function islandora_solr_content_type_update_7001()
-{
-  // Get default status for field using machine name of field
-  // $field_updated_field = field_info_field('isct_display_facets');
-  // do stuff
-  // field_update_field($field_updated_field);
-}
+// function islandora_solr_content_type_update_7001()
+// {
+//   // Get default status for field using machine name of field
+//   // $field_updated_field = field_info_field('isct_display_facets');
+//   // do stuff
+//   // field_update_field($field_updated_field);
+// }

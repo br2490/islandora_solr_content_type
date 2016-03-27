@@ -4,7 +4,7 @@
  * @file
  * Solr Collection "views" via a custom content type.
  */
-require_once dirname(__FILE__) . '/includes/content.view.inc'; // The display of our content type is here.
+require_once dirname(__FILE__) . '/includes/content.display.inc'; // The display of our content type is here.
 require_once dirname(__FILE__) . '/includes/search.inc'; // The modification of solr search/faceting is here.
 require_once dirname(__FILE__) . '/includes/theme.inc'; // Themeing.
 
@@ -90,6 +90,17 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
 }
 
 /**
+ * Implements hook_module_implements_alter(&$implementations, $hook).
+ */
+function islandora_solr_content_type_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'form_alter' && isset($implementations['islandora_solr_content_type'])) {
+    $group = $implementations['islandora_solr_content_type'];
+    unset($implementations['islandora_solr_content_type']);
+    $implementations['islandora_solr_content_type'] = $group;
+  }
+}
+
+/**
  * Implements hook_form_BASE_ID_alter().
  * @param $form
  * @param $form_state
@@ -97,43 +108,47 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
  */
 function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $form_id)
 {
-  if ($form['#node']->type == 'islandora_solr_content_type') {
-    $form['additional_display_settings'] = array(
-      '#type' => 'fieldset',
-      '#title' => 'Additional Dislpay Settings',
-      '#collapsible' => TRUE,
-      '#weight' => 20,
-    );
-
-    $form['featured_area'] = array(
-      '#type' => 'fieldset',
-      '#title' => 'Featured Area',
-      '#collapsible' => TRUE,
-      '#weight' => 30,
-    );
-
-    $additional_display_settings = array(
-      'isct_display_datefacets',
-      'isct_display_dateslider',
-      'isct_display_auto_expand_date',
-      'isct_display_facets',
-    );
-
-    foreach ($additional_display_settings as $form_element) {
-      $form['additional_display_settings'][$form_element] = $form[$form_element];
-      unset($form[$form_element]);
-    }
-
-    $featured_area = array(
-      'isct_featured_topic_hide',
-      'isct_featured_content_area',
-    );
-
-    foreach ($featured_area as $form_element) {
-      $form['featured_area'][$form_element] = $form[$form_element];
-      unset($form[$form_element]);
-    }
+  if ($form['#node']->type !== 'islandora_solr_content_type') {
+    return; // See ya.
   }
+
+  $form['additional_display_settings'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Additional Dislpay Settings',
+    '#collapsible' => TRUE,
+    '#weight' => 20,
+  );
+
+  $form['featured_area'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Featured Area',
+    '#collapsible' => TRUE,
+    '#weight' => 30,
+  );
+
+  $additional_display_settings = array(
+    'isct_display_datefacets',
+    'isct_display_dateslider',
+    'isct_display_auto_expand_date',
+    'isct_display_facets',
+  );
+
+  foreach ($additional_display_settings as $form_element) {
+    $form['additional_display_settings'][$form_element] = $form[$form_element];
+    unset($form[$form_element]);
+  }
+
+  $featured_area = array(
+    'isct_featured_topic_hide',
+    'isct_featured_content_area',
+  );
+
+  foreach ($featured_area as $form_element) {
+    $form['featured_area'][$form_element] = $form[$form_element];
+    unset($form[$form_element]);
+  }
+
+  $form['menu']['enabled']['#default_value'] = variable_get('isct_menu_by_default', FALSE);
 }
 
 /**
@@ -173,26 +188,6 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $
     }
   }
 }
-
-// /**
-//  * Implements islandora_breadcrumbs_alter().
-//  */
-// function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb, $context) {
-//  foreach($breadcrumb as $pos => $crumb) {
-//    if((bool)strpos($crumb,'href="/node/%20?cq=')) {
-
-//      $substring_start = strpos($crumb,'/node/%20?cq=');
-//      $substring_end = strpos($crumb, '&amp;', $substring_start) + 5;
-
-//      $bad_string = substr($crumb, $substring_start, ($substring_end-$substring_start));
-//      $replacement = '/'. request_path() . '?';
-//      $newcrumb = str_replace($bad_string, $replacement, $crumb);
-
-//      $breadcrumb[$pos] = $newcrumb;
-//    }
-//  }
-// }
-
 
 /**
  * Reports all islandora blocks available... I'm so lazy. (DEVELOPMENT)
