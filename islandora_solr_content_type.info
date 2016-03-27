@@ -3,6 +3,7 @@ description=A Drupal content type for Islandora objects indexed and served by SO
 version=VERSION
 core=7.x
 package=Barnard College Custom Islandora
+configure = admin/islandora/islandora_solr_content_type
 files[] = islandora_solr_content_type.install
 files[] = islandora_solr_content_type.module
 files[] = includes/admin.form.inc

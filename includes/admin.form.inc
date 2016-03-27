@@ -8,6 +8,12 @@
  * Implements hook_form().
  */
 function islandora_solr_content_type_config($form, &$form_state) {
+
+  $form['#attached'] = array(
+    'js' => array(
+      drupal_get_path('module', 'islandora_solr_content_type') . '/js/admin.form.js',
+    ),
+  );
   
   $form['comment_islandora_solr_content_type'] = array(
     '#type' => 'radios',
@@ -48,20 +54,44 @@ function islandora_solr_content_type_config($form, &$form_state) {
     '#description' => t('This can be override by anyone with access administer menu.'),
     '#default_value' => variable_get('isct_menu_by_default', '0'),
   );
-  
-  $options = menu_parent_options(menu_get_menus(), 0); // Should this be restricted to "main-menu"? Implications? Use Cases?
 
-  $form['menu_parent_islandora_solr_content_type'] = array(
-    '#type' => 'select',
-    '#title' => t('Parent item'),
+  $menu_options = menu_get_menus();
+  $type = $form['#node_type'];
+
+  $form['menu_options_islandora_solr_content_type'] = array(
+    '#type' => 'checkboxes',
+    '#title' => t('Available menus'),
+    '#default_value' => variable_get('menu_options_islandora_solr_content_type', array('main-menu')),
+    '#options' => $menu_options,
+    '#description' => t('The menus available to place links in for this content type.'),
     '#states' => array(
       'invisible' => array(
         'input[name="isct_menu_by_default"]' => array('value' => 0),
       ),
     ),
-    '#default_value' => variable_get('menu_parent_islandora_solr_content_type', ''),
-    '#options' => $options,
   );
 
+  $options = menu_parent_options(menu_get_menus(), array('mlid' => 0));
+  $form['menu_parent_islandora_solr_content_type'] = array(
+    '#type' => 'select',
+    '#title' => t('Default parent item'),
+    '#default_value' => variable_get('menu_parent_islandora_solr_content_type', 'main-menu:0'),
+    '#options' => $options,
+    '#description' => t('Choose the menu item to be the default parent for a new link in the content authoring form.'),
+    '#attributes' => array('class' => array('menu-title-select'),),
+    '#states' => array(
+      'invisible' => array(
+        'input[name="isct_menu_by_default"]' => array('value' => 0),
+      ),
+    ),
+  );
+
+  // Call Drupal.isct_menu_update_parent_list() to filter the list of
+  // available default parent menu items based on the selected menus.
+  drupal_add_js(
+  '(function ($) { Drupal.isct_menu_update_parent_list(); })(jQuery);', 
+  array('scope' => 'footer', 'type' => 'inline')
+  );
+  
   return system_settings_form($form);
 }
