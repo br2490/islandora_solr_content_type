@@ -15,7 +15,8 @@ $_islandora_solr_content_type = array();
 /**
  * Implements hook_permission().
  */
-function islandora_solr_content_type_permission() {
+function islandora_solr_content_type_permission() 
+{
   return array(
     'administer islandora_solr_content_type' => array(
       'title' => t('Administer Islandora Solr Content Type'),
@@ -27,7 +28,8 @@ function islandora_solr_content_type_permission() {
 /**
  * Implements hook_menu().
  */
-function islandora_solr_content_type_menu() {
+function islandora_solr_content_type_menu() 
+{
   return array(
     'admin/islandora/islandora_solr_content_type' => array(
       'page callback' => 'drupal_get_form',
@@ -92,7 +94,8 @@ function islandora_solr_content_type_form_alter(&$form, $form_state, $form_id) {
 /**
  * Implements hook_module_implements_alter(&$implementations, $hook).
  */
-function islandora_solr_content_type_module_implements_alter(&$implementations, $hook) {
+function islandora_solr_content_type_module_implements_alter(&$implementations, $hook) 
+{
   if ($hook == 'form_alter' && isset($implementations['islandora_solr_content_type'])) {
     $group = $implementations['islandora_solr_content_type'];
     unset($implementations['islandora_solr_content_type']);
