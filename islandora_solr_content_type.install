@@ -181,6 +181,32 @@ function _islandora_solr_content_type_installed_fields()
     'deleted' => 0,
   );
 
+  // Field: Islandora Solr search block title.
+  $fields['isct_display_search_title'] = array(
+    'translatable' => 0,
+    'field_name' => 'isct_display_search_title',
+    'module' => 'text',
+    'type' => 'text',
+    'settings' => array(),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
+  // Field: Islandora Solr facet block title.
+  $fields['isct_display_facet_title'] = array(
+    'translatable' => 0,
+    'field_name' => 'isct_display_facet_title',
+    'module' => 'text',
+    'type' => 'text',
+    'settings' => array(),
+    'active' => 1,
+    'locked' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+  );
+
   // Field: modify #access of facet block's date_slider
   $fields['isct_display_dateslider'] = array(
     'translatable' => 0,
@@ -422,6 +448,62 @@ Barnard College Examples:
     ),
   );
 
+  $instances['isct_display_search_title'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_display_search_title',
+    'entity_type' => 'node',
+    'label' => $t('Islandor Solr Search Block Title.'),
+    'description' => $t('Title of the Islandora Search block on this collection page. Use &lt;none&gt; for blank.'),
+    'default_value' => array(array('value' => 'Search this collection')),
+    'deleted' => 0,
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'type' => 'text',
+      'settings' => array(),
+      'weight' => 21,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
+      ),
+    ),
+  );
+  
+  $instances['isct_display_facet_title'] = array(
+    'bundle' => 'islandora_solr_content_type',
+    'field_name' => 'isct_display_facet_title',
+    'entity_type' => 'node',
+    'label' => $t('Islandor Solr Facet Block Title.'),
+    'description' => $t('Title of the Islandora Facet block on this collection page. Use &lt;none&gt; for blank.'),
+    'default_value' => array(array('value' => '<none>')),
+    'deleted' => 0,
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'type' => 'text',
+      'settings' => array(),
+      'weight' => 22,
+    ),
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'type' => 'hidden',
+      ),
+    ),
+  );
+
   $instances['isct_display_datefacets'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_datefacets',
@@ -442,7 +524,7 @@ Barnard College Examples:
       'settings' => array(
         'display_label' => 1
       ),
-      'weight' => 21,
+      'weight' => 23,
     ),
     'display' => array(
       'default' => array(
@@ -472,7 +554,7 @@ Barnard College Examples:
       'settings' => array(
         'display_label' => 1
       ),
-      'weight' => 22,
+      'weight' => 24,
     ),
     'display' => array(
       'default' => array(
@@ -502,7 +584,7 @@ Barnard College Examples:
       'settings' => array(
         'display_label' => 1
       ),
-      'weight' => 23,
+      'weight' => 25,
     ),
     'display' => array(
       'default' => array(
@@ -530,7 +612,7 @@ Barnard College Examples:
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 24,
+      'weight' => 26,
     ),
     'display' => array(
       'default' => array(

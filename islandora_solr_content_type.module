@@ -127,6 +127,8 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
   );
 
   $additional_display_settings = array(
+    'isct_display_search_title',
+    'isct_display_facet_title',
     'isct_display_datefacets',
     'isct_display_dateslider',
     'isct_display_auto_expand_date',

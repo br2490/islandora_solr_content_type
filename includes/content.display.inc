@@ -20,6 +20,8 @@ function islandora_solr_content_type_prepare_content($node)
     'isct_solr_query',
     'isct_solr_search_query',
     'isct_query_rows',
+    'isct_display_search_title',
+    'isct_display_facet_title',
     'isct_display_datefacets',
     'isct_display_dateslider',
     'isct_display_auto_expand_date',
@@ -56,11 +58,12 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full')
   // Get our global.
   global $_islandora_solr_content_type;
 
+
   // We're on a islandora_solr_content_type page...
   $_islandora_solr_content_type['view'] = TRUE;
 
   islandora_solr_content_type_prepare_content($node);
-
+  dpm($_islandora_solr_content_type);
   // For our content type, we want to default to the grid view. If the user selects
   // something else we do not want to override them back to the grid view.
   !isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
@@ -125,12 +128,12 @@ function islandora_solr_content_type_block_list_alter(&$blocks)
   $additional_blocks = array(
     'islandora_solr' => array(
       'advanced' => array(
-        'title' => 'Search this collection', // will get H2
+        'title' =>  $_islandora_solr_content_type['display_search_title'],
         'region' => 'sidebar_first',
         'weight' => 0,
       ),
       'basic_facets' => array(
-        'title' => '<none>',
+        'title' => $_islandora_solr_content_type['display_facet_title'],
         'region' => 'sidebar_first',
         'weight' => 1,
       ),
