@@ -106,18 +106,6 @@ function _islandora_solr_content_type_installed_fields()
     'deleted' => 0,
   );
 
-  $fields['isct_testing'] = array(
-    'translatable' => 1,
-    'field_name' => 'isct_testing',
-    'module' => 'text',
-    'type' => 'text_long',
-    'settings' => array(),
-    'active' => 1,
-    'locked' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-  );
-
   // Solr query field
   $fields['isct_solr_query'] = array(
     'translatable' => 0,
