@@ -20,22 +20,27 @@ function islandora_solr_content_type_install_custom_type()
 /*
  * Function to UPDATE our conntent fields and instances. CR"U"D
  */
-function islandora_solr_content_type_update_custom_type()
+function islandora_solr_content_type_update_custom_type($form = NULL, &$form_state = NULL)
 {
-  foreach (_islandora_solr_content_type_installed_fields() as $field) {
-  	if (!field_info_field($field['field_name'])) {
-  		field_create_field($field);
-  	} else {
-    	field_update_field($field);
+  try {
+    foreach (_islandora_solr_content_type_installed_fields() as $field) {
+    	if (!field_info_field($field['field_name'])) {
+    		field_create_field($field);
+    	} else {
+      	field_update_field($field);
+    	}
   	}
-	}
-  foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
-    field_update_instance($fieldinstance);
-  }
-  foreach (_islandora_solr_content_type_variables() as $var => $option) {
-    if (!variable_get($var)) {
-      variable_set($var, $option);
+    foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
+      field_update_instance($fieldinstance);
     }
+    // foreach (_islandora_solr_content_type_variables() as $var => $option) {
+    //   if (variable_get($var, FALSE)) {
+    //     variable_set($var, $option);
+    //   }
+    // }
+    dpm('Module update completed.');
+  } catch(Exception $e) {
+    dpm('Module update failed.');
   }
 }
 
@@ -78,13 +83,13 @@ function _islandora_solr_content_type_variables()
   $variables['pathauto_node_islandora_solr_content_type_pattern'] = 'collections/[node:title]';
  
   // Auto-add to menu  
-  $variables['isct_menu_by_default'] = '0';
+  $variables['isct_menu_by_default'] = '1';
 
   // Menu Default
-  $variables['menu_options_islandora_solr_content_type'] = array();
+  $variables['menu_options_islandora_solr_content_type'] = array('main-menu');
 
   // Parent menu for all if above == 1
-  $variables['menu_parent_islandora_solr_content_type'] = '';
+  $variables['menu_parent_islandora_solr_content_type'] = 'main-menu:0';
 
   return $variables;
 }

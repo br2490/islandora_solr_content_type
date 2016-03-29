@@ -4,10 +4,10 @@
  * @file
  * Solr Collection "views" via a custom content type.
  */
-require_once dirname(__FILE__) . '/includes/content_config.inc'; // for the update script.
-require_once dirname(__FILE__) . '/includes/content.display.inc'; // The display of our content type is here.
-require_once dirname(__FILE__) . '/includes/search.inc'; // The modification of solr search/faceting is here.
-require_once dirname(__FILE__) . '/includes/theme.inc'; // Themeing.
+require_once 'includes/content.config.inc'; // Loads our content structure: fields, instances, variables.
+require_once 'includes/content.display.inc'; // The display of our content type is here.
+require_once 'includes/search.inc'; // The modification of solr search/faceting is here.
+require_once 'includes/theme.inc'; // Themeing.
 
 // Content global.
 $_islandora_solr_content_type = array();
@@ -115,7 +115,6 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state, $
   if ($form['#node']->type !== 'islandora_solr_content_type') {
     return; // See ya.
   }
-
   $form['additional_display_settings'] = array(
     '#type' => 'fieldset',
     '#title' => 'Additional Dislpay Settings',

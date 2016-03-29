@@ -5,6 +5,8 @@
  * Decription TK
  */
 
+require_once 'content.config.inc'; // Loads our content structure: fields, instances, variables.
+
 /**
  * Implements hook_form().
  */
@@ -85,6 +87,12 @@ function islandora_solr_content_type_config($form, &$form_state) {
         'input[name="isct_menu_by_default"]' => array('value' => 0),
       ),
     ),
+  );
+
+  $form['update_isct_module'] = array (
+    '#type' => 'submit',
+    '#value' => t('Update Module'),
+    '#submit' => array('islandora_solr_content_type_update_custom_type'),
   );
 
   // Call Drupal.isct_menu_update_parent_list() to filter the list of

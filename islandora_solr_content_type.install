@@ -6,7 +6,7 @@
  * Fields, instance, and variables for our content type.
  * For brevity field names are shortened to "isct" - the initialism of the module.
  */
-require_once dirname(__FILE__) . '/includes/content_config.inc'; // Loads our content structure: fields, instances, variables.
+require_once 'includes/content.config.inc'; // Loads our content structure: fields, instances, variables.
 
 /**
  * Implements hook_install()
