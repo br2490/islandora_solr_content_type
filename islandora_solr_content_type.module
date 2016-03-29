@@ -4,6 +4,7 @@
  * @file
  * Solr Collection "views" via a custom content type.
  */
+require_once dirname(__FILE__) . '/includes/content_config.inc'; // for the update script.
 require_once dirname(__FILE__) . '/includes/content.display.inc'; // The display of our content type is here.
 require_once dirname(__FILE__) . '/includes/search.inc'; // The modification of solr search/faceting is here.
 require_once dirname(__FILE__) . '/includes/theme.inc'; // Themeing.

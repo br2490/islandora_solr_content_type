@@ -58,7 +58,6 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full')
   // Get our global.
   global $_islandora_solr_content_type;
 
-
   // We're on a islandora_solr_content_type page...
   $_islandora_solr_content_type['view'] = TRUE;
 
@@ -82,18 +81,18 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full')
   // Build the rest of our block's content - include the switch (list/grid) and sort blocks.
   $node->content['switch_block'] = array(
     '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'display_switch'),
-    '#weight' => '2',
-  );
+    '#weight' => '2'
+    );
 
   $node->content['sort_order_block'] = array(
     '#markup' => islandora_solr_content_type_block_content_render('islandora_solr', 'sort'),
     '#weight' => '2',
-  );
+    );
 
   $node->content['results'] = array(
     '#markup' => $solr_result_output,
     '#weight' => '3',
-  );
+    );
 
 }
 
