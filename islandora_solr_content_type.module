@@ -35,7 +35,7 @@ function islandora_solr_content_type_menu()
     'admin/islandora/islandora_solr_content_type' => array(
       'page callback' => 'drupal_get_form',
       'title' => 'Islandora Solr Content Type',
-      'description' => 'Put something intelligent here', //@todo
+      'description' => 'Configure defaults for the Islandora Solr Content type.', //@todo
       'page arguments' => array('islandora_solr_content_type_config'),
       'file' => 'includes/admin.form.inc',
       'access arguments' => array('administer islandora_solr_content_type'),
