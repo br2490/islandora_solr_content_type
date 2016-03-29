@@ -4,10 +4,10 @@
  * @file
  * Solr Collection "views" via a custom content type.
  */
-require_once 'includes/content.config.inc'; // Loads our content structure: fields, instances, variables.
-require_once 'includes/content.display.inc'; // The display of our content type is here.
-require_once 'includes/search.inc'; // The modification of solr search/faceting is here.
-require_once 'includes/theme.inc'; // Themeing.
+module_load_include('inc', 'islandora_solr_content_type', 'includes/content.config'); // Loads our content structure: fields, instances, variables.
+module_load_include('inc', 'islandora_solr_content_type', 'includes/content.display'); // The display of our content type is here.
+module_load_include('inc', 'islandora_solr_content_type', 'includes/search'); // The modification of solr search/faceting is here.
+module_load_include('inc', 'islandora_solr_content_type', 'includes/theme'); // Themeing.
 
 // Content global.
 $_islandora_solr_content_type = array();

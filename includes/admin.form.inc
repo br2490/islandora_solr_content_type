@@ -5,7 +5,7 @@
  * Decription TK
  */
 
-require_once 'content.config.inc'; // Loads our content structure: fields, instances, variables.
+module_load_include('inc', 'islandora_solr_content_type', 'includes/content.config'); // Loads our content structure: fields, instances, variables.
 
 /**
  * Implements hook_form().

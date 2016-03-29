@@ -1,5 +1,9 @@
 <?php
 // vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
+/**
+ * @file
+ * Description TK.
+ */
 
 /*
  * Function to add our content fields and instances. "C"RUD
