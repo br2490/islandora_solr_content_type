@@ -13,7 +13,7 @@ This module requires the following modules/libraries:
 
 * [Islandora](https://github.com/islandora/islandora)
 * [Islandora Solr Search](https://github.com/Islandora/islandora_solr_search)
-* Everything else is Drupal 7.x core, so no additional modules are required.
+* Everything else is included in Drupal 7.x core, no additional modules are required.
 
 
 ## Installation
