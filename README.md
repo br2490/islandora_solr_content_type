@@ -1,21 +1,56 @@
 # Islandora Solr Content Type
-A Drupal 7.x content type for Islandora requiring only core-drupal, Islandora and, Islandora SOLR. 
 
-## Deps
+## Introduction
 
-Drupal 7x, Islandora, Islandora Solr Search
+This is an extention of Islandora Solr which allows for the easy creation and dynamic collection pages based on Solr queries. This  content type allows for the searching and faceting within the collection page itself, hooking into Islandora Solr. ...more to come.
 
-## What is it?
-The purpose of this module is to allow archivists & curators to create a collection view by way of using a SOLR query.
+## Drupal Version
+* [Drupal 7.x](https://www.drupal.org/node/3060/release?api_version%5B%5D=103)
 
-It makes the process of displaying collections (e.g., special collections, timely collections, unique collections, any combination of the above) easy, and promotes the end-user to explore within that collection (searching and faceting work).
+## Requirements
 
-## How do I use it?
-- Install it like any other Drupal module.
-- Click Content and add new content using the Barnard Collection View.
-- Specify the base SOLR query that will generate the collection view, write your descriptions, yada yada...
+This module requires the following modules/libraries:
 
-## Why?
-This module only uses core Drupal 1.7x functionality and promotes the display of collections.
+* [Islandora](https://github.com/islandora/islandora)
+* [Islandora Solr Search](https://github.com/Islandora/islandora_solr_search)
+* Everything else is Drupal 7.x core, so no additional modules are required.
 
-It includes the ability of end users to search and facet the collection view without being redirected.
+
+## Installation
+
+Install as usual, see [this](https://drupal.org/documentation/install/modules-themes/modules-7) for further information.
+
+## Configuration
+
+Select configuration options for page derivatives, Parent Solr Field, and select a viewer for the issue view and page view in  Administration » Islandora » Islandora Solr Content Type
+
+![Configuration](https://raw.githubusercontent.com/br2490/images/ISCT_pre1/isct_admin_form_inc.png)
+
+## Documentation
+
+<a href="https://github.com/br2490/images/blob/ISCT_pre1/Screenshots.MD" target="_blank">Creating a new content type, and en example.</a> More documentation soon.
+
+## Troubleshooting/Issues
+
+Having problems or solved a problem? 
+
+* [Contact Benji](emailto:brosner+ISCT@barnard.edu)
+ 
+Check out the Islandora google groups for a solution.
+
+* [Islandora Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora)
+* [Islandora Dev Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora-dev)
+
+## Maintainers/Sponsors
+
+Current maintainers:
+
+* [Benjamin Rosner](https://github.com/br2490)
+
+## Development
+
+If you would like to contribute to this module, please check out [CONTRIBUTING.md](CONTRIBUTING.md). In addition, we have helpful [Documentation for Developers](https://github.com/Islandora/islandora/wiki#wiki-documentation-for-developers) info, as well as our [Developers](http://islandora.ca/developers) section on the [Islandora.ca](http://islandora.ca) site.
+
+## License
+
+[GPLv3](http://www.gnu.org/licenses/gpl-3.0.txt)
