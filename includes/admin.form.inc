@@ -35,7 +35,7 @@ function islandora_solr_content_type_config($form, &$form_state) {
     '#required' => TRUE,
     '#options' => array (
       0 => t('Do <strong>not</strong> diplay authorship and timestamp on pages. (default)'),
-      1 => t('Display authorship and timestampe on pages.'),
+      1 => t('Display authorship and timestamp on pages.'),
     ),
     '#title' => t('Hide authorship and timestamp on all ISCT pages.'),
     '#default_value' => variable_get('node_submitted_islandora_solr_content_type', '0'),
@@ -89,10 +89,26 @@ function islandora_solr_content_type_config($form, &$form_state) {
     ),
   );
 
+  // remove this later.
+  $form['isct_development_mode'] = array(
+    '#type' => 'radios',
+    '#options' => array (
+      1 => t('Enabled'),
+      0 => t('Disabled'),
+    ),
+    '#title' => t('Development mode.'),
+    '#default_value' => variable_get('isct_development_mode', '0'),
+  );
+  // remove this later.
   $form['update_isct_module'] = array (
     '#type' => 'submit',
-    '#value' => t('Update Module'),
+    '#value' => t('Update Module (development)'),
     '#submit' => array('islandora_solr_content_type_update_custom_type'),
+    '#states' => array(
+      'invisible' => array(
+        'input[name="isct_development_mode"]' => array('value' => 0),
+      ),
+    ),
   );
 
   // Call Drupal.isct_menu_update_parent_list() to filter the list of
