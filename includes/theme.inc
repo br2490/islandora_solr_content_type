@@ -15,7 +15,7 @@ function islandora_solr_content_type_preprocess_page(&$vars)
   if (isset($vars['node']) && $vars['node']->type == 'islandora_solr_content_type') {
     if (!(bool)strpos(current_path(), 'edit')) {
       $vars['theme_hook_suggestions'][] = 'page__node__' . $vars['node']->type;
-    } // else { do some edit page theming or nothing... }
+    } 
   }
 }
 
@@ -38,14 +38,6 @@ function islandora_solr_content_type_theme($existing, $type, $theme, $path)
     'template' => 'page--node--islandora_solr_content_type',
     'path' => drupal_get_path('module', 'islandora_solr_content_type') . '/templates',
   );
-
-  // //Node add template for admins.
-  // $theme['page__node__add__islandora_solr_content_type'] = array(
-  //   'render element' => 'content',
-  //   'base hook' => 'page',
-  //   'template' => 'page--node--add--islandora_solr_content_type',
-  //   'path' => drupal_get_path('module', 'islandora_solr_content_type') . '/templates',
-  //  );
 
   return $theme;
 }

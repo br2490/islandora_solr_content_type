@@ -55,6 +55,13 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full')
     return; // Party on Garth. Party on.
   }
 
+  // $_SESSION['isct'] = new stdClass();
+  // $_SESSION['isct']->current = $node->nid;
+  // $_SESSION['isct']->crumb_title = $node->title;
+  // $_SESSION['isct']->crumb_title_path = l(drupal_get_title(), base_path() . request_uri());
+  // $_SESSION['isct']->crumb_path = menu_get_active_breadcrumb();
+  // dpm($_SESSION);
+
   // Get our global.
   global $_islandora_solr_content_type;
 

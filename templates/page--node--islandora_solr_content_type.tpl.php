@@ -82,12 +82,8 @@
     <div id="content" class="column" role="main">
       <?php print render($page['highlighted']); ?>
       <?php print render($title_prefix); ?>
-      <?php if (isset($bc_breadcrumb)): ?>
-        <?php print $bc_breadcrumb; ?>
-      <?php endif; ?>
       <?php
-      $bc_views_breadcrumb = array('breadcrumb' => menu_get_active_breadcrumb());
-      print theme('bc_islandora_breadcrumb', $bc_views_breadcrumb);
+      print theme('bc_islandora_breadcrumb', array('breadcrumb' => menu_get_active_breadcrumb()));
       isset($breadcrumb) ? print $breadcrumb : NULL;
       ?>
       <?php if ($title): ?>
