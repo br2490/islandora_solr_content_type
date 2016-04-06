@@ -1,4 +1,4 @@
-# Islandora Solr Content Type
+# Islandora Solr Content Type [![Build Status](https://travis-ci.org/br2490/islandora_solr_content_type.svg?branch=master)](https://travis-ci.org/br2490/islandora_solr_content_type)
 
 ## Introduction
 
@@ -34,7 +34,7 @@ Select configuration options for page derivatives, Parent Solr Field, and select
 
 Having problems or solved a problem? 
 
-* [Contact Benji](emailto:brosner+ISCT@barnard.edu)
+* [Contact Benjamin](mailto:brosner+ISCT@barnard.edu)
  
 Check out the Islandora google groups for a solution.
 
