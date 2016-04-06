@@ -1,0 +1,56 @@
+# The language section tells Travis how to customize the environment. We tend
+# to test against PHP 5.3 through 5.5
+language: php
+php:
+  - 5.3.3
+  - 5.4
+  - 5.5
+# Restricting the branches to test against makes sure that we're only testing
+# updates to the main branch.
+branches:
+  only:
+    - /^7.x/
+# The environment matrix lets us set environment variables to use when
+# establishing our test environment and running tests. FEDORA_VERSION is used
+# by travis_setup.sh to determine what version to download.
+env:
+  matrix:
+    - FEDORA_VERSION="3.5"
+    - FEDORA_VERSION="3.6.2"
+    - FEDORA_VERSION="3.7.0"
+    - FEDORA_VERSION="3.8.1"
+  global:
+    # Global variables across all tests can be established here.
+# The before_install script is used to set up the environment. This is where
+# we run travis_setup.sh, install packages, and move everything to the right
+# place. If anything fails here, the test script will not be run.
+before_install:
+ - cd $HOME
+ - git clone -b 7.x git://github.com/Islandora/islandora.git
+ - export ISLANDORA_DIR=$HOME/islandora
+ - $HOME/islandora/tests/scripts/travis_setup.sh
+
+ - git clone -b development git@github.com:br2490/islandora_solr_content_type.git
+ - ln -s $HOME/islandora_solr_content_type sites/all/modules/islandora_solr_content_type
+
+ - cd $HOME/drupal-*
+ - drush -y -u 1 en islandora_solr_content_type
+# At this point, the test script is run.
+script:
+  # Islandora and its contributed modules require Drupal coding standards to be
+  # met, so it's in your best interests to use the code sniffing tools at your
+  # disposal as well as run your tests.
+  - $ISLANDORA_DIR/tests/scripts/line_endings.sh sites/all/modules/islandora_solr_content_type
+  - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_solr_content_type
+  - phpcpd --names *.module,*.inc,*.test sites/all/modules/islandora_solr_content_type
+  # This is also the point when your actual SimpleTest tests should be run.
+  # Remember that travis_setup.sh establishes the webserver at localhost:8081,
+  # so set that.
+  - drush test-run --uri=http://localhost:8081 "Islandora Solr Content Type"
+# If the tests failed, it may be a good idea to cat the log files in an
+# after_failure section. Maybe do it cleaner than this example.
+after_failure:
+  - cat /tmp/drush_webserver.log
+  - cat $HOME/sites/default/files/simpletest/verbose/*
+  - cat /home/travis/islandora_tomcat/server/logs/*
+  - $TRAVIS_BUILD_DIR/tests/scripts/travis_setup.sh
