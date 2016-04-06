@@ -41,7 +41,8 @@ function islandora_solr_content_type_update_custom_type($form = NULL, &$form_sta
     //   }
     // }
     dpm('Module update completed.');
-  } catch (Exception $e) {
+  }
+  catch (Exception $e) {
     dpm('Module update failed.');
   }
 }

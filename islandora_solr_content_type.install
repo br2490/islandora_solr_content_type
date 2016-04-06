@@ -6,16 +6,18 @@
  * For brevity field names are shortened to "isct" - the initialism of the
  *   module.
  */
-require_once 'includes/content.config.inc'; // Loads our content structure: fields, instances, variables.
+
+// Loads our content structure: fields, instances, variables.
+require_once 'includes/content.config.inc'; 
 
 /**
  * Implements hook_install()
  */
 function islandora_solr_content_type_install() {
   node_types_rebuild();
-  // Note that normally one would call node_add_body_field() for their content type
-  // We do not, instead we create our own "body field" that forces the full page view.
-  // This content type works best in the "full" view mode...
+  // Note that normally one would call node_add_body_field() for their content 
+  // type. We do not, instead we create our own "body field" that forces the 
+  // full page view. This content type works best in the "full" view mode...
   islandora_solr_content_type_install_custom_type();
 }
 
@@ -35,7 +37,7 @@ function islandora_solr_content_type_uninstall() {
   field_purge_batch(1000);
 }
 
-// This is just a placeholder && example. It currently does not perform anything.
+// This is just a placeholder/example. It currently does not perform anything.
 // function islandora_solr_content_type_update_7001()
 // {
 //  islandora_solr_content_type_update_custom_type();
