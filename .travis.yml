@@ -14,10 +14,11 @@ env:
 before_install:
  - cd $HOME
  - git clone -b 7.x git://github.com/Islandora/islandora.git
- - git clone -b master https://github.com/br2490/islandora_solr_content_type.git
  - export ISLANDORA_DIR=$HOME/islandora
  - $HOME/islandora/tests/scripts/travis_setup.sh
+ - git clone -b master https://github.com/br2490/islandora_solr_content_type.git
  - cd $HOME/drupal-*
+ - git clone -b master https://github.com/br2490/islandora_solr_content_type.git
  - ln -s $HOME/islandora_solr_content_type sites/all/modules/islandora_solr_content_type
  - drush -y -u 1 en islandora_solr_content_type
 script:
