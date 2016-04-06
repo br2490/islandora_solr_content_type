@@ -13,16 +13,17 @@ env:
   - FEDORA_VERSION="3.7.0"
   - FEDORA_VERSION="3.8.1"
 before_install:
- - cd $HOME
- - git clone -b 7.x git://github.com/Islandora/islandora.git
- - export ISLANDORA_DIR=$HOME/islandora
- - $HOME/islandora/tests/scripts/travis_setup.sh
- - git clone -b master https://github.com/br2490/islandora_solr_content_type.git
- - cd $HOME/drupal-*
- - ln -s $TRAVIS_BUILD_DIR sites/all/modules/islandora_solr_search
- - ln -s $HOME/islandora_solr_content_type sites/all/modules/islandora_solr_content_type
- - drush -y -u 1 en islandora_solr
- - drush -y -u 1 en islandora_solr_content_type
+  - cd $HOME
+  - git clone -b 7.x git://github.com/Islandora/islandora.git
+  - git clone -b 7.x https://github.com/Islandora/islandora_solr_search.git
+  - git clone -b master https://github.com/br2490/islandora_solr_content_type.git
+  - export ISLANDORA_DIR=$HOME/islandora
+  - $HOME/islandora/tests/scripts/travis_setup.sh
+  - cd $HOME/drupal-*
+  - ln -s $HOME/islandora_solr_search sites/all/modules/islandora_solr_search
+  - ln -s $HOME/islandora_solr_content_type sites/all/modules/islandora_solr_content_type
+  - drush -y -u 1 en islandora_solr
+  - drush -y -u 1 en islandora_solr_content_type
 script:
   - $ISLANDORA_DIR/tests/scripts/line_endings.sh sites/all/modules/islandora_solr_content_type
   - drush coder-review --reviews=production,security,style,i18n,potx,sniffer islandora_solr_content_type
