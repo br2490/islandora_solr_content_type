@@ -8,16 +8,17 @@
  */
 
 // Loads our content structure: fields, instances, variables.
-require_once 'includes/content.config.inc'; 
+require_once 'includes/content.config.inc';
 
 /**
  * Implements hook_install()
  */
 function islandora_solr_content_type_install() {
   node_types_rebuild();
-  // Note that normally one would call node_add_body_field() for their content 
-  // type. We do not, instead we create our own "body field" that forces the 
-  // full page view. This content type works best in the "full" view mode...
+  // Note that normally one would call node_add_body_field() for their
+  // content type We do not, instead we create our own "body field" that
+  // forces the full page view. This content type works best in the "full"
+  // view mode...
   islandora_solr_content_type_install_custom_type();
 }
 
@@ -36,15 +37,5 @@ function islandora_solr_content_type_uninstall() {
   node_type_delete('islandora_solr_content_type');
   field_purge_batch(1000);
 }
-
-// This is just a placeholder/example. It currently does not perform anything.
-// function islandora_solr_content_type_update_7001()
-// {
-//  islandora_solr_content_type_update_custom_type();
-// }
-//   // Get default status for field using machine name of field
-//   // $field_updated_field = field_info_field('isct_display_facets');
-//   // do stuff
-//   // field_update_field($field_updated_field);
 
 // vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:

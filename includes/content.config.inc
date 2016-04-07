@@ -22,7 +22,8 @@ function islandora_solr_content_type_install_custom_type() {
 /*
  * Function to UPDATE our conntent fields and instances. CR"U"D
  */
-function islandora_solr_content_type_update_custom_type($form = NULL, &$form_state = NULL) {
+function islandora_solr_content_type_update_custom_type($form = NULL,
+  &$form_state = NULL) {
   try {
     foreach (_islandora_solr_content_type_installed_fields() as $field) {
       if (!field_info_field($field['field_name'])) {
@@ -77,9 +78,8 @@ function _islandora_solr_content_type_variables() {
   $variables['node_submitted_islandora_solr_content_type'] = '0';
 
   // Default state to published, without other options (e.g., sticky, promoted, etc.).
-  $variables['node_options_islandora_solr_content_type'] = array(
-    '0' => 'status',
-  );
+  $variables['node_options_islandora_solr_content_type'] =
+    array('0' => 'status',);
 
   // Auto path generation default
   $variables['pathauto_node_islandora_solr_content_type_pattern'] =
@@ -318,9 +318,8 @@ function _islandora_solr_content_type_instances() {
     'field_name'    => 'isct_solr_query',
     'entity_type'   => 'node',
     'label'         => $t('Solr Collection View Query - Landing Page'),
-    'description'   => $t('The Solr query that will generate desired \'collection view.\' <br>
-  An easy way to create this question is to visit the <a target="_blank" href="' .
-                          $GLOBALS['base_root'] . '/islandora/search">search page</a> and start with a basic query.
+    'description'   => $t($GLOBALS['base_root'] . 'The Solr query that will generate desired \'collection view.\' <br>
+              An easy way to create this question is to visit the <a target="_blank" href="' . '/islandora/search">search page</a> and start with a basic query.
 The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the Solr search fields available to a site visitor.</em></strong><br>
 Barnard College Examples: 
 <ul>
@@ -343,9 +342,7 @@ Barnard College Examples:
       'active'   => 1,
       'module'   => 'text',
       'type'     => 'text_textarea',
-      'settings' => array(
-        'rows' => 2,
-      ),
+      'settings' => array('rows' => 2,),
       'weight'   => 2,
     ),
     'display'       => array(
@@ -373,9 +370,7 @@ Barnard College Examples:
       'active'   => 1,
       'module'   => 'text',
       'type'     => 'text_textarea',
-      'settings' => array(
-        'rows' => 2,
-      ),
+      'settings' => array('rows' => 2,),
       'weight'   => 3,
     ),
     'display'       => array(
@@ -391,11 +386,7 @@ Barnard College Examples:
     'field_name'    => 'isct_query_rows',
     'entity_type'   => 'node',
     'label'         => $t('Number of results to display per page'),
-    'default_value' => array(
-      0 => array(
-        'value' => $t('8'),
-      ),
-    ),
+    'default_value' => array(0 => array('value' => $t('8'),),),
     'deleted'       => 0,
     'description'   => $t('The number of records (rows) to display from the Solr query.'),
     'required'      => 1,
@@ -406,9 +397,7 @@ Barnard College Examples:
     'widget'        => array(
       'active'   => 1,
       'module'   => 'number',
-      'settings' => array(
-        'size' => 10,
-      ),
+      'settings' => array('size' => 10,),
       'type'     => 'number',
       'weight'   => 4,
     ),
@@ -481,21 +470,15 @@ Barnard College Examples:
     'field_name'    => 'isct_display_datefacets',
     'entity_type'   => 'node',
     'label'         => $t('Remove <strong>all</strong> date faceting from the Facet block?'),
-    'default_value' => array(
-      0 => array('value' => 0,),
-    ),
+    'default_value' => array(0 => array('value' => 0,),),
     'deleted'       => 0,
     'required'      => 0,
-    'settings'      => array(
-      'user_register_form' => 0,
-    ),
+    'settings'      => array('user_register_form' => 0,),
     'widget'        => array(
       'active'   => 1,
       'module'   => 'options',
       'type'     => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1,
-      ),
+      'settings' => array('display_label' => 1,),
       'weight'   => 23,
     ),
     'display'       => array(
@@ -511,21 +494,15 @@ Barnard College Examples:
     'field_name'    => 'isct_display_dateslider',
     'entity_type'   => 'node',
     'label'         => $t('Remove the date slider region (i.e., date picker) in the Facet block?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1,),),
     'deleted'       => 0,
     'required'      => 0,
-    'settings'      => array(
-      'user_register_form' => 0,
-    ),
+    'settings'      => array('user_register_form' => 0,),
     'widget'        => array(
       'active'   => 1,
       'module'   => 'options',
       'type'     => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1,
-      ),
+      'settings' => array('display_label' => 1,),
       'weight'   => 24,
     ),
     'display'       => array(
@@ -541,21 +518,15 @@ Barnard College Examples:
     'field_name'    => 'isct_display_auto_expand_date',
     'entity_type'   => 'node',
     'label'         => $t('Automatically expand the date search region in the Facets block?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1,),),
     'deleted'       => 0,
     'required'      => 0,
-    'settings'      => array(
-      'user_register_form' => 0,
-    ),
+    'settings'      => array('user_register_form' => 0,),
     'widget'        => array(
       'active'   => 1,
       'module'   => 'options',
       'type'     => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1,
-      ),
+      'settings' => array('display_label' => 1,),
       'weight'   => 25,
     ),
     'display'       => array(
@@ -574,9 +545,7 @@ Barnard College Examples:
     'label'       => $t('Facets to display on page'),
     'deleted'     => 0,
     'required'    => 0,
-    'settings'    => array(
-      'user_register_form' => 0,
-    ),
+    'settings'    => array('user_register_form' => 0,),
     'tree'        => 1,
     'collapsible' => 1,
     'widget'      => array(
@@ -599,21 +568,15 @@ Barnard College Examples:
     'field_name'    => 'isct_featured_topic_hide',
     'entity_type'   => 'node',
     'label'         => $t('Hide the featured area when the user preforms a search in the collection?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1,),),
     'deleted'       => 0,
     'required'      => 0,
-    'settings'      => array(
-      'user_register_form' => 0,
-    ),
+    'settings'      => array('user_register_form' => 0,),
     'widget'        => array(
       'active'   => 1,
       'module'   => 'options',
       'type'     => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1,
-      ),
+      'settings' => array('display_label' => 1,),
       'weight'   => 31,
     ),
     'display'       => array(

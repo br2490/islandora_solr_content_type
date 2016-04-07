@@ -39,17 +39,8 @@ function islandora_solr_content_type_theme($existing, $type, $theme, $path) {
     'base hook'      => 'page',
     'template'       => 'page--node--islandora_solr_content_type',
     'path'           => drupal_get_path('module',
-                                        'islandora_solr_content_type') .
-      '/templates',
+        'islandora_solr_content_type') . '/templates',
   );
-
-  // //Node add template for admins.
-  // $theme['page__node__add__islandora_solr_content_type'] = array(
-  //   'render element' => 'content',
-  //   'base hook' => 'page',
-  //   'template' => 'page--node--add--islandora_solr_content_type',
-  //   'path' => drupal_get_path('module', 'islandora_solr_content_type') . '/templates',
-  //  );
 
   return $theme;
 }
