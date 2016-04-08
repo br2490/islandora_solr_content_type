@@ -48,8 +48,8 @@ function islandora_solr_content_type_update_custom_type($form = NULL,
  * Function to remove our conntent fields and instances. CRU"D".
  */
 function islandora_solr_content_type_uninstall_custom_type() {
-  foreach (array_keys(_islandora_solr_content_type_installed_fields())
-  as $field) {
+  $fielnd_names = array_keys(_islandora_solr_content_type_installed_fields();
+  foreach ($fielnd_names as $field) {
     field_delete_field($field);
   }
   $instances = field_info_instances('node', 'islandora_solr_content_type');
@@ -100,7 +100,7 @@ function _islandora_solr_content_type_variables() {
  * Returns an array of our fields.
  *
  * @return array
- *    An array of fields and their properties.
+ *   An array of fields and their properties.
  */
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
@@ -210,7 +210,7 @@ function _islandora_solr_content_type_installed_fields() {
  * Spits out the instances of our fields.
  *
  * @return array
- *    An array of field instances based on our types with additional params.
+ *   An array of field instances based on our types with additional params.
  */
 function _islandora_solr_content_type_instances() {
   $instances = array();
@@ -246,7 +246,7 @@ collection view. <br> An easy way to create this question is to visit the
     mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND 
     RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> 
     <li>Get all photographs using mods: mods_genre_ms:"photographs"</li></ul>',
-    array('@url' => $GLOBALS['base_root'] . '/islandora/search',)),
+    array('@url' => $GLOBALS['base_root'] . '/islandora/search')),
     'default_value' => array(
       0 => array(
         'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
