@@ -1,4 +1,4 @@
-# Islandora Solr Content Type [![Build Status](https://travis-ci.org/br2490/islandora_solr_content_type.svg?branch=master)](https://travis-ci.org/br2490/islandora_solr_content_type)
+# Islandora Solr Content Type [![Build Status](https://travis-ci.org/BarnardArchives/islandora_solr_content_type.svg?branch=master)](https://travis-ci.org/BarnardArchives/islandora_solr_content_type)
 
 ## Introduction
 
