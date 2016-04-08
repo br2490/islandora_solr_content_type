@@ -48,7 +48,7 @@ function islandora_solr_content_type_update_custom_type($form = NULL,
  * Function to remove our conntent fields and instances. CRU"D".
  */
 function islandora_solr_content_type_uninstall_custom_type() {
-  $fielnd_names = array_keys(_islandora_solr_content_type_installed_fields();
+  $fielnd_names = array_keys(_islandora_solr_content_type_installed_fields());
   foreach ($fielnd_names as $field) {
     field_delete_field($field);
   }
