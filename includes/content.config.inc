@@ -246,7 +246,7 @@ collection view. <br> An easy way to create this question is to visit the
     mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND 
     RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> 
     <li>Get all photographs using mods: mods_genre_ms:"photographs"</li></ul>',
-    array('@url' => $GLOBALS['base_root'] . '/islandora/search',),),
+    array('@url' => $GLOBALS['base_root'] . '/islandora/search',)),
     'default_value' => array(
       0 => array(
         'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
