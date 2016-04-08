@@ -12,11 +12,9 @@ module_load_include('inc', 'islandora_solr_content_type',
 module_load_include('inc', 'islandora_solr_content_type',
   'includes/content.display');
 // The modification of solr search/faceting is here.
-module_load_include('inc', 'islandora_solr_content_type',
-  'includes/search');
+module_load_include('inc', 'islandora_solr_content_type', 'includes/search');
 // Themeing.
-module_load_include('inc', 'islandora_solr_content_type',
-  'includes/theme');
+module_load_include('inc', 'islandora_solr_content_type', 'includes/theme');
 
 // Content global.
 $_islandora_solr_content_type = array();
@@ -28,8 +26,7 @@ function islandora_solr_content_type_permission() {
   return array(
     'administer islandora_solr_content_type' => array(
       'title' => t('Administer Islandora Solr Content Type'),
-      'description' =>
-      t('Set defaults and administer the Islandora Solr Content Type.'),
+      'description' => t('Set defaults and administer the Islandora Solr Content Type.'),
     ),
   );
 }
@@ -42,8 +39,7 @@ function islandora_solr_content_type_menu() {
     'admin/islandora/islandora_solr_content_type' => array(
       'page callback' => 'drupal_get_form',
       'title' => 'Islandora Solr Content Type',
-      'description' =>
-      'Configure defaults for the Islandora Solr Content type.',
+      'description' => 'Configure defaults for the Islandora Solr Content type.',
       'page arguments' => array('islandora_solr_content_type_config'),
       'file' => 'includes/admin.form.inc',
       'access arguments' => array('administer islandora_solr_content_type'),
@@ -61,17 +57,13 @@ function islandora_solr_content_type_node_info() {
     'islandora_solr_content_type' => array(
       'name' => t('Islandora Solr Content'),
       // Will refactor to Islandora Solr Content Collection (name still a WIP)
-      'base' => 'node_content',
-      'description' => t('A content type to configure and display a collection
-by a specifying a Solr query. <em>Collection</em> is used loosely, as these
-content pages may be  curated exhibits, special p rojects, timely (or
-time-based) collections, etc.'),
-      'has_title' => '1',
-      'title_label' => t('Collection Name (Page Name)'),
-      'help' => t('Use this page to configure and display a collection
+      'base' => 'node_content', 'description' => t('A content type to configure 
+and display a collection by a specifying a Solr query. <em>Collection</em> is
+ used loosely, as these content pages may be  curated exhibits, special p 
+ rojects, timely (or time-based) collections, etc.'), 'has_title' => '1',
+      'title_label' => t('Collection Name (Page Name)'), 'help' => t('Use this page to configure and display a collection
 by a specifying a Solr query.<br> Use the <strong>Preview</strong> button to
-preview what the results from the Solr query your specified.'),
-      'custom' => '0',
+preview what the results from the Solr query your specified.'), 'custom' => '0',
     ),
   );
   drupal_alter('node_info', $items);
@@ -116,26 +108,19 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state,
     return; // See ya.
   }
   $form['additional_display_settings'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'Additional Dislpay Settings',
-    '#collapsible' => true,
-    '#weight' => 20,
+    '#type' => 'fieldset', '#title' => 'Additional Dislpay Settings',
+    '#collapsible' => TRUE, '#weight' => 20,
   );
 
   $form['featured_area'] = array(
-    '#type' => 'fieldset',
-    '#title' => 'Featured Area',
-    '#collapsible' => true,
+    '#type' => 'fieldset', '#title' => 'Featured Area', '#collapsible' => TRUE,
     '#weight' => 30,
   );
 
   $additional_display_settings = array(
-    'isct_display_search_title',
-    'isct_display_facet_title',
-    'isct_display_datefacets',
-    'isct_display_dateslider',
-    'isct_display_auto_expand_date',
-    'isct_display_facets',
+    'isct_display_search_title', 'isct_display_facet_title',
+    'isct_display_datefacets', 'isct_display_dateslider',
+    'isct_display_auto_expand_date', 'isct_display_facets',
   );
 
   foreach ($additional_display_settings as $form_element) {
@@ -144,7 +129,7 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state,
   }
 
   $featured_area =
-  array('isct_featured_topic_hide', 'isct_featured_content_area');
+    array('isct_featured_topic_hide', 'isct_featured_content_area');
 
   foreach ($featured_area as $form_element) {
     $form['featured_area'][$form_element] = $form[$form_element];
@@ -152,7 +137,7 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state,
   }
 
   $form['menu']['enabled']['#default_value'] =
-    variable_get('isct_menu_by_default', false);
+    variable_get('isct_menu_by_default', FALSE);
 }
 
 /**
@@ -181,7 +166,7 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb,
       $href_parts = explode('&', $link->getAttribute('href'));
 
       // If we got the wrong base paht, replace it.
-      if (strpos($href_parts[0], $base_path) === false) {
+      if (strpos($href_parts[0], $base_path) === FALSE) {
         unset($href_parts[0]);
         $new_href = '/' . $base_path . '?' . implode('&', $href_parts);
         $link->setAttribute('href', $new_href);
