@@ -32,10 +32,10 @@ Select configuration options for page derivatives, Parent Solr Field, and select
 
 ## Troubleshooting/Issues
 
-Having problems or solved a problem? 
-
+Having problems or solved a problem?
+``````
 * [Contact Benjamin](mailto:brosner+ISCT@barnard.edu)
- 
+
 Check out the Islandora google groups for a solution.
 
 * [Islandora Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora)

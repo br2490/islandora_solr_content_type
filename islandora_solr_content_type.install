@@ -35,3 +35,4 @@ function islandora_solr_content_type_uninstall() {
 }
 
 // vim: set filetype=php:
+

@@ -5,14 +5,15 @@
  */
 
 /**
- * Parses node variables into a global variable that is used throughout the
- * display and seach includes.
+ * Parses node variables into a global variable.
+ *
+ * This is used throughout the display and search includes.
  */
 function islandora_solr_content_type_prepare_content($node) {
   global $_islandora_solr_content_type;
 
-  // These are our content variables. These DEFINE what is present on the 
-  // content page, and also help us with search. Everything gets saved in the 
+  // These are our content variables. These DEFINE what is present on the
+  // content page, and also help us with search. Everything gets saved in the
   // content's global - I'm sure there is a better way.
 
   $isct_values = array(
@@ -28,8 +29,8 @@ function islandora_solr_content_type_prepare_content($node) {
     $field_value = field_get_items('node', $node, $field);
     $global_field_name = str_replace('isct_', '', $field);
     if ($global_field_name !== 'display_facets') {
-      $_islandora_solr_content_type[$global_field_name] =
-        $field_value[0]['value'];
+      $_islandora_solr_content_type[$global_field_name]
+        = $field_value[0]['value'];
     }
     else {
       foreach ($field_value as $facet) {
@@ -41,41 +42,45 @@ function islandora_solr_content_type_prepare_content($node) {
 
 /**
  * Implements hook_node_view().
+ *
  * This is where we display our content type to the end-user.
  */
 function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
+  // Party on Garth. Party on.
   if ($node->type !== 'islandora_solr_content_type') {
-    return; // Party on Garth. Party on.
+    return;
   }
 
   // Get our global.
   global $_islandora_solr_content_type;
 
-  // We're on a islandora_solr_content_type page...
+  // We're on a islandora_solr_content_type page.
   $_islandora_solr_content_type['view'] = TRUE;
 
   islandora_solr_content_type_prepare_content($node);
-  // For our content type, we want to default to the grid view. If the user 
+  // For our content type, we want to default to the grid view. If the user
   // selects something else do not want to override them back to the grid view.
   !isset($_GET['display']) ? $_GET['display'] = 'grid' : NULL;
 
   // The _very_ important stuff:
-  // Foremost we rely on islandora_solr() to return a search result - 
+  // Foremost we rely on islandora_solr() to return a search result -
   // that will be our primary content.
   // This reliance on islandora_solr let us do amazing things fairly simply
 
-  // We use a param called "cq" if the user has preformed a search from our 
-  // collection page. If it's not there we display the content as it was 
+  // We use a param called "cq" if the user has preformed a search from our
+  // collection page. If it's not there we display the content as it was
   // configured by the curator.
   if (!$_GET['cq']) {
-    $solr_result_output = islandora_solr(); // See hook_islandora_solr()
+    // See hook_islandora_solr_query().
+    $solr_result_output = islandora_solr();
   }
   else {
-    $solr_result_output =
-      islandora_solr($_GET['cq']); // See hook_islandora_solr_query().
+    // See hook_islandora_solr_query().
+    $solr_result_output
+      = islandora_solr($_GET['cq']);
   }
 
-  // Build the rest of our block's content - include the switch 
+  // Build the rest of our block's content - include the switch
   // (list/grid) and sort blocks.
   $node->content['switch_block'] = array(
     '#markup' => islandora_solr_content_type_block_content_render('islandora_solr',
@@ -87,12 +92,12 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
       'sort'), '#weight' => '2',
   );
 
-  $node->content['results'] =
-    array('#markup' => $solr_result_output, '#weight' => '3');
+  $node->content['results']
+    = array('#markup' => $solr_result_output, '#weight' => '3');
 
 }
 
-/*
+/**
  * Implements hook_block_list_alter().
  */
 function islandora_solr_content_type_block_list_alter(&$blocks) {
@@ -141,18 +146,19 @@ function islandora_solr_content_type_block_list_alter(&$blocks) {
     }
   }
 
-  // Sort the blocks
+  // Sort the blocks.
   usort($blocks, "islandora_solr_content_type_custom_sort");
 }
 
 /**
- * Sorting function for blocks as objects. Why drupal only has sort functions
- * for arrays is beyond me...
+ * Sorting function for blocks as objects.
  *
- * @param $a
- * @param $b
+ * @param object $a
+ *  block a.
+ * @param object $b
+ *  block b.
  *
- * @return bool
+ * @return bool weight of blocks.
  */
 function islandora_solr_content_type_custom_sort($a, $b) {
   return $a->weight > $b->weight;
@@ -161,23 +167,23 @@ function islandora_solr_content_type_custom_sort($a, $b) {
 /**
  * Generates a rendered block from $module with name $function.
  *
- * @param $module
- * @param $function
+ * @param $module string module name.
+ * @param $function string function name.
  *
  * @return drupal_render of block.
  */
 function islandora_solr_content_type_block_content_render($module, $function) {
   $block = block_load($module, $function);
-  $block_renderable =
-    _block_get_renderable_array(_block_render_blocks(array($block)));
+  $block_renderable
+    = _block_get_renderable_array(_block_render_blocks(array($block)));
   $render = drupal_render($block_renderable);
 
   return $render;
 }
 
-## REGION: Facet block modifications.
 /**
  * Implements hook_form_BASE_ID_alter().
+ *
  * For our content type we want to simplify the facet block by hiding a few
  * elements.
  */
@@ -190,7 +196,7 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
     return;
   }
 
-  // Hide the entire date faceting area! 
+  // Hide the entire date faceting area!
   // If this is TRUE once we set access we can leave this function.
   if ($_islandora_solr_content_type['display_datefacets']) {
     $form['#access'] = FALSE;
@@ -198,8 +204,8 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
     return;
   }
 
-  // We need to access the theme layer to hide the display 
-  // of the title "Date Created"
+  // We need to access the theme layer to hide the display of the title "Date
+  // Created"
   // @see: https://github.com/Islandora/islandora_solr_search/blob/7.x/theme/theme.inc#L108
   if ($_islandora_solr_content_type['display_dateslider']) {
     // Get rid of datepicker bar and the corresponding submit.
@@ -211,6 +217,7 @@ function islandora_solr_content_type_form_islandora_solr_range_slider_form_alter
 
 /**
  * Implements hook_form_BASE_ID_alter().
+ *
  * For our content type we want to simplify the facet block by hiding a few
  * elements.
  */
@@ -225,12 +232,12 @@ function islandora_solr_content_type_form_islandora_solr_date_filter_form_alter(
 
   if ($_islandora_solr_content_type['display_auto_expand_date']) {
     // Modify the markup to class 'expanded' and remove the hide/show link:
-    $form['date_range_expand']['#markup'] =
-      '<span class="toggle-date-range-filter date-range-expanded"> </span>';
+    $form['date_range_expand']['#markup']
+      = '<span class="toggle-date-range-filter date-range-expanded"> </span>';
   }
 }
 
-// THIS area is a KEY to our content display, and not searching within 
+// THIS area is a KEY to our content display, and not searching within
 // the collection. THEREFORE it is in content_view.inc and not search.inc.
 
 /**
@@ -254,25 +261,26 @@ function islandora_solr_content_type_islandora_solr_query($islandora_solr_query)
     // If we have an unique search query different from the collection query
     // use it.
     if ($_islandora_solr_content_type['solr_search_query']) {
-      $islandora_solr_query->solrParams['fq'][] =
-        $_islandora_solr_content_type['solr_search_query'];
+      $islandora_solr_query->solrParams['fq'][]
+        = $_islandora_solr_content_type['solr_search_query'];
 
       return $islandora_solr_query;
     }
 
-    // We do not have an unique search query, so we'll tokenize our collection 
+    // We do not have an unique search query, so we'll tokenize our collection
     // query fields and use them.
-    $solr_query =
-      str_replace('_ms:', '_mt:', $_islandora_solr_content_type['solr_query']);
+    $solr_query
+      = str_replace('_ms:', '_mt:',
+      $_islandora_solr_content_type['solr_query']);
     $islandora_solr_query->solrParams['fq'][] = $solr_query;
 
     return $islandora_solr_query;
   }
 
-  // We do not have a user collection search, so just preform and display the 
+  // We do not have a user collection search, so just preform and display the
   // collection landing view...
-  $islandora_solr_query->solrParams['fq'][] =
-    $_islandora_solr_content_type['solr_query'];
+  $islandora_solr_query->solrParams['fq'][]
+    = $_islandora_solr_content_type['solr_query'];
 
   return $islandora_solr_query;
 }
@@ -290,12 +298,12 @@ function islandora_solr_content_type_islandora_solr_query_alter(&$islandora_solr
 
   // I need to figure out pagination and why 'query_rows' isn't restricting the
   // results from solr. This leads to pagination, not result limits.
-  $islandora_solr_query->solrLimit =
-    $_islandora_solr_content_type['query_rows'];
+  $islandora_solr_query->solrLimit
+    = $_islandora_solr_content_type['query_rows'];
 
   // Update facets to only those selected...
-  $islandora_solr_query->solrParams['facet.field'] =
-    $_islandora_solr_content_type['display_facets'];
+  $islandora_solr_query->solrParams['facet.field']
+    = $_islandora_solr_content_type['display_facets'];
 }
 
 // vim: set filetype=php:

@@ -3,7 +3,6 @@
  * @file
  * Solr Collection "views" via a custom content type.
  */
-// vim: set filetype=php:
 
 // Loads our content structure: fields, instances, variables.
 module_load_include('inc', 'islandora_solr_content_type',
@@ -49,14 +48,13 @@ function islandora_solr_content_type_menu() {
 }
 
 /**
- * Implements hook_node_info().
- * Define our content type.
+ * Implements hook_node_info(). Define our content type.
  */
 function islandora_solr_content_type_node_info() {
   $items = array(
     'islandora_solr_content_type' => array(
       'name' => t('Islandora Solr Content'),
-      // Will refactor to Islandora Solr Content Collection (name still a WIP)
+      // Will refactor to Islandora Solr Content Collection (name still a WIP).
       'base' => 'node_content', 'description' => t('A content type to configure 
 and display a collection by a specifying a Solr query. <em>Collection</em> is
  used loosely, as these content pages may be  curated exhibits, special p 
@@ -105,8 +103,9 @@ function islandora_solr_content_type_module_implements_alter(&$implementations,
 function islandora_solr_content_type_form_node_form_alter(&$form, $form_state,
   $form_id) {
   if ($form['#node']->type !== 'islandora_solr_content_type') {
-    return; // See ya.
+    return;
   }
+
   $form['additional_display_settings'] = array(
     '#type' => 'fieldset', '#title' => 'Additional Dislpay Settings',
     '#collapsible' => TRUE, '#weight' => 20,
@@ -128,16 +127,16 @@ function islandora_solr_content_type_form_node_form_alter(&$form, $form_state,
     unset($form[$form_element]);
   }
 
-  $featured_area =
-    array('isct_featured_topic_hide', 'isct_featured_content_area');
+  $featured_area
+    = array('isct_featured_topic_hide', 'isct_featured_content_area');
 
   foreach ($featured_area as $form_element) {
     $form['featured_area'][$form_element] = $form[$form_element];
     unset($form[$form_element]);
   }
 
-  $form['menu']['enabled']['#default_value'] =
-    variable_get('isct_menu_by_default', FALSE);
+  $form['menu']['enabled']['#default_value']
+    = variable_get('isct_menu_by_default', FALSE);
 }
 
 /**
@@ -175,3 +174,6 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb,
     }
   }
 }
+
+// vim: set filetype=php:
+

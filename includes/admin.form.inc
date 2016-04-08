@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * @TODO Decription
+ * @TODO Description
  */
 
 // Loads our content structure: fields, instances, variables.
@@ -82,8 +82,8 @@ individual page.'),
       'invisible' => array(
         'input[name="isct_menu_by_default"]' => array(
           'value' => 0,
-        )
-      )
+        ),
+      ),
     ),
   );
 
@@ -101,12 +101,12 @@ individual page.'),
       'invisible' => array(
         'input[name="isct_menu_by_default"]' => array(
           'value' => 0,
-        )
-      )
+        ),
+      ),
     ),
   );
 
-  // remove this later.
+  // Remove this later.
   $form['isct_development_mode'] = array(
     '#type' => 'radios',
     '#options' => array(
@@ -116,7 +116,7 @@ individual page.'),
     '#title' => t('Development mode.'),
     '#default_value' => variable_get('isct_development_mode', '0'),
   );
-  // remove this later.
+  // Remove this later.
   $form['update_isct_module'] = array(
     '#type' => 'submit',
     '#value' => t('Update Module (development)'),
@@ -132,3 +132,4 @@ individual page.'),
   return system_settings_form($form);
 }
 // vim: set filetype=php:
+

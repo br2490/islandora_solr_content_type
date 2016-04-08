@@ -4,8 +4,8 @@
  * @TODO Description
  */
 
-/*
- * Function to add our content fields and instances. "C"RUD
+/**
+ * Function to add our content fields and instances. "C"RUD.
  */
 function islandora_solr_content_type_install_custom_type() {
   foreach (_islandora_solr_content_type_installed_fields() as $field) {
@@ -19,7 +19,7 @@ function islandora_solr_content_type_install_custom_type() {
   }
 }
 
-/*
+/**
  * Function to UPDATE our content fields and instances. CR"U"D.
  */
 function islandora_solr_content_type_update_custom_type($form = NULL,
@@ -37,19 +37,19 @@ function islandora_solr_content_type_update_custom_type($form = NULL,
       field_update_instance($fieldinstance);
     }
     // Do something about variables.
-    dpm('Module update completed.');
+    drupal_set_message('Module update completed.', 'status');
   }
   catch (Exception $e) {
-    dpm('Module update failed.');
+    drupal_set_message('Module update failed.', 'error');
   }
 }
 
-/*
- * Function to remove our conntent fields and instances. CRU"D"
+/**
+ *  Function to remove our conntent fields and instances. CRU"D".
  */
 function islandora_solr_content_type_uninstall_custom_type() {
-  foreach (array_keys(_islandora_solr_content_type_installed_fields()) as
-    $field) {
+  foreach (array_keys(_islandora_solr_content_type_installed_fields())
+    as $field) {
     field_delete_field($field);
   }
   $instances = field_info_instances('node', 'islandora_solr_content_type');
@@ -62,64 +62,70 @@ function islandora_solr_content_type_uninstall_custom_type() {
 }
 
 /**
- * Fields, instances and variables for islandora_solr_content_type
+ * Fields, instances and variables for islandora_solr_content_type.
+ *
  * Note that some fields, instances and variable names use the name initialism
  * (ISCT) to avoid the strlen limit on fields and instances.
  */
 function _islandora_solr_content_type_variables() {
   $variables = array();
 
-  // No comments
+  // No comments please.
   $variables['comment_islandora_solr_content_type'] = '0';
 
-  // No submitted info (i.e. author info and date)
+  // No submitted info (i.e. author info and date).
   $variables['node_submitted_islandora_solr_content_type'] = '0';
 
-  // Default state to published, without other options
-  $variables['node_options_islandora_solr_content_type'] =
-    array('0' => 'status');
+  // Default state to published, without other options.
+  $variables['node_options_islandora_solr_content_type']
+    = array('0' => 'status');
 
-  // Auto path generation default
-  $variables['pathauto_node_islandora_solr_content_type_pattern'] =
-    'collections/[node:title]';
+  // Auto path generation default.
+  $variables['pathauto_node_islandora_solr_content_type_pattern']
+    = 'collections/[node:title]';
 
-  // Auto-add to menu
+  // Auto-add to menu.
   $variables['isct_menu_by_default'] = '1';
 
-  // Menu Default
+  // Menu Default.
   $variables['menu_options_islandora_solr_content_type'] = array('main-menu');
 
-  // Parent menu for all if above == 1
+  // Parent menu for all if above == 1.
   $variables['menu_parent_islandora_solr_content_type'] = 'main-menu:0';
 
   return $variables;
 }
 
+/**
+ * Returns an array of our fields.
+ *
+ * @return array of fields.
+ */
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
 
-  // "Custom" body field (forced to full view, no summary.)
+  // "Custom" body field (forced to full view, no summary).
   $fields['isct_body'] = array(
     'translatable' => 1, 'field_name' => 'isct_body', 'module' => 'text',
     'type' => 'text_long', 'settings' => array(), 'active' => 1, 'locked' => 1,
     'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Solr query field
+  // Solr query field.
   $fields['isct_solr_query'] = array(
     'translatable' => 0, 'field_name' => 'isct_solr_query', 'module' => 'text',
     'type' => 'text_long', 'settings' => array(), 'active' => 1, 'locked' => 1,
     'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Solr query field
+  // Solr query field.
   $fields['isct_solr_search_query'] = array(
     'translatable' => 0, 'field_name' => 'isct_solr_search_query',
     'module' => 'text', 'type' => 'text_long', 'settings' => array(),
     'active' => 1, 'locked' => 1, 'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Field: number of results to display per page (rows)
+  // Field: number of results to display per page (rows).
   $fields['isct_query_rows'] = array(
     'translatable' => 1, 'field_name' => 'isct_query_rows',
     'module' => 'number', 'type' => 'number_integer', 'settings' => array(),
@@ -140,7 +146,7 @@ function _islandora_solr_content_type_installed_fields() {
     'locked' => 1, 'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Field: modify #access of facet block's date_slider
+  // Field: modify #access of facet block's date_slider.
   $fields['isct_display_dateslider'] = array(
     'translatable' => 0, 'field_name' => 'isct_display_dateslider',
     'module' => 'list', 'type' => 'list_boolean', 'settings' => array(
@@ -150,7 +156,7 @@ function _islandora_solr_content_type_installed_fields() {
     ), 'active' => 1, 'locked' => 1, 'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Field: modify #access of facet block's date_facet
+  // Field: modify #access of facet block's date_facet.
   $fields['isct_display_datefacets'] = array(
     'translatable' => 0, 'field_name' => 'isct_display_datefacets',
     'module' => 'list', 'type' => 'list_boolean', 'settings' => array(
@@ -160,7 +166,7 @@ function _islandora_solr_content_type_installed_fields() {
     ), 'active' => 1, 'locked' => 1, 'cardinality' => 1, 'deleted' => 0,
   );
 
-  // Field: modify #markup of facet block's date_range
+  // Field: modify #markup of facet block's date_range.
   $fields['isct_display_auto_expand_date'] = array(
     'translatable' => 0, 'field_name' => 'isct_display_auto_expand_date',
     'module' => 'list', 'type' => 'list_boolean', 'settings' => array(
@@ -199,7 +205,11 @@ function _islandora_solr_content_type_installed_fields() {
   return $fields;
 }
 
-// grumble grumble...
+/**
+ * Spits out the instances of our fields.
+ *
+ * @return array of field instances.
+ */
 function _islandora_solr_content_type_instances() {
   $instances = array();
   $t = get_t();
@@ -223,19 +233,17 @@ function _islandora_solr_content_type_instances() {
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_solr_query', 'entity_type' => 'node',
     'label' => $t('Solr Collection View Query - Landing Page'),
-    'description' => $t($GLOBALS['base_root'] .
-      'The Solr query that will generate desired \'collection view.\' <br> An
-      easy way to create this question is to visit the <a target="_blank"  
-      href="' . '/islandora/search">search page</a> and start with a basic 
-      query. The URL bar will display the encoded query string. This will 
-      give you an idea of a query string.<br><strong><em>Note: You are not
-      restricted to the Solr search fields available to a site visitor.</em>
-      </strong><br> Barnard College Examples: <ul> <li>Get all yearbooks by 
-      mods title AND only display their cover (by collection membership): 
-      mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND 
-      RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> 
-      <li>Get all photographs using mods: mods_genre_ms:"photographs"</li>
-      </ul>'),
+    'description' => $t('The Solr query that will generate desired 
+\'collection view.\' <br> An easy way to create this question is to visit the
+ <a target="_blank" href="' . $GLOBALS['base_root'] . '/islandora/search">search page</a>
+  and start with a basic query. The URL bar will display the encoded query 
+  string. This will give you an idea of a query string.<br><strong><em>Note:
+   You are not restricted to the Solr search fields available to a site visitor.
+   </em></strong><br> Barnard College Examples: <ul> <li>Get all yearbooks by 
+   mods title AND only display their cover (by collection membership):
+    mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND 
+    RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> 
+    <li>Get all photographs using mods: mods_genre_ms:"photographs"</li></ul>'),
     'default_value' => array(
       0 => array(
         'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
@@ -434,3 +442,4 @@ function _islandora_solr_content_type_instances() {
   return $instances;
 }
 // vim: set filetype=php:
+
