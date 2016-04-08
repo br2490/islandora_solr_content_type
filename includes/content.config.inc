@@ -1,15 +1,13 @@
 <?php
-// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
 /**
  * @file
- * Description TK.
+ * @TODO Description
  */
 
 /*
  * Function to add our content fields and instances. "C"RUD
  */
-function islandora_solr_content_type_install_custom_type()
-{
+function islandora_solr_content_type_install_custom_type() {
   foreach (_islandora_solr_content_type_installed_fields() as $field) {
     field_create_field($field);
   }
@@ -24,16 +22,16 @@ function islandora_solr_content_type_install_custom_type()
 /*
  * Function to UPDATE our conntent fields and instances. CR"U"D
  */
-function islandora_solr_content_type_update_custom_type($form = NULL, &$form_state = NULL)
-{
+function islandora_solr_content_type_update_custom_type($form = null,
+  &$form_state = null) {
   try {
     foreach (_islandora_solr_content_type_installed_fields() as $field) {
-    	if (!field_info_field($field['field_name'])) {
-    		field_create_field($field);
-    	} else {
-      	field_update_field($field);
-    	}
-  	}
+      if (!field_info_field($field['field_name'])) {
+        field_create_field($field);
+      } else {
+        field_update_field($field);
+      }
+    }
     foreach (_islandora_solr_content_type_instances() as $fieldinstance) {
       field_update_instance($fieldinstance);
     }
@@ -43,7 +41,7 @@ function islandora_solr_content_type_update_custom_type($form = NULL, &$form_sta
     //   }
     // }
     dpm('Module update completed.');
-  } catch(Exception $e) {
+  } catch (Exception $e) {
     dpm('Module update failed.');
   }
 }
@@ -51,9 +49,9 @@ function islandora_solr_content_type_update_custom_type($form = NULL, &$form_sta
 /*
  * Function to remove our conntent fields and instances. CRU"D"
  */
-function islandora_solr_content_type_uninstall_custom_type()
-{
-  foreach (array_keys(_islandora_solr_content_type_installed_fields()) as $field) {
+function islandora_solr_content_type_uninstall_custom_type() {
+  foreach (array_keys(_islandora_solr_content_type_installed_fields()) as
+    $field) {
     field_delete_field($field);
   }
   $instances = field_info_instances('node', 'islandora_solr_content_type');
@@ -66,10 +64,9 @@ function islandora_solr_content_type_uninstall_custom_type()
 }
 
 // Fields, instances and variables for islandora_solr_content_type
-// Note that some fields, instances and variable names use the name initialism (ISCT) to
-// avoid the strlen limit on fields and instances.
-function _islandora_solr_content_type_variables()
-{
+// Note that some fields, instances and variable names use the name initialism
+// (ISCT) to avoid the strlen limit on fields and instances.
+function _islandora_solr_content_type_variables() {
   $variables = array();
 
   // No comments
@@ -78,15 +75,15 @@ function _islandora_solr_content_type_variables()
   // No submitted info (i.e. author info and date)
   $variables['node_submitted_islandora_solr_content_type'] = '0';
 
-  // Default state to published, without other options (e.g., sticky, promoted, etc.).
-  $variables['node_options_islandora_solr_content_type'] = array(
-    '0' => 'status'
-  );
+  // Default state to published, without other options
+  $variables['node_options_islandora_solr_content_type'] =
+  array('0' => 'status');
 
   // Auto path generation default
-  $variables['pathauto_node_islandora_solr_content_type_pattern'] = 'collections/[node:title]';
- 
-  // Auto-add to menu  
+  $variables['pathauto_node_islandora_solr_content_type_pattern'] =
+    'collections/[node:title]';
+
+  // Auto-add to menu
   $variables['isct_menu_by_default'] = '1';
 
   // Menu Default
@@ -98,8 +95,7 @@ function _islandora_solr_content_type_variables()
   return $variables;
 }
 
-function _islandora_solr_content_type_installed_fields()
-{
+function _islandora_solr_content_type_installed_fields() {
   $fields = array();
 
   // "Custom" body field (forced to full view, no summary.)
@@ -242,15 +238,15 @@ function _islandora_solr_content_type_installed_fields()
     'type' => 'list_text',
     'settings' => array(
       'allowed_values' => array(),
-      'allowed_values_function' => 'islandora_solr_content_type_solr_get_facets',
-    ),
+      'allowed_values_function' =>
+      'islandora_solr_content_type_solr_get_facets'),
     'active' => 1,
     'locked' => 1,
     'cardinality' => -1,
     'deleted' => 0,
   );
 
-  // Field: featured area for use with an image, caption, etc. that will autohide.
+  // Field: featured area for use with an image, caption, that will autohide.
   $fields['isct_featured_content_area'] = array(
     'translatable' => 1,
     'field_name' => 'isct_featured_content_area',
@@ -321,17 +317,15 @@ function _islandora_solr_content_type_instances()
     'field_name' => 'isct_solr_query',
     'entity_type' => 'node',
     'label' => $t('Solr Collection View Query - Landing Page'),
-    'description' => $t('The Solr query that will generate desired \'collection view.\' <br>
-  An easy way to create this question is to visit the <a target="_blank" href="' . $GLOBALS['base_root'] . '/islandora/search">search page</a> and start with a basic query.
-The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the Solr search fields available to a site visitor.</em></strong><br>
-Barnard College Examples: 
-<ul>
-<li>Get all yearbooks by mods title AND only display their cover (by collection membership): mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li>
-<li>Get all photographs using mods: mods_genre_ms:"photographs"</li>
-</ul>'),
+    'description' => $t($GLOBALS['base_root'] .
+      'The Solr query that will generate desired \'collection view.\' <br> An easy way to create this question is to visit the <a target="_blank" href="' .
+      '/islandora/search">search page</a> and start with a basic query. The URL bar will display the encoded query string. This will give you an idea of a query string.<br><strong><em>Note: You are not restricted to the Solr search fields available to a site visitor.</em></strong><br> Barnard College Examples: <ul> <li>Get all yearbooks by mods title AND only display their cover (by collection membership): mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> <li>Get all photographs using mods: mods_genre_ms:"photographs"</li> </ul>'),
     'default_value' => array(
       0 => array(
-        'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'), // This is for dev and should be removed.
+        'value' =>
+
+        $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
+        // This is for dev and should be removed.
       ),
     ),
     'deleted' => 0,
@@ -344,9 +338,7 @@ Barnard College Examples:
       'active' => 1,
       'module' => 'text',
       'type' => 'text_textarea',
-      'settings' => array(
-        'rows' => 2,
-      ),
+      'settings' => array('rows' => 2),
       'weight' => 2,
     ),
     'display' => array(
@@ -374,9 +366,7 @@ Barnard College Examples:
       'active' => 1,
       'module' => 'text',
       'type' => 'text_textarea',
-      'settings' => array(
-        'rows' => 2,
-      ),
+      'settings' => array('rows' => 2),
       'weight' => 3,
     ),
     'display' => array(
@@ -392,11 +382,7 @@ Barnard College Examples:
     'field_name' => 'isct_query_rows',
     'entity_type' => 'node',
     'label' => $t('Number of results to display per page'),
-    'default_value' => array(
-      0 => array(
-        'value' => $t('8'),
-      ),
-    ),
+    'default_value' => array(0 => array('value' => $t('8'))),
     'deleted' => 0,
     'description' => $t('The number of records (rows) to display from the Solr query.'),
     'required' => 1,
@@ -407,9 +393,7 @@ Barnard College Examples:
     'widget' => array(
       'active' => 1,
       'module' => 'number',
-      'settings' => array(
-        'size' => 10,
-      ),
+      'settings' => array('size' => 10),
       'type' => 'number',
       'weight' => 4,
     ),
@@ -448,7 +432,7 @@ Barnard College Examples:
       ),
     ),
   );
-  
+
   $instances['isct_display_facet_title'] = array(
     'bundle' => 'islandora_solr_content_type',
     'field_name' => 'isct_display_facet_title',
@@ -482,21 +466,15 @@ Barnard College Examples:
     'field_name' => 'isct_display_datefacets',
     'entity_type' => 'node',
     'label' => $t('Remove <strong>all</strong> date faceting from the Facet block?'),
-    'default_value' => array(
-      0 => array('value' => 0,),
-    ),
+    'default_value' => array(0 => array('value' => 0)),
     'deleted' => 0,
     'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
+    'settings' => array('user_register_form' => 0),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1
-      ),
+      'settings' => array('display_label' => 1),
       'weight' => 23,
     ),
     'display' => array(
@@ -512,21 +490,15 @@ Barnard College Examples:
     'field_name' => 'isct_display_dateslider',
     'entity_type' => 'node',
     'label' => $t('Remove the date slider region (i.e., date picker) in the Facet block?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1)),
     'deleted' => 0,
     'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
+    'settings' => array('user_register_form' => 0),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1
-      ),
+      'settings' => array('display_label' => 1),
       'weight' => 24,
     ),
     'display' => array(
@@ -542,21 +514,15 @@ Barnard College Examples:
     'field_name' => 'isct_display_auto_expand_date',
     'entity_type' => 'node',
     'label' => $t('Automatically expand the date search region in the Facets block?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1)),
     'deleted' => 0,
     'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
+    'settings' => array('user_register_form' => 0),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1
-      ),
+      'settings' => array('display_label' => 1),
       'weight' => 25,
     ),
     'display' => array(
@@ -575,9 +541,7 @@ Barnard College Examples:
     'label' => $t('Facets to display on page'),
     'deleted' => 0,
     'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
+    'settings' => array('user_register_form' => 0),
     'tree' => 1,
     'collapsible' => 1,
     'widget' => array(
@@ -600,21 +564,15 @@ Barnard College Examples:
     'field_name' => 'isct_featured_topic_hide',
     'entity_type' => 'node',
     'label' => $t('Hide the featured area when the user preforms a search in the collection?'),
-    'default_value' => array(
-      0 => array('value' => 1,),
-    ),
+    'default_value' => array(0 => array('value' => 1)),
     'deleted' => 0,
     'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
+    'settings' => array('user_register_form' => 0),
     'widget' => array(
       'active' => 1,
       'module' => 'options',
       'type' => 'options_onoff',
-      'settings' => array(
-        'display_label' => 1
-      ),
+      'settings' => array('display_label' => 1),
       'weight' => 31,
     ),
     'display' => array(
@@ -650,7 +608,7 @@ Barnard College Examples:
       ),
     ),
   );
+
   return $instances;
 }
-
-
+// vim: set filetype=php:
