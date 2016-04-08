@@ -15,13 +15,13 @@ function islandora_solr_content_type_form_islandora_solr_advanced_search_form_al
   &$form_state) {
   global $_islandora_solr_content_type;
 
-  if ($_islandora_solr_content_type !== NULL ||
+  if ($_islandora_solr_content_type !== null ||
     isset($form_state['build_info']['args']['islandora_solr_content_type'])
   ) {
     unset($form['#submit']);
     $form['#submit'][] =
       'islandora_solr_content_type_advanced_search_form_submit';
-    $form_state['build_info']['args']['islandora_solr_content_type'] = TRUE;
+    $form_state['build_info']['args']['islandora_solr_content_type'] = true;
   }
 }
 
@@ -46,12 +46,12 @@ function islandora_solr_content_type_advanced_search_form_submit($form,
     $search = trim($term['search']);
     $search = islandora_solr_replace_slashes($search);
     $boolean = (isset($term['boolean'])) ? $term['boolean'] :
-      variable_get('islandora_solr_search_boolean', 'user');
+    variable_get('islandora_solr_search_boolean', 'user');
     $field = islandora_solr_lesser_escape($field);
     // Add query.
     if (!empty($search)) {
       $query_array[] =
-        array('search' => "$field:($search)", 'boolean' => $boolean,);
+      array('search' => "$field:($search)", 'boolean' => $boolean);
     }
   }
   // Create query.
@@ -73,7 +73,7 @@ function islandora_solr_content_type_advanced_search_form_submit($form,
 
   // Get our current params.
   $params = isset($_islandora_solr_queryclass->internalSolrParams) ?
-    $_islandora_solr_queryclass->internalSolrParams : array();
+  $_islandora_solr_queryclass->internalSolrParams : array();
 
   // Unset our collection query from the params. We're building a new CQ below.
   if (isset($params['cq'])) {
@@ -83,8 +83,7 @@ function islandora_solr_content_type_advanced_search_form_submit($form,
   // Build our search string with params and redirect back to collection page.
   $search_string = array_merge(array('cq' => $query), $params);
   $form_state['redirect'] =
-    array(current_path(), array('query' => $search_string,),);
+  array(current_path(), array('query' => $search_string));
 
 }
-// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
-
+// vim: set filetype=php:

@@ -21,48 +21,51 @@ function islandora_solr_content_type_config($form, &$form_state) {
   );
 
   $form['comment_islandora_solr_content_type'] = array(
-    '#type'          => 'radios',
-    '#required'      => TRUE,
-    '#options'       => array(
+    '#type' => 'radios',
+    '#required' => true,
+    '#options' => array(
       0 => t('Disable and disallow comments by default. (default)'),
       1 => t('Enable and allow comments by default.'),
     ),
-    '#title'         => t('Default to use for <em>Comments</em> when creating 
+    '#title' => t('Default to use for <em>Comments</em> when creating
 a new ISCT.'),
-    '#description'   => t('<strong>Note:</strong> This can be overriden on each 
+    '#description' => t('<strong>Note:</strong> This can be overriden on each
 individual page.'),
     '#default_value' => variable_get('comment_islandora_solr_content_type',
       '0'),
   );
 
   $form['node_submitted_islandora_solr_content_type'] = array(
-    '#type'          => 'radios',
-    '#required'      => TRUE,
-    '#options'       => array(
-      0 => t('Do <strong>not</strong> diplay authorship and timestamp on pages. (default)'),
+    '#type' => 'radios',
+    '#required' => true,
+    '#options' => array(
+      0 =>
+      t('Do <strong>not</strong> diplay authorship and timestamp on pages. (default)'),
       1 => t('Display authorship and timestamp on pages.'),
     ),
-    '#title'         => t('Hide authorship and timestamp on all ISCT pages.'),
-    '#default_value' => variable_get('node_submitted_islandora_solr_content_type',
+    '#title' => t('Hide authorship and timestamp on all ISCT pages.'),
+    '#default_value' =>
+    variable_get('node_submitted_islandora_solr_content_type',
       '0'),
   );
 
   $form['pathauto_node_islandora_solr_content_type_pattern'] = array(
-    '#type'          => 'textfield',
-    '#title'         => t('Automatic Path Setting'),
-    '#default_value' => variable_get('pathauto_node_islandora_solr_content_type_pattern',
+    '#type' => 'textfield',
+    '#title' => t('Automatic Path Setting'),
+    '#default_value' =>
+    variable_get('pathauto_node_islandora_solr_content_type_pattern',
       'collections/[node:title]'),
   );
 
   $form['isct_menu_by_default'] = array(
-    '#type'          => 'radios',
-    '#options'       => array(
+    '#type' => 'radios',
+    '#options' => array(
       1 => t('Enabled'),
       0 => t('Disabled'),
     ),
-    '#title'         => t('By default add new Islandora Solr Content to a 
+    '#title' => t('By default add new Islandora Solr Content to a
     menu?'),
-    '#description'   => t('This can be override by anyone with access 
+    '#description' => t('This can be override by anyone with access
     administer  menu.'),
     '#default_value' => variable_get('isct_menu_by_default', '0'),
   );
@@ -71,45 +74,46 @@ individual page.'),
   $type = $form['#node_type'];
 
   $form['menu_options_islandora_solr_content_type'] = array(
-    '#type'          => 'checkboxes',
-    '#title'         => t('Available menus'),
-    '#default_value' => variable_get('menu_options_islandora_solr_content_type',
+    '#type' => 'checkboxes',
+    '#title' => t('Available menus'),
+    '#default_value' =>
+    variable_get('menu_options_islandora_solr_content_type',
       array('main-menu')),
-    '#options'       => $menu_options,
-    '#description'   => t('The menus available to place links in for this 
+    '#options' => $menu_options,
+    '#description' => t('The menus available to place links in for this
     content type.'),
-    '#states'        => array('invisible' => array('input[name="isct_menu_by_default"]' => array('value' => 0),),),
+    '#states' => array('invisible' => array('input[name="isct_menu_by_default"]' => array('value' => 0))),
   );
 
   $options = menu_parent_options(menu_get_menus(), array('mlid' => 0));
   $form['menu_parent_islandora_solr_content_type'] = array(
-    '#type'          => 'select',
-    '#title'         => t('Default parent item'),
+    '#type' => 'select',
+    '#title' => t('Default parent item'),
     '#default_value' => variable_get('menu_parent_islandora_solr_content_type',
       'main-menu:0'),
-    '#options'       => $options,
-    '#description'   => t('Choose the menu item to be the default parent for 
+    '#options' => $options,
+    '#description' => t('Choose the menu item to be the default parent for
     a new link in the content authoring form.'),
-    '#attributes'    => array('class' => array('menu-title-select'),),
-    '#states'        => array('invisible' => array('input[name="isct_menu_by_default"]' => array('value' => 0),),),
+    '#attributes' => array('class' => array('menu-title-select')),
+    '#states' => array('invisible' => array('input[name="isct_menu_by_default"]' => array('value' => 0))),
   );
 
   // remove this later.
   $form['isct_development_mode'] = array(
-    '#type'          => 'radios',
-    '#options'       => array(
+    '#type' => 'radios',
+    '#options' => array(
       1 => t('Enabled'),
       0 => t('Disabled'),
     ),
-    '#title'         => t('Development mode.'),
+    '#title' => t('Development mode.'),
     '#default_value' => variable_get('isct_development_mode', '0'),
   );
   // remove this later.
   $form['update_isct_module'] = array(
-    '#type'   => 'submit',
-    '#value'  => t('Update Module (development)'),
+    '#type' => 'submit',
+    '#value' => t('Update Module (development)'),
     '#submit' => array('islandora_solr_content_type_update_custom_type'),
-    '#states' => array('invisible' => array('input[name="isct_development_mode"]' => array('value' => 0),),),
+    '#states' => array('invisible' => array('input[name="isct_development_mode"]' => array('value' => 0))),
   );
 
   // Call Drupal.isct_menu_update_parent_list() to filter the list of
@@ -119,5 +123,4 @@ individual page.'),
 
   return system_settings_form($form);
 }
-// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
-
+// vim: set filetype=php:

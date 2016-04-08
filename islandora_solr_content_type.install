@@ -13,7 +13,7 @@ require_once 'includes/content.config.inc';
 /**
  * Implements hook_install()
  */
-function islandora_solr_content_type_install() {
+function islandoraSolrContentTypeInstall() {
   node_types_rebuild();
   // Note that normally one would call node_add_body_field() for their
   // content type We do not, instead we create our own "body field" that
@@ -25,7 +25,7 @@ function islandora_solr_content_type_install() {
 /**
  * Implements hook_uninstall().
  */
-function islandora_solr_content_type_uninstall() {
+function islandoraSolrContentTypeUninstall() {
   $sql = 'SELECT nid FROM {node} n WHERE n.type = :type';
   $result = db_query($sql, array(':type' => 'islandora_solr_content_type'));
   $nids = array();
@@ -38,4 +38,4 @@ function islandora_solr_content_type_uninstall() {
   field_purge_batch(1000);
 }
 
-// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
+// vim: set filetype=php:

@@ -44,5 +44,4 @@ function islandora_solr_content_type_theme($existing, $type, $theme, $path) {
 
   return $theme;
 }
-// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
-
+// vim: set filetype=php:
