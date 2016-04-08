@@ -100,7 +100,7 @@ function _islandora_solr_content_type_variables() {
  * Returns an array of our fields.
  *
  * @return array
- *  An array of fields and their properties.
+ *    An array of fields and their properties.
  */
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
@@ -210,7 +210,7 @@ function _islandora_solr_content_type_installed_fields() {
  * Spits out the instances of our fields.
  *
  * @return array
- *  An array of field instances based on our types with additional params.
+ *    An array of field instances based on our types with additional params.
  */
 function _islandora_solr_content_type_instances() {
   $instances = array();
@@ -237,7 +237,7 @@ function _islandora_solr_content_type_instances() {
     'label' => $t('Solr Collection View Query - Landing Page'),
     'description' => $t('The Solr query that will generate desired 
 collection view. <br> An easy way to create this question is to visit the
- <a target="_blank" href="' . $GLOBALS['base_root'] . '/islandora/search">search page</a>
+ <a target="_blank" href="@url">search page</a>
   and start with a basic query. The URL bar will display the encoded query 
   string. This will give you an idea of a query string.<br><strong><em>Note:
    You are not restricted to the Solr search fields available to a site visitor.
@@ -245,7 +245,8 @@ collection view. <br> An easy way to create this question is to visit the
    mods title AND only display their cover (by collection membership):
     mods_relatedItem_host_titleInfo_title_ms:"Mortarboard" AND 
     RELS_EXT_isMemberOf_uri_ms:"info:fedora/islandora:bookCollection"</li> 
-    <li>Get all photographs using mods: mods_genre_ms:"photographs"</li></ul>'),
+    <li>Get all photographs using mods: mods_genre_ms:"photographs"</li></ul>',
+    array('@url' => $GLOBALS['base_root'] . '/islandora/search',),),
     'default_value' => array(
       0 => array(
         'value' => $t('RELS_EXT_isMemberOf_uri_ms:"info:fedora/bc:barnard-literary-magazine"'),
@@ -443,4 +444,5 @@ collection view. <br> An easy way to create this question is to visit the
 
   return $instances;
 }
+
 // vim: set filetype=php:

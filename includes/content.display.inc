@@ -154,11 +154,12 @@ function islandora_solr_content_type_block_list_alter(&$blocks) {
  * Sorting function for blocks as objects.
  *
  * @param object $a
- *  block a.
+ *   block a.
  * @param object $b
- *  block b.
+ *   block b.
  *
- * @return bool weight of blocks.
+ * @return bool 
+ *   weight of blocks.
  */
 function islandora_solr_content_type_custom_sort($a, $b) {
   return $a->weight > $b->weight;
@@ -168,11 +169,11 @@ function islandora_solr_content_type_custom_sort($a, $b) {
  * Generates a rendered block from $module with name $function.
  *
  * @param string $module
- *  module name.
+ *   module name.
  * @param string $function
- *  function name.
+ *   function name.
  *
- * @return drupal_render
+ * @ return drupal_render
  *  Returns the rendered drupal block from module with function.
  */
 function islandora_solr_content_type_block_content_render($module, $function) {

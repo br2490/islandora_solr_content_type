@@ -131,4 +131,5 @@ individual page.'),
 
   return system_settings_form($form);
 }
+
 // vim: set filetype=php:
