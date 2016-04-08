@@ -5,23 +5,19 @@
  */
 
 /**
- * Implements hook_form_FORM_ID_alter()
- * We're gonna use our own submit handler for our content type.
- *
- * @param $form
- * @param $form_state
+ * Implements hook_form_FORM_ID_alter().
+ * We use our own submit handler for our content type.
  */
 function islandora_solr_content_type_form_islandora_solr_advanced_search_form_alter(&$form,
   &$form_state) {
   global $_islandora_solr_content_type;
 
-  if ($_islandora_solr_content_type !== null ||
-    isset($form_state['build_info']['args']['islandora_solr_content_type'])
-  ) {
+  if ($_islandora_solr_content_type !== NULL ||
+    isset($form_state['build_info']['args']['islandora_solr_content_type'])) {
     unset($form['#submit']);
     $form['#submit'][] =
-      'islandora_solr_content_type_advanced_search_form_submit';
-    $form_state['build_info']['args']['islandora_solr_content_type'] = true;
+    'islandora_solr_content_type_advanced_search_form_submit';
+    $form_state['build_info']['args']['islandora_solr_content_type'] = TRUE;
   }
 }
 
