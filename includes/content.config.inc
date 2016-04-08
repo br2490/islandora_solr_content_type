@@ -37,19 +37,19 @@ function islandora_solr_content_type_update_custom_type($form = NULL,
       field_update_instance($fieldinstance);
     }
     // Do something about variables.
-    drupal_set_message('Module update completed.', 'status');
+    drupal_set_message(t('Module update completed.'), 'status');
   }
   catch (Exception $e) {
-    drupal_set_message('Module update failed.', 'error');
+    drupal_set_message(t('Module update failed.'), 'error');
   }
 }
 
 /**
- *  Function to remove our conntent fields and instances. CRU"D".
+ * Function to remove our conntent fields and instances. CRU"D".
  */
 function islandora_solr_content_type_uninstall_custom_type() {
   foreach (array_keys(_islandora_solr_content_type_installed_fields())
-    as $field) {
+  as $field) {
     field_delete_field($field);
   }
   $instances = field_info_instances('node', 'islandora_solr_content_type');
@@ -99,7 +99,8 @@ function _islandora_solr_content_type_variables() {
 /**
  * Returns an array of our fields.
  *
- * @return array of fields.
+ * @return array
+ *  An array of fields and their properties.
  */
 function _islandora_solr_content_type_installed_fields() {
   $fields = array();
@@ -208,7 +209,8 @@ function _islandora_solr_content_type_installed_fields() {
 /**
  * Spits out the instances of our fields.
  *
- * @return array of field instances.
+ * @return array
+ *  An array of field instances based on our types with additional params.
  */
 function _islandora_solr_content_type_instances() {
   $instances = array();
@@ -234,7 +236,7 @@ function _islandora_solr_content_type_instances() {
     'field_name' => 'isct_solr_query', 'entity_type' => 'node',
     'label' => $t('Solr Collection View Query - Landing Page'),
     'description' => $t('The Solr query that will generate desired 
-\'collection view.\' <br> An easy way to create this question is to visit the
+collection view. <br> An easy way to create this question is to visit the
  <a target="_blank" href="' . $GLOBALS['base_root'] . '/islandora/search">search page</a>
   and start with a basic query. The URL bar will display the encoded query 
   string. This will give you an idea of a query string.<br><strong><em>Note:
@@ -442,4 +444,3 @@ function _islandora_solr_content_type_instances() {
   return $instances;
 }
 // vim: set filetype=php:
-

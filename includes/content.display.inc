@@ -65,7 +65,7 @@ function islandora_solr_content_type_node_view($node, $view_mode = 'full') {
   // The _very_ important stuff:
   // Foremost we rely on islandora_solr() to return a search result -
   // that will be our primary content.
-  // This reliance on islandora_solr let us do amazing things fairly simply
+  // This reliance on islandora_solr let us do amazing things fairly simply.
 
   // We use a param called "cq" if the user has preformed a search from our
   // collection page. If it's not there we display the content as it was
@@ -167,10 +167,13 @@ function islandora_solr_content_type_custom_sort($a, $b) {
 /**
  * Generates a rendered block from $module with name $function.
  *
- * @param $module string module name.
- * @param $function string function name.
+ * @param string $module
+ *  module name.
+ * @param string $function
+ *  function name.
  *
- * @return drupal_render of block.
+ * @return drupal_render
+ *  Returns the rendered drupal block from module with function.
  */
 function islandora_solr_content_type_block_content_render($module, $function) {
   $block = block_load($module, $function);

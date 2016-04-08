@@ -35,4 +35,3 @@ function islandora_solr_content_type_theme($existing, $type, $theme, $path) {
   return $theme;
 }
 // vim: set filetype=php:
-

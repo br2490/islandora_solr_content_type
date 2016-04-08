@@ -48,7 +48,9 @@ function islandora_solr_content_type_menu() {
 }
 
 /**
- * Implements hook_node_info(). Define our content type.
+ * Implements hook_node_info().
+ *
+ * Define our content type.
  */
 function islandora_solr_content_type_node_info() {
   $items = array(
@@ -176,4 +178,3 @@ function islandora_solr_content_type_islandora_breadcrumbs_alter(&$breadcrumb,
 }
 
 // vim: set filetype=php:
-

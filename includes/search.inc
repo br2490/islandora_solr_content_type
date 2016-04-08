@@ -5,7 +5,7 @@
  */
 
 /**
- * Implements hook_form_FORM_ID_alter() for form_islandora_solr_advanced_search_form.
+ * Implements hook_form_alter().
  *
  * We use our own submit handler for our content type.
  */
@@ -85,4 +85,3 @@ function islandora_solr_content_type_advanced_search_form_submit($form,
 
 }
 // vim: set filetype=php:
-
