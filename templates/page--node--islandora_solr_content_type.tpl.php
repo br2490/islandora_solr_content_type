@@ -86,12 +86,9 @@
       <?php if (isset($bc_breadcrumb)): ?>
         <?php print $bc_breadcrumb; ?>
       <?php endif; ?>
-      <?php
-      $bc_views_breadcrumb =
-        array('breadcrumb' => menu_get_active_breadcrumb());
-      print theme('bc_islandora_breadcrumb', $bc_views_breadcrumb);
-      isset($breadcrumb) ? print $breadcrumb : NULL;
-      ?>
+      <?php if (isset($breadcrumb)): ?>
+       <?php print $breadcrumb; ?>
+      <?php endif; ?>
       <?php if ($title): ?>
         <h1 class="page__title title"
             id="page-title"><?php print $title; ?></h1>
