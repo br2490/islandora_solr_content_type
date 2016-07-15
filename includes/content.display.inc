@@ -32,7 +32,7 @@ function islandora_solr_content_type_prepare_content($node) {
       $_islandora_solr_content_type[$global_field_name]
         = $field_value[0]['value'];
     }
-    else {
+    elseif (!empty($field_value)) {
       foreach ($field_value as $facet) {
         $_islandora_solr_content_type[$global_field_name][] = $facet['value'];
       }
